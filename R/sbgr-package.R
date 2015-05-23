@@ -13,6 +13,6 @@
 #' @author Nan Xiao <\email{address@@sbgenomics.com}>
 #'         Teng-Fei Yin <\email{tengfei.yin@@sbgenomics.com}>
 #'
-#' @import RCurl
+#' @import httr jsonlite
 #'
 NULL

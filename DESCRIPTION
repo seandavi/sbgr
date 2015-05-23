@@ -9,6 +9,7 @@ Description: R Interface for Seven Bridges Genomics API
 License: MIT
 VignetteBuilder: knitr
 Imports:
-    RCurl
+    httr,
+    jsonlite
 Suggests:
     knitr
