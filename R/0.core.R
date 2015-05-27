@@ -4,7 +4,7 @@ library('jsonlite')
 # wrapper for http logic
 sbgapi = function (auth_token = NULL, version = '1.1', path,
                    method = c('GET', 'POST', 'PUT', 'DELETE'),
-                   query = NULL, data = NULL) {
+                   query = NULL, body = NULL) {
   
   if (is.null(auth_token)) stop('auth_token must be provided')
   
@@ -21,15 +21,20 @@ sbgapi = function (auth_token = NULL, version = '1.1', path,
   }
   
   if (method == 'POST') {
-    
+    stopifnot(is.list(body))
+    body_json = toJSON(body, auto_unbox = TRUE)
+    req = POST(paste0(base_url, path), add_headers(headers), query = query,
+               body = body_json)
   }
   
   if (method == 'PUT') {
-    
+    stopifnot(is.list(body))
+    body_json = toJSON(body, auto_unbox = TRUE)
+    req = PUT(paste0(base_url, path), add_headers(headers), body = body_json)
   }
   
   if (method == 'DELETE') {
-    
+    req = DELETE(paste0(base_url, path), add_headers(headers))
   }
   
   return(req)
@@ -37,7 +42,7 @@ sbgapi = function (auth_token = NULL, version = '1.1', path,
 }
 
 status_check = function (req) {
-
+  
   if (status_code(req) == '200') {
     return(content(req, 'parsed'))
   } else if (status_code(req) %in% c('401', '403', '404', '503')) {
@@ -46,5 +51,5 @@ status_check = function (req) {
   } else {
     stop('Error of unknown type occured')
   }
-
+  
 }

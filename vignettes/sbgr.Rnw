@@ -6,7 +6,7 @@
 
 \makeatletter
 % \VignetteIndexEntry{sbgr: R Interface for Seven Bridges Genomics API}
-%\VignetteKeywords{api, genomics, bioinformatics, pipeline, seven bridges genomics}
+%\VignetteKeywords{api, genomics, bioinformatics, pipeline, seven bridges genomics, SBG}
 %\VignettePackage{sbgr}
 % \VignetteEngine{knitr::knitr}
 \makeatother
@@ -19,21 +19,14 @@
 if (require('knitr')) opts_chunk$set(fig.width = 5, fig.height = 5, fig.align = 'center', tidy = FALSE, warning = FALSE, cache = TRUE)
 @
 
-%
-<<prelim,echo=FALSE>>=
-sbgr.version = '1.0'
-@
-%
-
     \begin{center}
     \vspace*{6\baselineskip}
     \rule{\textwidth}{1.6pt}\vspace*{-\baselineskip}\vspace*{2pt}
     \rule{\textwidth}{0.4pt}\\[2\baselineskip]
-    {\LARGE \textbf{sbgr: R Interface for Seven Bridges Genomics API}}\\[1.2\baselineskip]
+    {\Large \textbf{sbgr: R Interface for Seven Bridges Genomics API}}\\[1.2\baselineskip]
     \rule{\textwidth}{0.4pt}\vspace*{-\baselineskip}\vspace{3.2pt}
     \rule{\textwidth}{1.6pt}\\[2\baselineskip]
-    {\Large Nan Xiao and Teng-Fei Yin}\\[\baselineskip]
-    {\large Package Version: \Sexpr{sbgr.version}}\\[\baselineskip]
+    {\large Seven Bridges Genomics}\\[\baselineskip]
     {\large \today}\par
     \vfill
     \begin{figure}[h]
@@ -51,6 +44,8 @@ sbgr.version = '1.0'
 \section{Introduction}
 
 Sample text.
+
+We use httr package for the restful requests with the API sever.
 
 \bibliographystyle{jss}
 \nocite{*} % list uncited bibs
