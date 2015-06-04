@@ -1,6 +1,23 @@
 # 1. Upload files
 
-# 1.1 Returns the upload information for the ongoing upload.
+#' Returns upload information for the ongoing upload
+#'
+#' Returns the upload information for the ongoing upload.
+#'
+#' @param auth_token auth token
+#' @param upload_id ID of the upload
+#'
+#' @return parsed list of the returned json
+#'
+#' @export upload_info
+#'
+#' @references
+#' \url{https://developer.sbgenomics.com/api/1.1/get/upload/multipart/\%3Aupload_id}
+#'
+#' @examples
+#' \donttest{token = '410b4672ebfc43bab48dd0d18a32fb6f'
+#' req = upload_info(token,
+#'                   upload_id = '8D7sQJxQk14ubsEnKaoeQZlRvV6ouQtMzBWaQNJdxPDLypUC3WogwtJdncevHxnT')}
 upload_info = function (auth_token = NULL, upload_id = NULL) {
   
   if (is.null(upload_id)) stop('upload_id must be provided')
@@ -13,9 +30,28 @@ upload_info = function (auth_token = NULL, upload_id = NULL) {
   
 }
 
-# 1.2 Gets the signed URL for the upload of the specified part.
-# Note that URLs are valid for 60 seconds only and that you should initiate
-# upload to the signed URL in this time frame.
+#' Returns AWS S3 signed URL for a part of the file upload
+#'
+#' Gets the signed URL for the upload of the specified part.
+#' Note that URLs are valid for 60 seconds only and that you should initiate
+#' upload to the signed URL in this time frame.
+#'
+#' @param auth_token auth token
+#' @param upload_id ID of the upload
+#' @param part_number Number of the upload file part that you wish to access
+#'
+#' @return parsed list of the returned json
+#'
+#' @export upload_info_part
+#'
+#' @references
+#' \url{https://developer.sbgenomics.com/api/1.1/get/upload/multipart/\%3Aupload_id/\%3Apart_number}
+#'
+#' @examples
+#' \donttest{token = '410b4672ebfc43bab48dd0d18a32fb6f'
+#' req = upload_info_part(token,
+#'                        upload_id = 'aVluXRqSX2bse6va3AFFgVAppOCQ9IABeA8HnyyiEw85j6pNyV989H4xvJpr53xa',
+#'                        part_number = 1)}
 upload_info_part = function (auth_token = NULL, 
                              upload_id = NULL, part_number = NULL) {
   
@@ -30,18 +66,41 @@ upload_info_part = function (auth_token = NULL,
   
 }
 
-# 1.3 Initializes the upload of the specified file.
-# This is the first operation performed when you wish to upload a file.
-# Operation is initialized by providing file name, project id where you
-# wish the file to be uploaded to (if not specified, defaults to user's stash)
-# and optionally by providing wanted part size. You may wish to set your
-# part size to a low value if you experience problems with uploading large
-# file parts, although default value of 5MB should be good enough for most users.
-# Limits:
-# Maximum number of parts is 10000
-# Maximum file size is 5TB
-# Maximum part size is 5GB
-# Default part size is 5MB
+#' Initializes the upload of the specified file
+#'
+#' This is the first operation performed when you wish to upload a file.
+#' Operation is initialized by providing file name, project id where you
+#' wish the file to be uploaded to (if not specified, defaults to user's stash)
+#' and optionally by providing wanted part size. You may wish to set your
+#' part size to a low value if you experience problems with uploading large
+#' file parts, although default value of 5MB should be good enough for
+#' most users.
+#'
+#' Limits: \itemize{
+#' \item Maximum number of parts is 10000
+#' \item Maximum file size is 5TB
+#' \item Maximum part size is 5GB
+#' \item Default part size is 5MB}
+#'
+#' @param auth_token auth token
+#' @param project_id ID of the project you wish to upload to
+#' @param name Name of the file you wish to upload
+#' @param size Size of the file you wish to upload
+#' @param part_size Requested part size. Note that API may reject your
+#' requested part size and return proper one in response.
+#'
+#' @return parsed list of the returned json
+#'
+#' @export upload_init
+#'
+#' @references
+#' \url{https://developer.sbgenomics.com/api/1.1/post/upload/multipart}
+#'
+#' @examples
+#' \donttest{token = '58aeb140-1970-0130-6386-001f5b34aa78'
+#' req = upload_init(token,
+#'                   project_id = 'f0eb447f-3511-4b28-9253-eba96191d432',
+#'                   name = 'Sample1_RNASeq_chr20.pe_1.fastq', size = 5242880)}
 upload_init = function (auth_token = NULL, project_id = NULL,
                         name = NULL, size = NULL, part_size = NULL) {
   
@@ -60,15 +119,31 @@ upload_init = function (auth_token = NULL, project_id = NULL,
   
 }
 
-token = '58aeb140-1970-0130-6386-001f5b34aa78'
-req = upload_init(token,
-                  project_id = 'f0eb447f-3511-4b28-9253-eba96191d432',
-                  name = 'Sample1_RNASeq_chr20.pe_1.fastq', size = 5242880)
-
-# 1.4 Reports the completion of the part upload.
-# The ETag is provided for the correctness check upon completion of the
-# whole upload. Value for the ETag is provided by AWS S3 service when
-# uploading the file in the ETag header.
+#' Reports the completion of the part upload
+#'
+#' The ETag is provided for the correctness check upon completion of the
+#' whole upload. Value for the ETag is provided by AWS S3 service when
+#' uploading the file in the ETag header.
+#'
+#' @param auth_token auth token
+#' @param upload_id ID of the upload
+#' @param part_number ID of the part you wish to report as completed
+#' @param e_tag Value of the ETag header returned by AWS S3 when uploading
+#' part of the file.
+#'
+#' @return parsed list of the returned json
+#'
+#' @export upload_complete_part
+#'
+#' @references
+#' \url{https://developer.sbgenomics.com/api/1.1/post/upload/multipart/\%3Aupload_id}
+#'
+#' @examples
+#' \donttest{token = '58aeb140-1970-0130-6386-001f5b34aa78'
+#' req = upload_complete_part(token,
+#'                            upload_id = '8D7sQJxQk14ubsEnKaoeQZlRvV6ouQtMzBWaQNJdxPDLypUC3WogwtJdncevHxnT',
+#'                            part_number = '1',
+#'                            e_tag = 'd41d8cd98f00b204e9800998ecf8427e')}
 upload_complete_part = function (auth_token = NULL, upload_id = NULL,
                                  part_number = NULL, e_tag = NULL) {
   
@@ -86,15 +161,25 @@ upload_complete_part = function (auth_token = NULL, upload_id = NULL,
   
 }
 
-token = '58aeb140-1970-0130-6386-001f5b34aa78'
-req = upload_complete_part(token,
-                           upload_id = '8D7sQJxQk14ubsEnKaoeQZlRvV6ouQtMzBWaQNJdxPDLypUC3WogwtJdncevHxnT',
-                           part_number = '1',
-                           e_tag = 'd41d8cd98f00b204e9800998ecf8427e')
-
-# 1.5 Reports the complete file upload.
-# If the whole parts are uploaded, and the provided ETags are correct,
-# then the file is assembled and made available on the SBG platform.
+#' Reports the complete file upload
+#'
+#' If the whole parts are uploaded, and the provided ETags are correct,
+#' then the file is assembled and made available on the SBG platform.
+#'
+#' @param auth_token auth token
+#' @param upload_id ID of the upload
+#'
+#' @return parsed list of the returned json
+#'
+#' @export upload_complete_all
+#'
+#' @references
+#' \url{https://developer.sbgenomics.com/api/1.1/post/upload/multipart/\%3Aupload_id/complete}
+#'
+#' @examples
+#' \donttest{token = '58aeb140-1970-0130-6386-001f5b34aa78'
+#' req = upload_complete_all(token,
+#'                           upload_id = '8D7sQJxQk14ubsEnKaoeQZlRvV6ouQtMzBWaQNJdxPDLypUC3WogwtJdncevHxnT')}
 upload_complete_all = function (auth_token = NULL, upload_id = NULL) {
   
   if (is.null(upload_id)) stop('upload_id must be provided')
@@ -107,11 +192,23 @@ upload_complete_all = function (auth_token = NULL, upload_id = NULL) {
   
 }
 
-token = '58aeb140-1970-0130-6386-001f5b34aa78'
-req = upload_complete_all(token,
-                          upload_id = '8D7sQJxQk14ubsEnKaoeQZlRvV6ouQtMzBWaQNJdxPDLypUC3WogwtJdncevHxnT')
-
-# 1.6 Aborts the upload. All upload records and the file are deleted.
+#' Aborts the upload
+#' 
+#' All upload records and the file are deleted.
+#'
+#' @param auth_token auth token
+#' @param upload_id ID of the upload
+#'
+#' @return parsed list of the returned json
+#'
+#' @export upload_delete
+#'
+#' @references
+#' \url{https://developer.sbgenomics.com/api/1.1/delete/upload/multipart/\%3Aupload_id}
+#'
+#' @examples
+#' \donttest{token = '410b4672ebfc43bab48dd0d18a32fb6f'
+#' req = upload_delete(token, upload_id = '8D7sQJxQk14ubsEnKaoeQZlRvV6ouQtMzBWaQNJdxPDLypUC3WogwtJdncevHxnT')}
 upload_delete = function (auth_token = NULL, upload_id = NULL) {
   
   if (is.null(upload_id)) stop('upload_id must be provided')
@@ -122,6 +219,3 @@ upload_delete = function (auth_token = NULL, upload_id = NULL) {
   return(status_check(req))
   
 }
-
-token = '410b4672ebfc43bab48dd0d18a32fb6f'
-req = upload_delete(token, upload_id = '8D7sQJxQk14ubsEnKaoeQZlRvV6ouQtMzBWaQNJdxPDLypUC3WogwtJdncevHxnT')

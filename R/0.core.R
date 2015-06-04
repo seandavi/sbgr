@@ -1,7 +1,13 @@
-library('httr')
-library('jsonlite')
+# library('httr')
+# library('jsonlite')
 
-# wrapper for http logic
+#' wrapper for http logic
+#'
+#' wrapper of http logic for SBG API
+#'
+#' @return returned request list of httr
+#' 
+#' @keywords internal
 sbgapi = function (auth_token = NULL, version = '1.1', path,
                    method = c('GET', 'POST', 'PUT', 'DELETE'),
                    query = NULL, body = NULL) {
@@ -41,6 +47,13 @@ sbgapi = function (auth_token = NULL, version = '1.1', path,
   
 }
 
+#' check request status
+#'
+#' check request status
+#'
+#' @return request content or the message
+#' 
+#' @keywords internal
 status_check = function (req) {
   
   if (status_code(req) == '200') {

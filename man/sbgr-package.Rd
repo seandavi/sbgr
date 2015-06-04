@@ -15,7 +15,7 @@ The comprehensive user guide can be opened with
 Version: \tab 1.0\cr License: \tab MIT\cr }
 }
 \author{
-Nan Xiao <\email{address@sbgenomics.com}>
+Nan Xiao <\email{nanx@uchicago.edu}>
         Teng-Fei Yin <\email{tengfei.yin@sbgenomics.com}>
 }
 

@@ -10,7 +10,7 @@
 #'
 #' @name sbgr-package
 #' @docType package
-#' @author Nan Xiao <\email{nanx@uchicago.edu}>
+#' @author Nan Xiao <\email{nanx@@uchicago.edu}>
 #'         Teng-Fei Yin <\email{tengfei.yin@@sbgenomics.com}>
 #'
 #' @import httr jsonlite
