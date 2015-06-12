@@ -26,7 +26,7 @@ of the JSON, sent as the body of the request. This call returns
 details of the project.
 }
 \examples{
-\donttest{token = '410b4672ebfc43bab48dd0d18a32fb6f'
+\donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
 req = project_new(token, name = 'Test API project',
                   description = 'My first API project',
                   billing_group_id = '5b6d5e71-dff8-42fc-8583-500d858f1093')}

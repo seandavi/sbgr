@@ -15,7 +15,7 @@
 #' \url{https://developer.sbgenomics.com/api/1.1/get/upload/multipart/\%3Aupload_id}
 #'
 #' @examples
-#' \donttest{token = '410b4672ebfc43bab48dd0d18a32fb6f'
+#' \donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' req = upload_info(token,
 #'                   upload_id = '8D7sQJxQk14ubsEnKaoeQZlRvV6ouQtMzBWaQNJdxPDLypUC3WogwtJdncevHxnT')}
 upload_info = function (auth_token = NULL, upload_id = NULL) {
@@ -48,7 +48,7 @@ upload_info = function (auth_token = NULL, upload_id = NULL) {
 #' \url{https://developer.sbgenomics.com/api/1.1/get/upload/multipart/\%3Aupload_id/\%3Apart_number}
 #'
 #' @examples
-#' \donttest{token = '410b4672ebfc43bab48dd0d18a32fb6f'
+#' \donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' req = upload_info_part(token,
 #'                        upload_id = 'aVluXRqSX2bse6va3AFFgVAppOCQ9IABeA8HnyyiEw85j6pNyV989H4xvJpr53xa',
 #'                        part_number = 1)}
@@ -207,7 +207,7 @@ upload_complete_all = function (auth_token = NULL, upload_id = NULL) {
 #' \url{https://developer.sbgenomics.com/api/1.1/delete/upload/multipart/\%3Aupload_id}
 #'
 #' @examples
-#' \donttest{token = '410b4672ebfc43bab48dd0d18a32fb6f'
+#' \donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' req = upload_delete(token, upload_id = '8D7sQJxQk14ubsEnKaoeQZlRvV6ouQtMzBWaQNJdxPDLypUC3WogwtJdncevHxnT')}
 upload_delete = function (auth_token = NULL, upload_id = NULL) {
   

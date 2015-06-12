@@ -18,7 +18,7 @@ parsed list of the returned json
 All upload records and the file are deleted.
 }
 \examples{
-\donttest{token = '410b4672ebfc43bab48dd0d18a32fb6f'
+\donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
 req = upload_delete(token, upload_id = '8D7sQJxQk14ubsEnKaoeQZlRvV6ouQtMzBWaQNJdxPDLypUC3WogwtJdncevHxnT')}
 }
 \references{

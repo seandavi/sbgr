@@ -1,7 +1,4 @@
-# library('httr')
-# library('jsonlite')
-
-#' wrapper for http logic
+#' wrapper of http logic for SBG API
 #'
 #' wrapper of http logic for SBG API
 #'

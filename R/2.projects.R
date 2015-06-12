@@ -14,7 +14,7 @@
 #' \url{https://developer.sbgenomics.com/api/1.1/get/project}
 #'
 #' @examples
-#' \donttest{token = '410b4672ebfc43bab48dd0d18a32fb6f'
+#' \donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' req = project_list(token)}
 project_list = function (auth_token = NULL) {
 
@@ -39,7 +39,7 @@ project_list = function (auth_token = NULL) {
 #' \url{https://developer.sbgenomics.com/api/1.1/get/project/\%3Aproject_id}
 #'
 #' @examples
-#' \donttest{token = '410b4672ebfc43bab48dd0d18a32fb6f'
+#' \donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' req = project_details(token, project_id = 'b0b3a611-6bb0-47e5-add7-a83402cf7858')}
 project_details = function (auth_token = NULL, project_id = NULL) {
   
@@ -69,7 +69,7 @@ project_details = function (auth_token = NULL, project_id = NULL) {
 #' \url{https://developer.sbgenomics.com/api/1.1/get/project/\%3Aproject_id/members}
 #'
 #' @examples
-#' \donttest{token = '410b4672ebfc43bab48dd0d18a32fb6f'
+#' \donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' req = project_members(token, project_id = 'b0b3a611-6bb0-47e5-add7-a83402cf7858')}
 project_members = function (auth_token = NULL, project_id = NULL) {
   
@@ -103,7 +103,7 @@ project_members = function (auth_token = NULL, project_id = NULL) {
 #' \url{https://developer.sbgenomics.com/api/1.1/post/project}
 #'
 #' @examples
-#' \donttest{token = '410b4672ebfc43bab48dd0d18a32fb6f'
+#' \donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' req = project_new(token, name = 'Test API project',
 #'                   description = 'My first API project',
 #'                   billing_group_id = '5b6d5e71-dff8-42fc-8583-500d858f1093')}
@@ -132,6 +132,7 @@ project_new = function (auth_token = NULL, name = NULL,
 #' when adding to the project.
 #'
 #' @param auth_token auth token
+#' @param project_id Name of the project you wish to add user to.
 #' @param username SBG platform username for a user you wish to add to the project.
 #' @param copy Logical. Ability to download or copy files.
 #' @param write Logical. Ability to create/edit/delete project objects.
@@ -146,7 +147,7 @@ project_new = function (auth_token = NULL, name = NULL,
 #' \url{https://developer.sbgenomics.com/api/1.1/post/project/\%3Aproject_id/members}
 #'
 #' @examples
-#' \donttest{token = '410b4672ebfc43bab48dd0d18a32fb6f'
+#' \donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' req = project_member_add(token,
 #'                          project_id = '88fc89c1-cfcd-46ed-a830-6a2fc110c628',
 #'                          username = 'testuser',
@@ -235,7 +236,7 @@ project_member_update = function (auth_token = NULL,
 #' \url{https://developer.sbgenomics.com/api/1.1/delete/project/\%3Aproject_id}
 #'
 #' @examples
-#' \donttest{token = '410b4672ebfc43bab48dd0d18a32fb6f'
+#' \donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' req = project_delete(token, project_id = '3a21ade8-ef3e-41f8-8ac2-1dc3b434ac77')}
 project_delete = function (auth_token = NULL, project_id = NULL) {
   
@@ -265,7 +266,7 @@ project_delete = function (auth_token = NULL, project_id = NULL) {
 #' \url{https://developer.sbgenomics.com/api/1.1/delete/project/\%3Aproject_id/members/\%3Auser_id}
 #'
 #' @examples
-#' \donttest{token = '410b4672ebfc43bab48dd0d18a32fb6f'
+#' \donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' req = project_member_delete(token,
 #'                             project_id = '7f7a72d0-da77-4f51-9416-99f14f7316ab',
 #'                             user_id = '08890148-6d9e-4a10-b284-924228d3f99a')}

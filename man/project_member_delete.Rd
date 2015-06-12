@@ -22,7 +22,7 @@ Note that user_id parameter is not username, but user ID parameter
 that you can receive from GET members call.
 }
 \examples{
-\donttest{token = '410b4672ebfc43bab48dd0d18a32fb6f'
+\donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
 req = project_member_delete(token,
                             project_id = '7f7a72d0-da77-4f51-9416-99f14f7316ab',
                             user_id = '08890148-6d9e-4a10-b284-924228d3f99a')}

@@ -18,7 +18,7 @@ parsed list of the returned json
 Note that this deletes all files, tasks which belong to a project.
 }
 \examples{
-\donttest{token = '410b4672ebfc43bab48dd0d18a32fb6f'
+\donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
 req = project_delete(token, project_id = '3a21ade8-ef3e-41f8-8ac2-1dc3b434ac77')}
 }
 \references{

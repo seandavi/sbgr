@@ -10,6 +10,8 @@ project_member_add(auth_token = NULL, project_id = NULL, username = NULL,
 \arguments{
 \item{auth_token}{auth token}
 
+\item{project_id}{Name of the project you wish to add user to.}
+
 \item{username}{SBG platform username for a user you wish to add to the project.}
 
 \item{copy}{Logical. Ability to download or copy files.}
@@ -29,7 +31,7 @@ privileges. Note that you need to specify user's SBG platform username
 when adding to the project.
 }
 \examples{
-\donttest{token = '410b4672ebfc43bab48dd0d18a32fb6f'
+\donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
 req = project_member_add(token,
                          project_id = '88fc89c1-cfcd-46ed-a830-6a2fc110c628',
                          username = 'testuser',

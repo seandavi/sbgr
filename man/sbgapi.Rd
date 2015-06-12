@@ -2,7 +2,7 @@
 % Please edit documentation in R/0.core.R
 \name{sbgapi}
 \alias{sbgapi}
-\title{wrapper for http logic}
+\title{wrapper of http logic for SBG API}
 \usage{
 sbgapi(auth_token = NULL, version = "1.1", path, method = c("GET", "POST",
   "PUT", "DELETE"), query = NULL, body = NULL)

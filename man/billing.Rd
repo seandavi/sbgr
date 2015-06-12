@@ -19,7 +19,7 @@ appropriate billing group. Full access to billing data is not
 available via the SBG public API yet.
 }
 \examples{
-\donttest{token = '410b4672ebfc43bab48dd0d18a32fb6f'
+\donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
 req = billing(token)}
 }
 \references{

@@ -12,8 +12,6 @@
 \makeatother
 
 \begin{document}
-\SweaveOpts{concordance=TRUE}
-%\SweaveOpts{concordance=TRUE}
 
 <<knitropts,echo=FALSE,message=FALSE>>=
 if (require('knitr')) opts_chunk$set(fig.width = 5, fig.height = 5, fig.align = 'center', tidy = FALSE, warning = FALSE, cache = TRUE)

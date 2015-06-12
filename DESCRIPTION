@@ -1,12 +1,12 @@
 Package: sbgr
 Type: Package
 Title: R Interface for Seven Bridges Genomics API
-Version: 1.0
-Date: 2015-05-14
-Author: Nan Xiao <address@sbgenomics.com>, Tengfei Yin <tengfei.yin@sbgenomics.com>
-Maintainer: Nan Xiao <address@sbgenomics.com>
-Description: R Interface for Seven Bridges Genomics API
-License: MIT
+Version: 0.99
+Date: 2015-05-01
+Author: Nan Xiao <nanx@uchicago.edu>, Tengfei Yin <tengfei.yin@sbgenomics.com>
+Maintainer: Nan Xiao <nanx@uchicago.edu>
+Description: R interface for Seven Bridges Genomics API.
+License: MIT + file LICENSE
 VignetteBuilder: knitr
 Imports:
     httr,

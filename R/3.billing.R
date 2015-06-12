@@ -17,7 +17,7 @@
 #' \url{https://developer.sbgenomics.com/api/1.1/get/billing}
 #'
 #' @examples
-#' \donttest{token = '410b4672ebfc43bab48dd0d18a32fb6f'
+#' \donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' req = billing(token)}
 billing = function (auth_token = NULL) {
 

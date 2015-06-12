@@ -16,7 +16,7 @@ parsed list of the returned json
 Returns the list of all projects you have access to.
 }
 \examples{
-\donttest{token = '410b4672ebfc43bab48dd0d18a32fb6f'
+\donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
 req = project_list(token)}
 }
 \references{

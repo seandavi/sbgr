@@ -18,7 +18,7 @@ parsed list of the returned json
 Returns the details of the project with ID specified by the project_id path parameter.
 }
 \examples{
-\donttest{token = '410b4672ebfc43bab48dd0d18a32fb6f'
+\donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
 req = project_details(token, project_id = 'b0b3a611-6bb0-47e5-add7-a83402cf7858')}
 }
 \references{
