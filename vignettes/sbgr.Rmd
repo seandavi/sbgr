@@ -353,7 +353,7 @@ print(pipeline_mat)
 ## [3,] "5345230dd79f0049c0c9444f" "Whole Genome Analysis - BWA + GATK 2.3.9-Lite (with Metrics)"              
 ## [4,] "534521e5d79f0049c0c94445" "RNA-Seq Alignment for Ion Proton - TopHat + Bowtie 2"                      
 ## [5,] "53452154d79f0049c0c94442" "RNA-Seq Alignment - TopHat"                                                
-## [6,] "546ba1bbd79f00701cb276a6" "Cellular Research Precise™ Analysis Pipeline"                              
+## [6,] "546ba1bbd79f00701cb276a6" "Cellular Research Precise Analysis Pipeline"                              
 ## [7,] "5392689dd79f007259672c79" "Amplicon Experiment QC"                                                    
 ## [8,] "53927c20d79f007259672c8e" "Amplicon Experiment QC - AmpliSeq Exomes"                                  
 ## [9,] "534521d1d79f0049c0c94444" "RNA-Seq Alignment for Ion Proton - STAR + Bowtie 2"                        
