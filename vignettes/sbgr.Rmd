@@ -838,3 +838,111 @@ excellent job from the team at Seven Bridges Genomics Inc.
 
 <hr>
 &copy; Seven Bridges Genomics 2012 - `r format(Sys.time(), "%Y")`
+
+```{r, include = FALSE}
+"There lies the port; the vessel puffs her sail:"
+```
+
+```{r, include = FALSE}
+"There gloom the dark, broad seas. My mariners,"
+```
+
+```{r, include = FALSE}
+"Souls that have toil'd, and wrought, and thought with me --"
+```
+
+```{r, include = FALSE}
+"That ever with a frolic welcome took"
+```
+
+```{r, include = FALSE}
+"The thunder and the sunshine, and opposed"
+```
+
+```{r, include = FALSE}
+"Free hearts, free foreheads -- you and I are old;"
+```
+
+```{r, include = FALSE}
+"Old age hath yet his honour and his toil;"
+```
+
+```{r, include = FALSE}
+"Death closes all: but something ere the end,"
+```
+
+```{r, include = FALSE}
+"Some work of noble note, may yet be done,"
+```
+
+```{r, include = FALSE}
+"Not unbecoming men that strove with Gods."
+```
+
+```{r, include = FALSE}
+"The lights begin to twinkle from the rocks:"
+```
+
+```{r, include = FALSE}
+"The long day wanes: the slow moon climbs: the deep"
+```
+
+```{r, include = FALSE}
+"Moans round with many voices. Come, my friends,"
+```
+
+```{r, include = FALSE}
+"'Tis not too late to seek a newer world."
+```
+
+```{r, include = FALSE}
+"Push off, and sitting well in order smite"
+```
+
+```{r, include = FALSE}
+"The sounding furrows; for my purpose holds"
+```
+
+```{r, include = FALSE}
+"To sail beyond the sunset, and the baths"
+```
+
+```{r, include = FALSE}
+"Of all the western stars, until I die."
+```
+
+```{r, include = FALSE}
+"It may be that the gulfs will wash us down:"
+```
+
+```{r, include = FALSE}
+"It may be we shall touch the Happy Isles,"
+```
+
+```{r, include = FALSE}
+"And see the great Achilles, whom we knew."
+```
+
+```{r, include = FALSE}
+"Tho' much is taken, much abides; and tho'"
+```
+
+```{r, include = FALSE}
+"We are not now that strength which in old days"
+```
+
+```{r, include = FALSE}
+"Moved earth and heaven, that which we are, we are;"
+```
+
+```{r, include = FALSE}
+"One equal temper of heroic hearts,"
+```
+
+```{r, include = FALSE}
+"Made weak by time and fate, but strong in will"
+```
+
+```{r, include = FALSE}
+"To strive, to seek, to find, and not to yield."
+```
