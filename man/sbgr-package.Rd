@@ -3,9 +3,9 @@
 \docType{package}
 \name{sbgr-package}
 \alias{sbgr-package}
-\title{R Interface for Seven Bridges Genomics API}
+\title{R Client for Seven Bridges Genomics API}
 \description{
-R Interface for Seven Bridges Genomics API
+R Client for Seven Bridges Genomics API
 }
 \details{
 The vignette can be opened with \code{vignette('sbgr')}.
@@ -14,7 +14,7 @@ The vignette can be opened with \code{vignette('sbgr')}.
 License: \tab MIT\cr }
 }
 \author{
-Nan Xiao <\email{nanx@uchicago.edu}>
+Nan Xiao <\email{nan.xiao@sbgenomics.com}>
         Teng-Fei Yin <\email{tengfei.yin@sbgenomics.com}>
 }
 

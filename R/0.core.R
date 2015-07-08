@@ -53,7 +53,7 @@ sbgapi = function (auth_token = NULL, version = '1.1', path,
 #' @keywords internal
 status_check = function (req) {
   
-  if (status_code(req) == '200') {
+  if (status_code(req) %in% c('200', '201', '204')) {
     return(content(req, 'parsed'))
   } else if (status_code(req) %in% c('401', '403', '404', '503')) {
     msg = content(req, 'parsed')$message

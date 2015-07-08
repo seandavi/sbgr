@@ -1,6 +1,6 @@
-#' R Interface for Seven Bridges Genomics API
+#' R Client for Seven Bridges Genomics API
 #'
-#' R Interface for Seven Bridges Genomics API
+#' R Client for Seven Bridges Genomics API
 #'
 #' The vignette can be opened with \code{vignette('sbgr')}.
 #'
@@ -9,7 +9,7 @@
 #'
 #' @name sbgr-package
 #' @docType package
-#' @author Nan Xiao <\email{nanx@@uchicago.edu}>
+#' @author Nan Xiao <\email{nan.xiao@@sbgenomics.com}>
 #'         Teng-Fei Yin <\email{tengfei.yin@@sbgenomics.com}>
 #'
 #' @import httr jsonlite

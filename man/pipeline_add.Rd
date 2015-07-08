@@ -24,7 +24,7 @@ Specify values such as \code{"my"} to specify a pipeline from
 parsed list of the returned json
 }
 \description{
-Add a pipeline to a specified project. You can use this functuin to add
+Add a pipeline to a specified project. You can use this function to add
 a pipeline from your other project or a public pipeline to a project.
 }
 \examples{

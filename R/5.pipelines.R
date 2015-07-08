@@ -119,7 +119,7 @@ pipeline_details = function (auth_token = NULL,
 
 #' Add a pipeline to a specified project
 #'
-#' Add a pipeline to a specified project. You can use this functuin to add
+#' Add a pipeline to a specified project. You can use this function to add
 #' a pipeline from your other project or a public pipeline to a project.
 #'
 #' @param auth_token auth token
@@ -147,11 +147,15 @@ pipeline_add = function (auth_token = NULL, project_id_to = NULL,
                          project_id_from = NULL, pipeline_id = NULL,
                          revision = NULL) {
   
-  if (is.null(project_id_to) | is.null(project_id_from) | is.null(pipeline_id))
-    stop('project_id_to, project_id_from and pipeline_id must be provided')
+  if (is.null(project_id_to) | is.null(pipeline_id))
+    stop('project_id_to and pipeline_id must be provided')
   
-  body = list('project_id' = project_id_from,
-              'pipeline_id' = pipeline_id)
+  if (is.null(project_id_from)) {
+    body = list('pipeline_id' = pipeline_id)
+  } else {
+    body = list('project_id' = project_id_from,
+                'pipeline_id' = pipeline_id)
+  }
   
   if (!is.null(revision)) body = c(body, 'revision' = as.character(revision))
   

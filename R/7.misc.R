@@ -12,13 +12,13 @@
 #' @examples
 #' \donttest{misc_get_auth_token()}
 misc_get_auth_token = function () {
-
-  browseURL('https://igor.sbgenomics.com/account/?current=developer')
-  cat("\nEnter generated auth token:")
+  
+  browseURL('https://igor.sbgenomics.com/account/?current=developer#developer')
+  cat("\nEnter the generated authentication token:")
   auth_token = scan(what = character(), nlines = 1L, quiet = TRUE)
-
+  
   return(auth_token)
-
+  
 }
 
 #' Download SBG uploader and extract to a specified directory
@@ -33,16 +33,16 @@ misc_get_auth_token = function () {
 #' @examples
 #' \donttest{misc_get_uploader('~/sbg-uploader/')}
 misc_get_uploader = function (destdir = NULL) {
-
+  
   if (is.null(destdir)) stop('destdir must be provided')
-
+  
   tmpfile = tempfile()
-
+  
   download.file(url = 'https://igor.sbgenomics.com/sbg-uploader/sbg-uploader.tgz',
                 method = 'libcurl', destfile = tmpfile)
-
+  
   untar(tarfile = tmpfile, exdir = path.expand(destdir))
-
+  
 }
 
 #' Specify the parameters of the file metadata and return a list,
@@ -187,6 +187,8 @@ misc_upload_cli = function (auth_token = NULL, uploader = NULL,
   if (!is.null(proxy)) proxy = paste('-x', proxy)
   
   cmd = paste(uploader, auth_token, project_id, proxy, file)
-  system(cmd)
+  res = system(command = cmd, intern = TRUE)
+  fid = strsplit(res, '\t')[[1]][1]
+  return(fid)
   
 }

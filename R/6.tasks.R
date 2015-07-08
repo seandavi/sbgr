@@ -63,7 +63,7 @@ task_list = function (auth_token = NULL, project_id = NULL) {
 #'
 #' @references
 #' \url{https://developer.sbgenomics.com/api/1.1/post/project/\%3Aproject_id/task}
-#'
+#' 
 #' @examples
 #' \donttest{token = '58aeb140-1970-0130-6386-001f5b34aa78'
 #' details = list(
