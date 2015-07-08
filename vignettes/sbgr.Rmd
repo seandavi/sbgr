@@ -50,7 +50,7 @@ The following primary steps will be included:
 
 ## Install the package
 
-To download and install the `r Biocpkg("sbg")` package from _Bioconductor_, type the following commands in _R_:
+To download and install the `r Biocpkg("sbgr")` package from _Bioconductor_, type the following commands in _R_:
 
 ```{r install, eval=FALSE}
 source("http://bioconductor.org/biocLite.R")
@@ -64,6 +64,14 @@ source("http://bioconductor.org/biocLite.R")
 useDevel(devel = TRUE)
 biocLite("sbgr")
 useDevel(devel = FALSE)
+```
+
+Alternatively, you can install the cutting-edge development version of the `r Githubpkg("road2stat/sbgr")` package from GitHub:
+
+```{r install_github, eval=FALSE}
+# install.packages("devtools") if devtools was not installed
+library("devtools")
+install_github("road2stat/sbgr")
 ```
 
 The package runs under Microsoft Windows, OS X, and GNU/Linux. If you meet any problems when installing the package, please check the [Bioconductor - Install](http://www.bioconductor.org/install/) page or [create an issue on GitHub](https://github.com/road2stat/sbgr/issues) and report the problem.
@@ -709,6 +717,10 @@ browseURL("sample1_fastqc/fastqc_report.html")  # open html report in browser
 The [SBG Developer Hub](https://developer.sbgenomics.com) provides API Documentation, quickstart guide, SDK tutorials and additional information on developing your own applications using the Seven Bridges platform.
 
 For a related example of running a series of tasks using a fixed pipeline and parameters, download the archive [sbg_api_example.tar.gz](https://developer.sbgenomics.com/examples/download/sbg_api_example.tar.gz) which contains sample files and a full worked example in Python.
+
+# Acknowledgement
+
+This documentation is based on the original Python version of the API documentation and tutorials. We gratefully appreciate the support and excellent job from the team at Seven Bridges Genomics Inc.
 
 <hr>
 &copy; Seven Bridges Genomics 2012 - `r format(Sys.time(), "%Y")`
