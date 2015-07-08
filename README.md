@@ -22,6 +22,14 @@ biocLite("sbgr")
 useDevel(devel = FALSE)
 ```
 
+Alternatively, you can install the cutting-edge development version of the package from GitHub:
+
+```
+# install.packages("devtools") if devtools was not installed
+library("devtools")
+install_github("road2stat/sbgr")
+```
+
 To load the package in R, simply use
 
 ```
