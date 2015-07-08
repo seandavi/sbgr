@@ -28,9 +28,9 @@ uploading the file in the ETag header.
 \examples{
 \donttest{token = '58aeb140-1970-0130-6386-001f5b34aa78'
 req = upload_complete_part(token,
-                           upload_id = '8D7sQJxQk14ubsEnKaoeQZlRvV6ouQtMzBWaQNJdxPDLypUC3WogwtJdncevHxnT',
-                           part_number = '1',
-                           e_tag = 'd41d8cd98f00b204e9800998ecf8427e')}
+  upload_id = '8D7sQJxQk14ubsEnKaoeQZlRvV6ouQtMzBWaQNJdxPDLypUC3WogwtJdncevHxnT',
+  part_number = '1',
+  e_tag = 'd41d8cd98f00b204e9800998ecf8427e')}
 }
 \references{
 \url{https://developer.sbgenomics.com/api/1.1/post/upload/multipart/\%3Aupload_id}

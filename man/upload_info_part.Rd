@@ -24,8 +24,8 @@ upload to the signed URL in this time frame.
 \examples{
 \donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
 req = upload_info_part(token,
-                       upload_id = 'aVluXRqSX2bse6va3AFFgVAppOCQ9IABeA8HnyyiEw85j6pNyV989H4xvJpr53xa',
-                       part_number = 1)}
+  upload_id = 'aVluXRqSX2bse6va3AFFgVAppOCQ9IABeA8HnyyiEw85j6pNyV989H4xvJpr53xa',
+  part_number = 1)}
 }
 \references{
 \url{https://developer.sbgenomics.com/api/1.1/get/upload/multipart/\%3Aupload_id/\%3Apart_number}

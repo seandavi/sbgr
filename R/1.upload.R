@@ -50,8 +50,8 @@ upload_info = function (auth_token = NULL, upload_id = NULL) {
 #' @examples
 #' \donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' req = upload_info_part(token,
-#'                        upload_id = 'aVluXRqSX2bse6va3AFFgVAppOCQ9IABeA8HnyyiEw85j6pNyV989H4xvJpr53xa',
-#'                        part_number = 1)}
+#'   upload_id = 'aVluXRqSX2bse6va3AFFgVAppOCQ9IABeA8HnyyiEw85j6pNyV989H4xvJpr53xa',
+#'   part_number = 1)}
 upload_info_part = function (auth_token = NULL, 
                              upload_id = NULL, part_number = NULL) {
   
@@ -141,9 +141,9 @@ upload_init = function (auth_token = NULL, project_id = NULL,
 #' @examples
 #' \donttest{token = '58aeb140-1970-0130-6386-001f5b34aa78'
 #' req = upload_complete_part(token,
-#'                            upload_id = '8D7sQJxQk14ubsEnKaoeQZlRvV6ouQtMzBWaQNJdxPDLypUC3WogwtJdncevHxnT',
-#'                            part_number = '1',
-#'                            e_tag = 'd41d8cd98f00b204e9800998ecf8427e')}
+#'   upload_id = '8D7sQJxQk14ubsEnKaoeQZlRvV6ouQtMzBWaQNJdxPDLypUC3WogwtJdncevHxnT',
+#'   part_number = '1',
+#'   e_tag = 'd41d8cd98f00b204e9800998ecf8427e')}
 upload_complete_part = function (auth_token = NULL, upload_id = NULL,
                                  part_number = NULL, e_tag = NULL) {
   
@@ -179,7 +179,7 @@ upload_complete_part = function (auth_token = NULL, upload_id = NULL,
 #' @examples
 #' \donttest{token = '58aeb140-1970-0130-6386-001f5b34aa78'
 #' req = upload_complete_all(token,
-#'                           upload_id = '8D7sQJxQk14ubsEnKaoeQZlRvV6ouQtMzBWaQNJdxPDLypUC3WogwtJdncevHxnT')}
+#'   upload_id = '8D7sQJxQk14ubsEnKaoeQZlRvV6ouQtMzBWaQNJdxPDLypUC3WogwtJdncevHxnT')}
 upload_complete_all = function (auth_token = NULL, upload_id = NULL) {
   
   if (is.null(upload_id)) stop('upload_id must be provided')
@@ -208,7 +208,8 @@ upload_complete_all = function (auth_token = NULL, upload_id = NULL) {
 #'
 #' @examples
 #' \donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
-#' req = upload_delete(token, upload_id = '8D7sQJxQk14ubsEnKaoeQZlRvV6ouQtMzBWaQNJdxPDLypUC3WogwtJdncevHxnT')}
+#' req = upload_delete(token,
+#'   upload_id = '8D7sQJxQk14ubsEnKaoeQZlRvV6ouQtMzBWaQNJdxPDLypUC3WogwtJdncevHxnT')}
 upload_delete = function (auth_token = NULL, upload_id = NULL) {
   
   if (is.null(upload_id)) stop('upload_id must be provided')
