@@ -35,11 +35,13 @@ either bad inputs and/or parameters, or because of the
 internal infrastructure failures.}
 }
 \examples{
-\donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
-req1 = task_details(token, project_id = '1c1d06d2-5862-48f6-b595-e0099b20937e',
-                    task_id = '22237')
-req2 = task_details(token, project_id = '1c1d06d2-5862-48f6-b595-e0099b20937e',
-                    task_id = '22237', download.url = TRUE)}
+token = '420b4672ebfc43bab48dc0d18a32fb6f'
+\donttest{req1 = task_details(token,
+                 project_id = '1c1d06d2-5862-48f6-b595-e0099b20937e',
+                 task_id = '22237')
+req2 = task_details(token,
+       project_id = '1c1d06d2-5862-48f6-b595-e0099b20937e',
+       task_id = '22237', download.url = TRUE)}
 }
 \references{
 \url{https://developer.sbgenomics.com/api/1.1/get/project/\%3Aproject_id/task/\%3Atask_id}

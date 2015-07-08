@@ -38,7 +38,11 @@ code2 <- function(...) {
 
 # Introduction
 
-This guide will get you started to use Seven Bridges API with the _R_ client package `r Biocpkg("sbgr")`, and guide you through the steps needed to run the [FastQC Analysis pipeline](https://igor.sbgenomics.com/public/pipelines/534520eed79f0049c0c9443a/), a simple public pipeline on the Seven Bridges Genomics platform.
+This guide will get you started to use Seven Bridges API with the _R_
+client package `r Biocpkg("sbgr")`, and guide you through the steps needed
+to run the
+[FastQC Analysis pipeline](https://igor.sbgenomics.com/public/pipelines/534520eed79f0049c0c9443a/),
+a simple public pipeline on the Seven Bridges Genomics platform.
 
 The following primary steps will be included:
 
@@ -50,14 +54,18 @@ The following primary steps will be included:
 
 ## Install the package
 
-To download and install the `r Biocpkg("sbgr")` package from _Bioconductor_, type the following commands in _R_:
+To download and install the `r Biocpkg("sbgr")` package from _Bioconductor_,
+type the following commands in _R_:
 
 ```{r install, eval=FALSE}
 source("http://bioconductor.org/biocLite.R")
 biocLite("sbgr")
 ```
 
-It is possible that the package is not availble in the `release` branch right after being pushed to Bioconductor, you may switch to the `devel` branch to install it and switch back to the `release` branch (if you were using the `release` branch at first):
+It is possible that the package is not availble in the `release` branch
+right after being pushed to Bioconductor, you may switch to the `devel`
+branch to install it and switch back to the `release` branch (if you were
+using the `release` branch at first):
 
 ```{r install_2, eval=FALSE}
 source("http://bioconductor.org/biocLite.R")
@@ -66,7 +74,8 @@ biocLite("sbgr")
 useDevel(devel = FALSE)
 ```
 
-Alternatively, you can install the cutting-edge development version of the `r Githubpkg("road2stat/sbgr")` package from GitHub:
+Alternatively, you can install the cutting-edge development version of
+the `r Githubpkg("road2stat/sbgr")` package from GitHub:
 
 ```{r install_github, eval=FALSE}
 # install.packages("devtools") if devtools was not installed
@@ -74,7 +83,11 @@ library("devtools")
 install_github("road2stat/sbgr")
 ```
 
-The package runs under Microsoft Windows, OS X, and GNU/Linux. If you meet any problems when installing the package, please check the [Bioconductor - Install](http://www.bioconductor.org/install/) page or [create an issue on GitHub](https://github.com/road2stat/sbgr/issues) and report the problem.
+The package runs under Microsoft Windows, OS X, and GNU/Linux. If you meet
+any problems when installing the package, please check the
+[Bioconductor - Install](http://www.bioconductor.org/install/) page
+or [create an issue on GitHub](https://github.com/road2stat/sbgr/issues)
+and report the problem.
 
 To load the package in _R_, simply use
 
@@ -84,13 +97,23 @@ library("sbgr")
 
 ## Get authentication token
 
-The authentication token is used as an _password_ to identify yourself when aceessing the API. Please remember to keep your authentication token secure.
+The authentication token is used as an _password_ to identify yourself
+when aceessing the API. Please remember to keep your authentication token
+secure.
 
-To get your authentication token, [register an account](https://igor.sbgenomics.com/register/) (if you have already registered, please skip) and [log in](https://igor.sbgenomics.com/login/) to the dashboard of the Seven Bridges Platform.
+To get your authentication token,
+[register an account](https://igor.sbgenomics.com/register/)
+(if you have already registered, please skip) and
+[log in](https://igor.sbgenomics.com/login/) to the dashboard of the
+Seven Bridges Platform.
 
-Open the [Account settings - Developer](https://igor.sbgenomics.com/account/?current=developer#developer) page, click the button in the page to generate the authentication token (a 32-letter string).
+Open the [Account settings - Developer](https://igor.sbgenomics.com/account/?current=developer#developer)
+page, click the button in the page to generate the authentication token
+(a 32-letter string).
 
-Alternatively, you could use the function `misc_get_auth_token()` in `r Biocpkg("sbgr")` to get the token and store it as an object in R workspace:
+Alternatively, you could use the function `misc_get_auth_token()`
+in `r Biocpkg("sbgr")` to get the token and store it as an object
+in R workspace:
 
 ```{r get_token, eval=FALSE}
 token = misc_get_auth_token()
@@ -101,7 +124,11 @@ token = misc_get_auth_token()
 ## 1: 
 ```
 
-This will automatically open the browser and redirect to the token generation page. You can copy and paste the token into the _R_ console, press enter, and then the function will save the token as an character object `token` in the current workspace, which will make it convenient for you to use it in the next steps. For example:
+This will automatically open the browser and redirect to the token
+generation page. You can copy and paste the token into the _R_ console,
+press enter, and then the function will save the token as an character
+object `token` in the current workspace, which will make it convenient
+for you to use it in the next steps. For example:
 
 ```{r print_token, eval=FALSE}
 print(token)
@@ -115,10 +142,17 @@ print(token)
 
 # Create projects
 
-Pipelines need to be executed within projects. We can either use a project that has already been created, or we can use the API to create a new one. Let's create one from scratch. We do this using the function `project_new()`. The function requires a name for the project (we will use the name `'API tutorial'`) and a billing group, which could be retrived by the function `billing()`. You can also use the optional parameter `description` in `project_new()` to set the project description.
+Pipelines need to be executed within projects. We can either use a project
+that has already been created, or we can use the API to create a new one.
+Let's create one from scratch. We do this using the function `project_new()`.
+The function requires a name for the project (we will use the name
+`'API tutorial'`) and a billing group, which could be retrived by the
+function `billing()`. You can also use the optional parameter `description`
+in `project_new()` to set the project description.
 
 ```{r create_proj, eval=FALSE}
-# Get the first billing group that I have access to and use it for the new project
+# Get the first billing group that we have access to
+# and use it for the new project
 billing_group_id = billing(token)[["items"]][[1]][["id"]]
 
 # Create new project
@@ -140,7 +174,9 @@ print(sbgr_project_id)
 
 # Get project details
 
-We will need the ID of a project to edit the file metatdata and execute pipelines. We can get the details of a project by using `project_details()`.
+We will need the ID of a project to edit the file metatdata and
+execute pipelines. We can get the details of a project by using
+`project_details()`.
 
 ```{r project_details, eval=FALSE}
 project_details(token, project_id = sbgr_project_id)
@@ -170,17 +206,29 @@ $my_permissions$admin
 [1] TRUE
 ```
 
-The returned list contains the details of the project that you can access with your auth token. Each project is listed with its ID number, name, description, and your detailed permissions to access the project.
+The returned list contains the details of the project that you can
+access with your auth token. Each project is listed with its ID number,
+name, description, and your detailed permissions to access the project.
 
 # Upload files and set file metadata
 
-Download the archive of sample data files [sample1.tgz](https://developer.sbgenomics.com/examples/download/sample1.tgz) and assume we have extracted the files to the current _R_ working directory. We will upload the extracted file `sample1.fastq` in this example.
+Download the archive of sample data files [sample1.tgz](https://developer.sbgenomics.com/examples/download/sample1.tgz)
+and assume we have extracted the files to the current _R_ working directory.
+We will upload the extracted file `sample1.fastq` in this example.
 
 ## Upload files using SBG command line uploader
 
-The easiest way to upload files to the Seven Bridges Platform and set their metadata without using the GUI is via the [SBG command-line uploader](https://developer.sbgenomics.com/tools/uploader/documentation). Download the latest version of the [SBG command line uploader](https://igor.sbgenomics.com/sbg-uploader/sbg-uploader.tgz). If you have an older version of the uploader, please be sure to re-download and use the most recent version. You can also use the function `misc_get_uploader()` to download the uploader and extract it to a specified location.
+The easiest way to upload files to the Seven Bridges Platform and set
+their metadata without using the GUI is via the [SBG command-line uploader](https://developer.sbgenomics.com/tools/uploader/documentation).
+Download the latest version of the [SBG command line uploader](https://igor.sbgenomics.com/sbg-uploader/sbg-uploader.tgz).
+If you have an older version of the uploader, please be sure to re-download
+and use the most recent version. You can also use the function
+`misc_get_uploader()` to download the uploader and extract it to
+a specified location.
 
-Once we have prepared the uploader and the file, we can use the function `misc_upload_cli()` to call the CLI uploader for uploading files, by specifying the parameters in the function:
+Once we have prepared the uploader and the file, we can use the function
+`misc_upload_cli()` to call the CLI uploader for uploading files,
+by specifying the parameters in the function:
 
 ```{r misc_upload_cli, eval=FALSE}
 misc_get_uploader('~/')  # download the SBG CLI uploader to home directory
@@ -200,7 +248,8 @@ print(file_id)
 ## [1] "559c41ebe4b0566fd159709a"
 ```
 
-> The uploaded file could be seen in the project we just created on the [Seven Bridges platform](https://igor.sbgenomics.com/u/#q).
+> The uploaded file could be seen in the project we just created on the
+[Seven Bridges platform](https://igor.sbgenomics.com/u/#q).
 
 <!--
 
@@ -208,16 +257,24 @@ print(file_id)
 
 Another way to upload files to the Seven Bridges Platform is via the API calls.
 
-Uploading files with the Seven Bridges API is performed as a multi-step operation. Basically, the required file is uploaded chunk by chunk, and then assembled as a complete file (in a similar way as the AWS S3 API). In order to upload a file, you will need to:
+Uploading files with the Seven Bridges API is performed as a multi-step
+operation. Basically, the required file is uploaded chunk by chunk,
+and then assembled as a complete file (in a similar way as the AWS S3 API).
+In order to upload a file, you will need to:
 
   1. Initialize the upload, defining the file name and size of the file.
-  2. Get signed URLs for the upload of each of the file parts to Amazon Simple Storage Service (S3).
-  3. Upload a part using a standard HTTP PUT call to the [Amazon S3 pre-signed URL](http://docs.aws.amazon.com/AmazonS3/latest/dev/PresignedUrlUploadObject.html).
-  4. If the part has been uploaded successfully, report completion of the part upload, otherwise handle the failure (retry, inform user, etc.).
+  2. Get signed URLs for the upload of each of the file parts to Amazon
+  Simple Storage Service (S3).
+  3. Upload a part using a standard HTTP PUT call to the [Amazon S3pre-signed URL](http://docs.aws.amazon.com/AmazonS3/latest/dev/PresignedUrlUploadObject.html).
+  4. If the part has been uploaded successfully, report completion of
+  the part upload, otherwise handle the failure (retry, inform user, etc.).
   5. Repeat steps 2 to 5 for each file part.
-  6. Once all file parts have been successfully uploaded, report completion of file upload.
+  6. Once all file parts have been successfully uploaded, report completion
+  of file upload.
 
-In this example, we will upload only one file part, since our file is a small one. For larger files, simply split them into smaller file parts and repeat the steps shown below.
+In this example, we will upload only one file part, since our file is
+a small one. For larger files, simply split them into smaller file parts
+and repeat the steps shown below.
 
 -->
 
@@ -244,7 +301,8 @@ fastqfile = upload_file(normalizePath("~/sample1.fastq"))
 upload_s3 = PUT(uri, body = fastqfile)
 # upload_s3 = requests.put(uri, data = f)
 etag = upload_s3$headers[["ETag"]]
-# We make the API call to confirm the successful upload to the S3 backing storage
+# We make the API call to confirm the successful upload
+# to the S3 backing storage
 upload_complete_part(token, upload_id, part_number = 1, e_tag = etag)
 # We make the call to finalize the upload. This ensures that the
 # file becomes available for other API requests.
@@ -255,7 +313,10 @@ upload_complete_all(token, upload_id)
 
 ## Identify uploaded files
 
-To use the files you have uploaded in the previous step, we will first need to get their ID numbers. After uploading files to the project, we can obtain the file ID by running the `file_list()` function to list all the files in the project at anytime.
+To use the files you have uploaded in the previous step, we will first
+need to get their ID numbers. After uploading files to the project, we
+can obtain the file ID by running the `file_list()` function to list all
+the files in the project at anytime.
 
 ```{r file_list, eval=FALSE}
 file_list(token, project_id = sbgr_project_id)
@@ -293,7 +354,10 @@ This will return a list about the details of the uploaded files in the project:
 
 ## Update file metadata
 
-Once the file is uploaded, we can use the function `file_meta_update()` to set or update the file metadata. After we got the file ID number, we can easily set the file metadata by specifying certain parameters in `file_meta_update()`. For example:
+Once the file is uploaded, we can use the function `file_meta_update()`
+to set or update the file metadata. After we got the file ID number,
+we can easily set the file metadata by specifying certain parameters
+in `file_meta_update()`. For example:
 
 ```{r update_meta, eval=FALSE}
 file_meta_update(token, project_id = sbgr_project_id,
@@ -341,11 +405,18 @@ file_meta_update(token, project_id = sbgr_project_id,
 
 The new metadata of the file will be shown after being succesfully updated.
 
-The `r Biocpkg("sbgr")` package also has a helper function `misc_make_metadata()` to generate metadata files. For more information about metadata, please refer to the [file metadata documentation](https://developer.sbgenomics.com/platform/metadata).
+The `r Biocpkg("sbgr")` package also has a helper function
+`misc_make_metadata()` to generate metadata files. For more
+information about metadata, please refer to the
+[file metadata documentation](https://developer.sbgenomics.com/platform/metadata).
 
 # List public pipelines and add pipelines to project
 
-We want to run the [FastQC pipeline](https://igor.sbgenomics.com/public/pipelines/534520eed79f0049c0c9443a/) in our project, so we will need its ID number to identify it. Since the FastQC pipeline is available in the [Seven Bridges public pipelines repository](https://igor.sbgenomics.com/public/pipelines), we will now list all of these pipelines along with their IDs to find the ID that we need. We can list all public pipelines via `pipeline_list_pub()`:
+We want to run the [FastQC pipeline](https://igor.sbgenomics.com/public/pipelines/534520eed79f0049c0c9443a/)
+in our project, so we will need its ID number to identify it. Since the FastQC pipeline is available in the
+[Seven Bridges public pipelines repository](https://igor.sbgenomics.com/public/pipelines),
+we will now list all of these pipelines along with their IDs to find
+the ID that we need. We can list all public pipelines via `pipeline_list_pub()`:
 
 ```{r pipeline_list_pub, eval=FALSE}
 pipeline_list = pipeline_list_pub(token)
@@ -392,7 +463,8 @@ print(pipeline_mat)
 ## [34,] "5345205cd79f0049c0c9442f" "Convert SAM/BAM to FASTQ"
 ```
 
-The pipeline we want is "FastQC Analysis", so we will copy it to our project using the function `pipeline_add()`:
+The pipeline we want is "FastQC Analysis", so we will copy it to our project
+using the function `pipeline_add()`:
 
 ```{r pipeline_add, eval=FALSE}
 # Get the FastQC pipeline ID number in pipeline_mat
@@ -417,13 +489,20 @@ This call returns the details of the copied pipeline.
 ## [1] "0"
 ```
 
-The added pipeline could also be seen in the project we created on the [Seven Bridges platform](https://igor.sbgenomics.com/u/).
+The added pipeline could also be seen in the project we created on the
+[Seven Bridges platform](https://igor.sbgenomics.com/u/).
 
-> Note that the pipeline now has a **new** ID number. This identifies the pipeline within your project. The ID of a pipeline when listed in the public repository is **different** from its ID when listed inside your project.
+> Note that the pipeline now has a **new** ID number. This identifies the
+pipeline within your project. The ID of a pipeline when listed in the
+public repository is **different** from its ID when listed inside your project.
 
 # Get pipeline details and find input nodes
 
-Assume we have cloned the [FastQC pipeline](https://igor.sbgenomics.com/public/pipelines/534520eed79f0049c0c9443a/) into our project via the above code or via the SBG platform. Now we need the **new** ID number of the FastQC pipeline in our project, so we can execute it via the API. To get the details of all available pipelines in your project, use `pipeline_list_project()`:
+Assume we have cloned the [FastQC pipeline](https://igor.sbgenomics.com/public/pipelines/534520eed79f0049c0c9443a/)
+into our project via the above code or via the SBG platform. Now we need
+the **new** ID number of the FastQC pipeline in our project, so we can
+execute it via the API. To get the details of all available pipelines
+in your project, use `pipeline_list_project()`:
 
 ```{r pipeline_list_project, eval=FALSE}
 project_pipeline = pipeline_list_project(token, project_id = sbgr_project_id)
@@ -448,7 +527,10 @@ Now we can extract the ID number of the pipeline:
 pipeline_id = project_pipeline[["items"]][[1]][["id"]]
 ```
 
-To input the file we uploaded to a pipeline, we have to get some more of the pipeline's details. In particular, we will need to get the ID number of its _input nodes_. We can list the full details of our chosen pipeline inside the project using the function `pipeline_details()`:
+To input the file we uploaded to a pipeline, we have to get some more
+of the pipeline's details. In particular, we will need to get the ID number
+of its _input nodes_. We can list the full details of our chosen pipeline
+inside the project using the function `pipeline_details()`:
 
 ```{r pipeline_details, eval=FALSE}
 fastqc_details = pipeline_details(token, project_id = sbgr_project_id,
@@ -456,7 +538,8 @@ fastqc_details = pipeline_details(token, project_id = sbgr_project_id,
 print(fastqc_details)
 ```
 
-The returned list contains the information of the pipeline. We can see that our chosen pipeline contains a single input node with ID `177252`:
+The returned list contains the information of the pipeline. We can see that
+our chosen pipeline contains a single input node with ID `177252`:
 
 ```
 ## $id
@@ -528,19 +611,35 @@ The returned list contains the information of the pipeline. We can see that our 
 ## [1] "FastQC Charts"
 ```
 
-This call returns a list of information about the FastQC pipeline. In particular, it gives the following information:
+This call returns a list of information about the FastQC pipeline.
+In particular, it gives the following information:
 
-  * `id`: The ID number of the pipeline, used by the API to uniquely refer to it
+  * `id`: The ID number of the pipeline, used by the API to uniquely
+  refer to it
   * `revision`: The revision of the pipeline
   * `name`: The human-readable name of the pipeline
   * `description`: A short description of what the pipeline's function
-  * `inputs`: An array listing the pipeline's input nodes, i.e. those pipeline apps which require files as input
-  * `nodes`: An array of intermediary nodes, representing the pipeline apps which transform the data. These may have editable parameters that should be set before running the pipeline, although in this particular pipeline example no parameters are editable.
-  * `output`: An array of output nodes, representing apps that produce files, reports, visualizations, etc.
+  * `inputs`: An array listing the pipeline's input nodes, i.e. those
+  pipeline apps which require files as input
+  * `nodes`: An array of intermediary nodes, representing the pipeline
+  apps which transform the data. These may have editable parameters
+  that should be set before running the pipeline, although in this
+  particular pipeline example no parameters are editable.
+  * `output`: An array of output nodes, representing apps that produce files,
+  reports, visualizations, etc.
 
-We will need to pay special attention to the sub-string that is a list of key-value pairs marked `inputs` for pipeline input nodes. Under each `input` node is a list of suggested files. These are the publicly available files that Seven Bridges Genomics recommends providing as input. Typically these are reference files, such as _reference genomes_, _SNP databases_, _known indels_, etc.
+We will need to pay special attention to the sub-string that is a list of
+key-value pairs marked `inputs` for pipeline input nodes. Under each `input`
+node is a list of suggested files. These are the publicly available files
+that Seven Bridges Genomics recommends providing as input. Typically these
+are reference files, such as _reference genomes_, _SNP databases_,
+_known indels_, etc.
 
-By inspecting the `inputs` part of the response to the call we just made, we can see the names and ID numbers of the suggested files for each input app. Notice that there is an app named `FASTQ`, which takes fastq files as input. This will be where we input the file `sample1.fastq` we want to analyze. We could extract and store the input id as `input_id`:
+By inspecting the `inputs` part of the response to the call we just made,
+we can see the names and ID numbers of the suggested files for each input app.
+Notice that there is an app named `FASTQ`, which takes fastq files as input.
+This will be where we input the file `sample1.fastq` we want to analyze.
+We could extract and store the input id as `input_id`:
 
 ```{r input_id, eval=FALSE}
 input_id = fastqc_details$inputs[[1]]$id
@@ -577,7 +676,8 @@ fastqc_task = task_run(token, project_id = sbgr_project_id, task_details = task)
 print(fastqc_task)
 ```
 
-If the request is well-constructed and contains valid IDs, it will return details of the newly-created task as a response:
+If the request is well-constructed and contains valid IDs, it will return
+details of the newly-created task as a response:
 
 ```
 ## $id
@@ -630,7 +730,9 @@ If the request is well-constructed and contains valid IDs, it will return detail
 
 # Monitor the task and download the results
 
-Tasks typically take a long time to finish. We can periodically (say, every 30 seconds) check the status of a task by using the function `task_details()`:
+Tasks typically take a long time to finish. We can periodically (say,
+every 30 seconds) check the status of a task by using the function
+`task_details()`:
 
 ```{r task_details, eval=FALSE}
 while (TRUE) {
@@ -644,7 +746,10 @@ while (TRUE) {
 print(task_running)
 ```
 
-Usually after running for several minutes, the task should be finished, and you will receive emails when the task is finished. Alternatively, you could also monitor the task status in your dashboard on the SBG website. The output would contain the task information:
+Usually after running for several minutes, the task should be finished,
+and you will receive emails when the task is finished. Alternatively,
+you could also monitor the task status in your dashboard on the SBG website.
+The output would contain the task information:
 
 ```
 ## $id
@@ -701,7 +806,10 @@ Usually after running for several minutes, the task should be finished, and you 
 ## [1] "559c44dbe4b0566fd1597562"
 ```
 
-Once a task has finished, you can locate and download its output files. You will need an external program like `wget` to perform the download. We use the function `file_download_url()` to return the download URLs of the output file (for example, the first output file):
+Once a task has finished, you can locate and download its output files.
+You will need an external program like `wget` to perform the download.
+We use the function `file_download_url()` to return the download URLs of
+the output file (for example, the first output file):
 
 ```{r download, eval=FALSE}
 report_url = file_download_url(token, project_id = sbgr_project_id,
@@ -714,13 +822,19 @@ browseURL("sample1_fastqc/fastqc_report.html")  # open html report in browser
 
 # Additional resources
 
-The [SBG Developer Hub](https://developer.sbgenomics.com) provides API Documentation, quickstart guide, SDK tutorials and additional information on developing your own applications using the Seven Bridges platform.
+The [SBG Developer Hub](https://developer.sbgenomics.com) provides API
+Documentation, quickstart guide, SDK tutorials and additional information
+on developing your own applications using the Seven Bridges platform.
 
-For a related example of running a series of tasks using a fixed pipeline and parameters, download the archive [sbg_api_example.tar.gz](https://developer.sbgenomics.com/examples/download/sbg_api_example.tar.gz) which contains sample files and a full worked example in Python.
+For a related example of running a series of tasks using a fixed pipeline
+and parameters, download the archive [sbg_api_example.tar.gz](https://developer.sbgenomics.com/examples/download/sbg_api_example.tar.gz)
+which contains sample files and a full worked example in Python.
 
 # Acknowledgement
 
-This documentation is based on the original Python version of the API documentation and tutorials. We gratefully appreciate the support and excellent job from the team at Seven Bridges Genomics Inc.
+This documentation is based on the original Python version of the API
+documentation and tutorials. We gratefully appreciate the support and
+excellent job from the team at Seven Bridges Genomics Inc.
 
 <hr>
 &copy; Seven Bridges Genomics 2012 - `r format(Sys.time(), "%Y")`

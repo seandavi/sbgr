@@ -19,8 +19,8 @@ appropriate billing group. Full access to billing data is not
 available via the SBG public API yet.
 }
 \examples{
-\donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
-req = billing(token)}
+token = '420b4672ebfc43bab48dc0d18a32fb6f'
+\donttest{req = billing(token)}
 }
 \references{
 \url{https://developer.sbgenomics.com/api/1.1/get/billing}

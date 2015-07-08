@@ -36,7 +36,7 @@ All the details, including the pipeline ID and runtime parameters,
 are specified via a list. See the example for details.
 }
 \examples{
-\donttest{token = '58aeb140-1970-0130-6386-001f5b34aa78'
+token = '58aeb140-1970-0130-6386-001f5b34aa78'
 details = list(
   'name' = 'Test 2 of C. Elegans VC',
   'description' = 'Testing Caenorhabditis elegans Exome Variant Calling',
@@ -49,9 +49,9 @@ details = list(
                                       'rg_seq_tech' = 'Illumina'),
                       '677492' = list()))
 
-req = task_run(token,
-               project_id = '7f7a72d0-da77-4f51-9416-99f14f7316ab',
-               task_details = details)}
+\donttest{req = task_run(token,
+                project_id = '7f7a72d0-da77-4f51-9416-99f14f7316ab',
+                task_details = details)}
 }
 \references{
 \url{https://developer.sbgenomics.com/api/1.1/post/project/\%3Aproject_id/task}

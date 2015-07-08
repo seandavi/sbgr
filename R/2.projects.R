@@ -14,19 +14,19 @@
 #' \url{https://developer.sbgenomics.com/api/1.1/get/project}
 #'
 #' @examples
-#' \donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
-#' req = project_list(token)}
+#' token = '420b4672ebfc43bab48dc0d18a32fb6f'
+#' \donttest{req = project_list(token)}
 project_list = function (auth_token = NULL) {
-
-  req = sbgapi(auth_token = auth_token, path = 'project', method = 'GET')
-
-  return(status_check(req))
-  
+    
+    req = sbgapi(auth_token = auth_token, path = 'project', method = 'GET')
+    
+    return(status_check(req))
+    
 }
 
-#' Returns the details of the project with ID specified by the project_id path parameter
+#' Returns the details of the project
 #'
-#' Returns the details of the project with ID specified by the project_id path parameter.
+#' Returns the details of the project.
 #'
 #' @param auth_token auth token
 #' @param project_id ID of a project you want to access.
@@ -39,17 +39,18 @@ project_list = function (auth_token = NULL) {
 #' \url{https://developer.sbgenomics.com/api/1.1/get/project/\%3Aproject_id}
 #'
 #' @examples
-#' \donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
-#' req = project_details(token, project_id = 'b0b3a611-6bb0-47e5-add7-a83402cf7858')}
+#' token = '420b4672ebfc43bab48dc0d18a32fb6f'
+#' \donttest{req = project_details(token,
+#'                 project_id = 'b0b3a611-6bb0-47e5-add7-a83402cf7858')}
 project_details = function (auth_token = NULL, project_id = NULL) {
-  
-  if (is.null(project_id)) stop('project_id must be provided')
-  
-  req = sbgapi(auth_token = auth_token,
-               path = paste0('project/', project_id), method = 'GET')
-  
-  return(status_check(req))
-  
+    
+    if (is.null(project_id)) stop('project_id must be provided')
+    
+    req = sbgapi(auth_token = auth_token,
+                 path = paste0('project/', project_id), method = 'GET')
+    
+    return(status_check(req))
+    
 }
 
 #' Returns a list of all users invited to the project and their privileges
@@ -69,18 +70,19 @@ project_details = function (auth_token = NULL, project_id = NULL) {
 #' \url{https://developer.sbgenomics.com/api/1.1/get/project/\%3Aproject_id/members}
 #'
 #' @examples
-#' \donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
-#' req = project_members(token, project_id = 'b0b3a611-6bb0-47e5-add7-a83402cf7858')}
+#' token = '420b4672ebfc43bab48dc0d18a32fb6f'
+#' \donttest{req = project_members(token,
+#'                 project_id = 'b0b3a611-6bb0-47e5-add7-a83402cf7858')}
 project_members = function (auth_token = NULL, project_id = NULL) {
-  
-  if (is.null(project_id)) stop('project_id must be provided')
-  
-  req = sbgapi(auth_token = auth_token,
-               path = paste0('project/', project_id, '/members'),
-               method = 'GET')
-  
-  return(status_check(req))
-  
+    
+    if (is.null(project_id)) stop('project_id must be provided')
+    
+    req = sbgapi(auth_token = auth_token,
+                 path = paste0('project/', project_id, '/members'),
+                 method = 'GET')
+    
+    return(status_check(req))
+    
 }
 
 #' Create new project
@@ -93,7 +95,8 @@ project_members = function (auth_token = NULL, project_id = NULL) {
 #' @param auth_token auth token
 #' @param name Name of the project you wish to create.
 #' @param description Description of the project you wish to create.
-#' @param billing_group_id ID of the billing group you wish to use for this project.
+#' @param billing_group_id ID of the billing group you wish to use
+#' for this project.
 #'
 #' @return parsed list of the returned json
 #'
@@ -103,26 +106,26 @@ project_members = function (auth_token = NULL, project_id = NULL) {
 #' \url{https://developer.sbgenomics.com/api/1.1/post/project}
 #'
 #' @examples
-#' \donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
-#' req = project_new(token, name = 'Test API project',
-#'                   description = 'My first API project',
-#'                   billing_group_id = '5b6d5e71-dff8-42fc-8583-500d858f1093')}
+#' token = '420b4672ebfc43bab48dc0d18a32fb6f'
+#' \donttest{req = project_new(token, name = 'Test API project',
+#'                 description = 'My first API project',
+#'                 billing_group_id = '5b6d5e71-dff8-42fc-8583-500d858f1093')}
 project_new = function (auth_token = NULL, name = NULL,
                         description = NULL, billing_group_id = NULL) {
-  
-  if (is.null(name) | is.null(description) | is.null(billing_group_id))
-    stop('name, description, and billing_group_id must be provided')
-  
-  body = list('name' = name,
-              'description' = description,
-              'billing_group_id' = billing_group_id)
-  
-  req = sbgapi(auth_token = auth_token, 
-               path = 'project', body = body,
-               method = 'POST')
-  
-  return(status_check(req))
-  
+    
+    if (is.null(name) | is.null(description) | is.null(billing_group_id))
+        stop('name, description, and billing_group_id must be provided')
+    
+    body = list('name' = name,
+                'description' = description,
+                'billing_group_id' = billing_group_id)
+    
+    req = sbgapi(auth_token = auth_token, 
+                 path = 'project', body = body,
+                 method = 'POST')
+    
+    return(status_check(req))
+    
 }
 
 #' Add a user to the project with appropriate permissions
@@ -133,11 +136,13 @@ project_new = function (auth_token = NULL, name = NULL,
 #'
 #' @param auth_token auth token
 #' @param project_id Name of the project you wish to add user to.
-#' @param username SBG platform username for a user you wish to add to the project.
+#' @param username SBG platform username for a user you wish to add to
+#' the project.
 #' @param copy Logical. Ability to download or copy files.
 #' @param write Logical. Ability to create/edit/delete project objects.
 #' @param execute Logical. Ability to run tasks.
-#' @param admin Logical. User has all rights on the project (including changing).
+#' @param admin Logical. User has all rights on the project
+#' (including changing).
 #'
 #' @return parsed list of the returned json
 #'
@@ -147,29 +152,28 @@ project_new = function (auth_token = NULL, name = NULL,
 #' \url{https://developer.sbgenomics.com/api/1.1/post/project/\%3Aproject_id/members}
 #'
 #' @examples
-#' \donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
-#' req = project_member_add(token,
-#'                          project_id = '88fc89c1-cfcd-46ed-a830-6a2fc110c628',
-#'                          username = 'testuser',
-#'                          write = TRUE)}
+#' token = '420b4672ebfc43bab48dc0d18a32fb6f'
+#' \donttest{req = project_member_add(token,
+#'                 project_id = '88fc89c1-cfcd-46ed-a830-6a2fc110c628',
+#'                 username = 'testuser', write = TRUE)}
 project_member_add = function (auth_token = NULL, project_id = NULL,
                                username = NULL, copy = FALSE, write = FALSE,
                                execute = FALSE, admin = FALSE) {
-  
-  if (is.null(project_id) | is.null(username))
-    stop('project_id and username must be both provided')
-  
-  body = list('username' = username,
-              'permissions' = list(
-                'copy' = copy, 'write' = write,
-                'execute' = execute, 'admin' = admin))
-  
-  req = sbgapi(auth_token = auth_token, 
-               path = paste0('project/', project_id, '/members'),
-               body = body, method = 'POST')
-  
-  return(status_check(req))
-  
+    
+    if (is.null(project_id) | is.null(username))
+        stop('project_id and username must be both provided')
+    
+    body = list('username' = username,
+                'permissions' = list(
+                    'copy' = copy, 'write' = write,
+                    'execute' = execute, 'admin' = admin))
+    
+    req = sbgapi(auth_token = auth_token, 
+                 path = paste0('project/', project_id, '/members'),
+                 body = body, method = 'POST')
+    
+    return(status_check(req))
+    
 }
 
 #' Set permissions for a user to a project
@@ -186,7 +190,8 @@ project_member_add = function (auth_token = NULL, project_id = NULL,
 #' @param write Logical. Ability to create/edit/delete project objects.
 #' @param copy Logical. Ability to download or copy files.
 #' @param execute Logical. Ability to run tasks.
-#' @param admin Logical. User has all rights on the project (including changing).
+#' @param admin Logical. User has all rights on the project
+#' (including changing).
 #'
 #' @return parsed list of the returned json
 #'
@@ -196,29 +201,29 @@ project_member_add = function (auth_token = NULL, project_id = NULL,
 #' \url{https://developer.sbgenomics.com/api/1.1/put/project/\%3Aproject_id/members/\%3Auser_id}
 #'
 #' @examples
-#' \donttest{token = '58aeb140-1970-0130-6386-001f5b34aa78'
-#' req = project_member_update(token,
-#'                             project_id = '7f7a72d0-da77-4f51-9416-99f14f7316ab',
-#'                             user_id = '08890148-6d9e-4a10-b284-924228d3f99a')}
+#' token = '58aeb140-1970-0130-6386-001f5b34aa78'
+#' \donttest{req = project_member_update(token,
+#'             project_id = '7f7a72d0-da77-4f51-9416-99f14f7316ab',
+#'             user_id = '08890148-6d9e-4a10-b284-924228d3f99a')}
 project_member_update = function (auth_token = NULL,
                                   project_id = NULL, user_id = NULL,
                                   write = FALSE, copy = FALSE,
                                   execute = FALSE, admin = FALSE) {
-  
-  if (is.null(project_id) | is.null(user_id))
-    stop('project_id and user_id must be both provided')
-  
-  body = list('write' = write,
-              'copy' = copy,
-              'execute' = execute,
-              'admin' = admin)
-  
-  req = sbgapi(auth_token = auth_token,
-               path = paste0('project/', project_id, '/members/', user_id),
-               body = body, method = 'PUT')
-  
-  return(status_check(req))
-  
+    
+    if (is.null(project_id) | is.null(user_id))
+        stop('project_id and user_id must be both provided')
+    
+    body = list('write' = write,
+                'copy' = copy,
+                'execute' = execute,
+                'admin' = admin)
+    
+    req = sbgapi(auth_token = auth_token,
+                 path = paste0('project/', project_id, '/members/', user_id),
+                 body = body, method = 'PUT')
+    
+    return(status_check(req))
+    
 }
 
 #' Delete a project
@@ -236,17 +241,18 @@ project_member_update = function (auth_token = NULL,
 #' \url{https://developer.sbgenomics.com/api/1.1/delete/project/\%3Aproject_id}
 #'
 #' @examples
-#' \donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
-#' req = project_delete(token, project_id = '3a21ade8-ef3e-41f8-8ac2-1dc3b434ac77')}
+#' token = '420b4672ebfc43bab48dc0d18a32fb6f'
+#' \donttest{req = project_delete(token, 
+#'             project_id = '3a21ade8-ef3e-41f8-8ac2-1dc3b434ac77')}
 project_delete = function (auth_token = NULL, project_id = NULL) {
-  
-  if (is.null(project_id)) stop('project_id must be provided')
-  
-  req = sbgapi(auth_token = auth_token,
-               path = paste0('project/', project_id), method = 'DELETE')
-  
-  return(status_check(req))
-  
+    
+    if (is.null(project_id)) stop('project_id must be provided')
+    
+    req = sbgapi(auth_token = auth_token,
+                 path = paste0('project/', project_id), method = 'DELETE')
+    
+    return(status_check(req))
+    
 }
 
 #' Removes a member from a project
@@ -266,20 +272,20 @@ project_delete = function (auth_token = NULL, project_id = NULL) {
 #' \url{https://developer.sbgenomics.com/api/1.1/delete/project/\%3Aproject_id/members/\%3Auser_id}
 #'
 #' @examples
-#' \donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
-#' req = project_member_delete(token,
-#'                             project_id = '7f7a72d0-da77-4f51-9416-99f14f7316ab',
-#'                             user_id = '08890148-6d9e-4a10-b284-924228d3f99a')}
+#' token = '420b4672ebfc43bab48dc0d18a32fb6f'
+#' \donttest{req = project_member_delete(token,
+#'             project_id = '7f7a72d0-da77-4f51-9416-99f14f7316ab',
+#'             user_id = '08890148-6d9e-4a10-b284-924228d3f99a')}
 project_member_delete = function (auth_token = NULL,
                                   project_id = NULL, user_id = NULL) {
-  
-  if (is.null(project_id) | is.null(user_id))
-    stop('project_id and user_id must be both provided')
-  
-  req = sbgapi(auth_token = auth_token,
-               path = paste0('project/', project_id, '/members/', user_id),
-               method = 'DELETE')
-  
-  return(status_check(req))
-  
+    
+    if (is.null(project_id) | is.null(user_id))
+        stop('project_id and user_id must be both provided')
+    
+    req = sbgapi(auth_token = auth_token,
+                 path = paste0('project/', project_id, '/members/', user_id),
+                 method = 'DELETE')
+    
+    return(status_check(req))
+    
 }

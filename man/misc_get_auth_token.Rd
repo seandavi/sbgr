@@ -14,6 +14,9 @@ Click 'Generate Token' button, copy and paste the generated token
 string to the R console. The function will return the token string.
 }
 \examples{
-\donttest{misc_get_auth_token()}
+# Paste the auth token into R
+# console then press enter:
+token = NULL
+\donttest{token = misc_get_auth_token()}
 }
 

@@ -18,17 +18,18 @@
 #' \url{https://developer.sbgenomics.com/api/1.1/get/project/\%3Aproject_id/file}
 #'
 #' @examples
-#' \donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
-#' req = file_list(token, project_id = '1c1d06d2-5862-48f6-b595-e0099b20937e')}
+#' token = '420b4672ebfc43bab48dc0d18a32fb6f'
+#' \donttest{req = file_list(token,
+#'             project_id = '1c1d06d2-5862-48f6-b595-e0099b20937e')}
 file_list = function (auth_token = NULL, project_id = NULL) {
-  
-  if (is.null(project_id)) stop('project_id must be provided')
-  
-  req = sbgapi(auth_token = auth_token,
-               path = paste0('project/', project_id, '/file'), method = 'GET')
-  
-  return(status_check(req))
-  
+    
+    if (is.null(project_id)) stop('project_id must be provided')
+    
+    req = sbgapi(auth_token = auth_token,
+                 path = paste0('project/', project_id, '/file'), method = 'GET')
+    
+    return(status_check(req))
+    
 }
 
 #' Returns detailed information about a project's files
@@ -47,20 +48,21 @@ file_list = function (auth_token = NULL, project_id = NULL) {
 #' \url{https://developer.sbgenomics.com/api/1.1/get/project/\%3Aproject_id/file/\%3Afile_id}
 #'
 #' @examples
-#' \donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
-#' req = file_details(token, project_id = '1c1d06d2-5862-48f6-b595-e0099b20937e',
-#'                    file_id = '530854e2e4b036506b803c7e')}
+#' token = '420b4672ebfc43bab48dc0d18a32fb6f'
+#' \donttest{req = file_details(token,
+#'             project_id = '1c1d06d2-5862-48f6-b595-e0099b20937e',
+#'             file_id = '530854e2e4b036506b803c7e')}
 file_details = function (auth_token = NULL, project_id = NULL, file_id = NULL) {
-  
-  if (is.null(project_id) | is.null(file_id))
-    stop('project_id and file_id must be both provided')
-  
-  req = sbgapi(auth_token = auth_token,
-               path = paste0('project/', project_id, '/file/', file_id),
-               method = 'GET')
-  
-  return(status_check(req))
-  
+    
+    if (is.null(project_id) | is.null(file_id))
+        stop('project_id and file_id must be both provided')
+    
+    req = sbgapi(auth_token = auth_token,
+                 path = paste0('project/', project_id, '/file/', file_id),
+                 method = 'GET')
+    
+    return(status_check(req))
+    
 }
 
 #' Copy specified file(s) to the specified project
@@ -80,25 +82,25 @@ file_details = function (auth_token = NULL, project_id = NULL, file_id = NULL) {
 #' \url{https://developer.sbgenomics.com/api/1.1/post/project/\%3Aproject_id/file}
 #'
 #' @examples
-#' \donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
-#' req = file_copy(token,
-#'                 project_id = '7f7a72d0-da77-4f51-9416-99f14f7316ab',
-#'                 file_id = c('5506a44ae4b04a4ab3ae7250',
-#'                             '5506a44ae4b04a4ab3ae7254',
-#'                             '5506a44ae4b04a4ab3ae7252'))}
+#' token = '420b4672ebfc43bab48dc0d18a32fb6f'
+#' \donttest{req = file_copy(token,
+#'             project_id = '7f7a72d0-da77-4f51-9416-99f14f7316ab',
+#'             file_id = c('5506a44ae4b04a4ab3ae7250',
+#'                         '5506a44ae4b04a4ab3ae7254',
+#'                         '5506a44ae4b04a4ab3ae7252'))}
 file_copy = function (auth_token = NULL, project_id = NULL, file_id = NULL) {
-  
-  if (is.null(project_id) | is.null(file_id))
-    stop('project_id and file_id must be both provided')
-  
-  body = list('file_id' = as.character(file_id))
-  
-  req = sbgapi(auth_token = auth_token, 
-               path = paste0('project/', project_id, '/file'),
-               body = body, method = 'POST')
-  
-  return(status_check(req))
-  
+    
+    if (is.null(project_id) | is.null(file_id))
+        stop('project_id and file_id must be both provided')
+    
+    body = list('file_id' = as.character(file_id))
+    
+    req = sbgapi(auth_token = auth_token, 
+                 path = paste0('project/', project_id, '/file'),
+                 body = body, method = 'POST')
+    
+    return(status_check(req))
+    
 }
 
 #' Update project's file metadata
@@ -122,11 +124,11 @@ file_copy = function (auth_token = NULL, project_id = NULL, file_id = NULL) {
 #' specify the quality score encoding scheme by setting
 #' \code{qual_scale} inside the pipeline. For BAM files, this value
 #' should always be \code{'sanger'}.
-#' @param seq_tech Sequencing technology. The \code{seq_tech} parameter allows you to specify
-#' the sequencing technology used. This metadata parameter is only
-#' required by some the tools and pipelines; however, it is strongly
-#' recommended that you set it whenever possible, unless you are certain
-#' that your pipeline will work without it.
+#' @param seq_tech Sequencing technology. The \code{seq_tech} parameter
+#' allows you to specify the sequencing technology used. This metadata
+#' parameter is only required by some the tools and pipelines;
+#' however, it is strongly recommended that you set it whenever possible,
+#' unless you are certain that your pipeline will work without it.
 #' @param sample Sample ID. You can use the \code{sample} parameter to specify
 #' the sample identifier. The value supplied in this field will be written
 #' to the read group tag (\code{@@RG:SM}) in SAM/BAM files generated from reads
@@ -158,49 +160,51 @@ file_copy = function (auth_token = NULL, project_id = NULL, file_id = NULL) {
 #' \item \url{https://developer.sbgenomics.com/platform/metadata}}
 #'
 #' @examples
-#' \donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
-#' req = file_meta_update(token,
-#'                        project_id = '1c1d06d2-5862-48f6-b595-e0099b20937e',
-#'                        file_id = '530854e2e4b036506b803c7e',
-#'                        name = 'c.elegans_chr2_test.fastq',
-#'                        file_type = 'fastq', qual_scale = 'illumina13',
-#'                        seq_tech = 'Illumina')}
+#' token = '420b4672ebfc43bab48dc0d18a32fb6f'
+#' \donttest{req = file_meta_update(token,
+#'             project_id = '1c1d06d2-5862-48f6-b595-e0099b20937e',
+#'             file_id = '530854e2e4b036506b803c7e',
+#'             name = 'c.elegans_chr2_test.fastq',
+#'             file_type = 'fastq', qual_scale = 'illumina13',
+#'             seq_tech = 'Illumina')}
 file_meta_update = function (auth_token = NULL,
                              project_id = NULL, file_id = NULL,
                              name = NULL,
                              file_type = c('text', 'binary', 'fasta', 'csfasta',
                                            'fastq', 'qual', 'xsq', 'sff', 'bam',
-                                           'bam_index', 'illumina_export', 'vcf',
-                                           'sam', 'bed', 'archive', 'juncs',
-                                           'gtf','gff', 'enlis_genome'),
-                             qual_scale = c('sanger', 'illumina13', 'illumina15',
-                                            'illumina18', 'solexa'),
+                                           'bam_index', 'illumina_export',
+                                           'vcf', 'sam', 'bed', 'archive',
+                                           'juncs', 'gtf','gff',
+                                           'enlis_genome'),
+                             qual_scale = c('sanger', 'illumina13',
+                                            'illumina15', 'illumina18',
+                                            'solexa'),
                              seq_tech = c('454', 'Helicos', 'Illumina', 'Solid',
                                           'IonTorrent'),
                              sample = NULL, library = NULL,
                              platform_unit = NULL, paired_end = NULL) {
-  
-  if (is.null(project_id) | is.null(file_id))
-    stop('project_id and file_id must be both provided')
-  
-  body = list(list('file_type' = file_type,
-                   'qual_scale' = qual_scale,
-                   'seq_tech' = seq_tech))
-  names(body) = 'metadata'
-  
-  if (!is.null(sample)) body$'metadata'$'sample' = as.character(sample)
-  if (!is.null(library)) body$'metadata'$'library' = as.character(library)
-  if (!is.null(platform_unit)) body$'metadata'$'platform_unit' = as.character(platform_unit)
-  if (!is.null(paired_end)) body$'metadata'$'paired_end' = as.character(paired_end)
-  
-  if (!is.null(name)) body = c(list('name' = name), body)
-  
-  req = sbgapi(auth_token = auth_token,
-               path = paste0('project/', project_id, '/file/', file_id),
-               body = body, method = 'PUT')
-  
-  return(status_check(req))
-  
+    
+    if (is.null(project_id) | is.null(file_id))
+        stop('project_id and file_id must be both provided')
+    
+    body = list(list('file_type' = file_type,
+                     'qual_scale' = qual_scale,
+                     'seq_tech' = seq_tech))
+    names(body) = 'metadata'
+    
+    if (!is.null(sample)) body$'metadata'$'sample' = as.character(sample)
+    if (!is.null(library)) body$'metadata'$'library' = as.character(library)
+    if (!is.null(platform_unit)) body$'metadata'$'platform_unit' = as.character(platform_unit)
+    if (!is.null(paired_end)) body$'metadata'$'paired_end' = as.character(paired_end)
+    
+    if (!is.null(name)) body = c(list('name' = name), body)
+    
+    req = sbgapi(auth_token = auth_token,
+                 path = paste0('project/', project_id, '/file/', file_id),
+                 body = body, method = 'PUT')
+    
+    return(status_check(req))
+    
 }
 
 #' Removes a file from a project
@@ -219,22 +223,22 @@ file_meta_update = function (auth_token = NULL,
 #' \url{https://developer.sbgenomics.com/api/1.1/delete/project/\%3Aproject_id/file/\%3Afile_id}
 #'
 #' @examples
-#' \donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
-#' req = file_delete(token,
-#'                   project_id = '1c1d06d2-5862-48f6-b595-e0099b20937e',
-#'                   file_id = '530854e2e4b036506b803c7e')}
+#' token = '420b4672ebfc43bab48dc0d18a32fb6f'
+#' \donttest{req = file_delete(token,
+#'             project_id = '1c1d06d2-5862-48f6-b595-e0099b20937e',
+#'             file_id = '530854e2e4b036506b803c7e')}
 file_delete = function (auth_token = NULL,
                         project_id = NULL, file_id = NULL) {
-  
-  if (is.null(project_id) | is.null(file_id))
-    stop('project_id and file_id must be both provided')
-  
-  req = sbgapi(auth_token = auth_token,
-               path = paste0('project/', project_id, '/file/', file_id),
-               method = 'DELETE')
-  
-  return(status_check(req))
-  
+    
+    if (is.null(project_id) | is.null(file_id))
+        stop('project_id and file_id must be both provided')
+    
+    req = sbgapi(auth_token = auth_token,
+                 path = paste0('project/', project_id, '/file/', file_id),
+                 method = 'DELETE')
+    
+    return(status_check(req))
+    
 }
 
 #' Returns a direct download URL for a project's file
@@ -256,21 +260,21 @@ file_delete = function (auth_token = NULL,
 #' \url{https://developer.sbgenomics.com/api/1.1/get/project/\%3Aproject_id/file/\%3Afile_id/download}
 #'
 #' @examples
-#' \donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
-#' req = file_download_url(token,
-#'                         project_id = '1c1d06d2-5862-48f6-b595-e0099b20937e',
-#'                         file_id = '530854e2e4b036506b803c7e')}
+#' token = '420b4672ebfc43bab48dc0d18a32fb6f'
+#' \donttest{req = file_download_url(token,
+#'             project_id = '1c1d06d2-5862-48f6-b595-e0099b20937e',
+#'             file_id = '530854e2e4b036506b803c7e')}
 file_download_url = function (auth_token = NULL, 
                               project_id = NULL, file_id = NULL) {
-  
-  if (is.null(project_id) | is.null(file_id))
-    stop('project_id and file_id must be both provided')
-  
-  req = sbgapi(auth_token = auth_token,
-               path = paste0('project/', project_id,
-                             '/file/', file_id, '/download'),
-               method = 'GET')
-  
-  return(status_check(req))
-  
+    
+    if (is.null(project_id) | is.null(file_id))
+        stop('project_id and file_id must be both provided')
+    
+    req = sbgapi(auth_token = auth_token,
+                 path = paste0('project/', project_id,
+                               '/file/', file_id, '/download'),
+                 method = 'GET')
+    
+    return(status_check(req))
+    
 }

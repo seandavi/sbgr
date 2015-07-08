@@ -12,7 +12,8 @@ project_member_add(auth_token = NULL, project_id = NULL, username = NULL,
 
 \item{project_id}{Name of the project you wish to add user to.}
 
-\item{username}{SBG platform username for a user you wish to add to the project.}
+\item{username}{SBG platform username for a user you wish to add to
+the project.}
 
 \item{copy}{Logical. Ability to download or copy files.}
 
@@ -20,7 +21,8 @@ project_member_add(auth_token = NULL, project_id = NULL, username = NULL,
 
 \item{execute}{Logical. Ability to run tasks.}
 
-\item{admin}{Logical. User has all rights on the project (including changing).}
+\item{admin}{Logical. User has all rights on the project
+(including changing).}
 }
 \value{
 parsed list of the returned json
@@ -31,11 +33,10 @@ privileges. Note that you need to specify user's SBG platform username
 when adding to the project.
 }
 \examples{
-\donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
-req = project_member_add(token,
-                         project_id = '88fc89c1-cfcd-46ed-a830-6a2fc110c628',
-                         username = 'testuser',
-                         write = TRUE)}
+token = '420b4672ebfc43bab48dc0d18a32fb6f'
+\donttest{req = project_member_add(token,
+                project_id = '88fc89c1-cfcd-46ed-a830-6a2fc110c628',
+                username = 'testuser', write = TRUE)}
 }
 \references{
 \url{https://developer.sbgenomics.com/api/1.1/post/project/\%3Aproject_id/members}

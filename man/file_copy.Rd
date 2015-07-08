@@ -21,12 +21,12 @@ parsed list of the returned json
 Copy specified file(s) to the specified project
 }
 \examples{
-\donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
-req = file_copy(token,
-                project_id = '7f7a72d0-da77-4f51-9416-99f14f7316ab',
-                file_id = c('5506a44ae4b04a4ab3ae7250',
-                            '5506a44ae4b04a4ab3ae7254',
-                            '5506a44ae4b04a4ab3ae7252'))}
+token = '420b4672ebfc43bab48dc0d18a32fb6f'
+\donttest{req = file_copy(token,
+            project_id = '7f7a72d0-da77-4f51-9416-99f14f7316ab',
+            file_id = c('5506a44ae4b04a4ab3ae7250',
+                        '5506a44ae4b04a4ab3ae7254',
+                        '5506a44ae4b04a4ab3ae7252'))}
 }
 \references{
 \url{https://developer.sbgenomics.com/api/1.1/post/project/\%3Aproject_id/file}

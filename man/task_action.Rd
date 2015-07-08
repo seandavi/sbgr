@@ -24,11 +24,11 @@ parsed list of the returned json
 Performs action on the task.
 }
 \examples{
-\donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
-req = task_action(token,
-                  project_id = '7f7a72d0-da77-4f51-9416-99f14f7316ab',
-                  task_id = '5506a44ae4b04a4ab3ae7250',
-                  action = 'abort')}
+token = '420b4672ebfc43bab48dc0d18a32fb6f'
+\donttest{req = task_action(token,
+                project_id = '7f7a72d0-da77-4f51-9416-99f14f7316ab',
+                task_id = '5506a44ae4b04a4ab3ae7250',
+                action = 'abort')}
 }
 \references{
 \url{https://developer.sbgenomics.com/api/1.1/post/project/\%3Aproject_id/task/\%3Atask_id}

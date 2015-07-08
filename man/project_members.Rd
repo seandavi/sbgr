@@ -20,8 +20,9 @@ Project ID is specified as path parameter. Call returns ID and username
 of the user with privileges.
 }
 \examples{
-\donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
-req = project_members(token, project_id = 'b0b3a611-6bb0-47e5-add7-a83402cf7858')}
+token = '420b4672ebfc43bab48dc0d18a32fb6f'
+\donttest{req = project_members(token,
+                project_id = 'b0b3a611-6bb0-47e5-add7-a83402cf7858')}
 }
 \references{
 \url{https://developer.sbgenomics.com/api/1.1/get/project/\%3Aproject_id/members}

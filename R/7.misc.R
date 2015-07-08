@@ -10,20 +10,26 @@
 #' @export misc_get_auth_token
 #'
 #' @examples
-#' \donttest{misc_get_auth_token()}
+#' # Paste the auth token into R
+#' # console then press enter:
+#' token = NULL
+#' \donttest{token = misc_get_auth_token()}
 misc_get_auth_token = function () {
-  
-  browseURL('https://igor.sbgenomics.com/account/?current=developer#developer')
-  cat("\nEnter the generated authentication token:")
-  auth_token = scan(what = character(), nlines = 1L, quiet = TRUE)
-  
-  return(auth_token)
-  
+    
+    browseURL('https://igor.sbgenomics.com/account/?current=developer#developer')
+    cat("\nEnter the generated authentication token:")
+    auth_token = scan(what = character(), nlines = 1L, quiet = TRUE)
+    
+    return(auth_token)
+    
 }
 
 #' Download SBG uploader and extract to a specified directory
 #'
 #' Download SBG uploader and extract to a specified directory.
+#'
+#' @return \code{0L} if the SBG CLI uploader is successfully
+#' downloaded and unarchived.
 #'
 #' @param destdir The directory to extract SBG uploader to.
 #' If not present, it will be created automatically.
@@ -31,18 +37,19 @@ misc_get_auth_token = function () {
 #' @export misc_get_uploader
 #'
 #' @examples
-#' \donttest{misc_get_uploader('~/sbg-uploader/')}
+#' dir = '~/sbg-uploader/'
+#' \donttest{misc_get_uploader(dir)}
 misc_get_uploader = function (destdir = NULL) {
-  
-  if (is.null(destdir)) stop('destdir must be provided')
-  
-  tmpfile = tempfile()
-  
-  download.file(url = 'https://igor.sbgenomics.com/sbg-uploader/sbg-uploader.tgz',
-                method = 'libcurl', destfile = tmpfile)
-  
-  untar(tarfile = tmpfile, exdir = path.expand(destdir))
-  
+    
+    if (is.null(destdir)) stop('destdir must be provided')
+    
+    tmpfile = tempfile()
+    
+    download.file(url = 'https://igor.sbgenomics.com/sbg-uploader/sbg-uploader.tgz',
+                  method = 'libcurl', destfile = tmpfile)
+    
+    untar(tarfile = tmpfile, exdir = path.expand(destdir))
+    
 }
 
 #' Specify the parameters of the file metadata and return a list,
@@ -68,11 +75,11 @@ misc_get_uploader = function (destdir = NULL) {
 #' specify the quality score encoding scheme by setting
 #' \code{qual_scale} inside the pipeline. For BAM files, this value
 #' should always be \code{'sanger'}.
-#' @param seq_tech Sequencing technology. The \code{seq_tech} parameter allows you to specify
-#' the sequencing technology used. This metadata parameter is only
-#' required by some the tools and pipelines; however, it is strongly
-#' recommended that you set it whenever possible, unless you are certain
-#' that your pipeline will work without it.
+#' @param seq_tech Sequencing technology. The \code{seq_tech} parameter
+#' allows you to specify the sequencing technology used. This metadata
+#' parameter is only required by some the tools and pipelines; however,
+#' it is strongly recommended that you set it whenever possible, unless
+#' you are certain that your pipeline will work without it.
 #' @param sample Sample ID. You can use the \code{sample} parameter to specify
 #' the sample identifier. The value supplied in this field will be written
 #' to the read group tag (\code{@@RG:SM}) in SAM/BAM files generated from reads
@@ -102,54 +109,59 @@ misc_get_uploader = function (destdir = NULL) {
 #' \url{https://developer.sbgenomics.com/platform/metadata}
 #'
 #' @examples
+#' destfile = '~/c.elegans_chr2_test.fastq.meta'
 #' \donttest{misc_make_metadata(output = 'metafile',
-#'             destfile = '~/c.elegans_chr2_test.fastq.meta',
+#'             destfile = destfile,
 #'             name = 'c.elegans_chr2_test.fastq',
 #'             file_type = 'fastq', qual_scale = 'illumina13',
 #'             seq_tech = 'Illumina')}
 misc_make_metadata = function (output = c('list', 'json', 'metafile'),
                                destfile = NULL,
                                name = NULL,
-                               file_type = c('text', 'binary', 'fasta', 'csfasta',
-                                             'fastq', 'qual', 'xsq', 'sff', 'bam',
-                                             'bam_index', 'illumina_export', 'vcf',
-                                             'sam', 'bed', 'archive', 'juncs',
+                               file_type = c('text', 'binary', 'fasta',
+                                             'csfasta', 'fastq', 'qual',
+                                             'xsq', 'sff', 'bam', 'bam_index',
+                                             'illumina_export', 'vcf', 'sam',
+                                             'bed', 'archive', 'juncs',
                                              'gtf','gff', 'enlis_genome'),
-                               qual_scale = c('sanger', 'illumina13', 'illumina15',
-                                              'illumina18', 'solexa'),
-                               seq_tech = c('454', 'Helicos', 'Illumina', 'Solid',
-                                            'IonTorrent'),
+                               qual_scale = c('sanger', 'illumina13',
+                                              'illumina15', 'illumina18',
+                                              'solexa'),
+                               seq_tech = c('454', 'Helicos', 'Illumina',
+                                            'Solid', 'IonTorrent'),
                                sample = NULL, library = NULL,
                                platform_unit = NULL, paired_end = NULL) {
-  
-  body = list(list('file_type' = file_type,
-                   'qual_scale' = qual_scale,
-                   'seq_tech' = seq_tech))
-  names(body) = 'metadata'
-  
-  if (!is.null(sample)) body$'metadata'$'sample' = as.character(sample)
-  if (!is.null(library)) body$'metadata'$'library' = as.character(library)
-  if (!is.null(platform_unit)) body$'metadata'$'platform_unit' = as.character(platform_unit)
-  if (!is.null(paired_end)) body$'metadata'$'paired_end' = as.character(paired_end)
-  
-  if (!is.null(name)) body = c(list('name' = name), body)
-  
-  if (output == 'metafile') {
-    if (is.null(destfile)) stop('destfile must be provided')
-    body = toJSON(body, auto_unbox = TRUE)
-    writeLines(body, con = destfile)
-  } else if (output == 'json') {
-    body = toJSON(body, auto_unbox = TRUE)
-    return(body)
-  } else if (output == 'list') {
-    return(body)
-  }
-  
+    
+    body = list(list('file_type' = file_type,
+                     'qual_scale' = qual_scale,
+                     'seq_tech' = seq_tech))
+    names(body) = 'metadata'
+    
+    if (!is.null(sample)) body$'metadata'$'sample' = as.character(sample)
+    if (!is.null(library)) body$'metadata'$'library' = as.character(library)
+    if (!is.null(platform_unit)) body$'metadata'$'platform_unit' = as.character(platform_unit)
+    if (!is.null(paired_end)) body$'metadata'$'paired_end' = as.character(paired_end)
+    
+    if (!is.null(name)) body = c(list('name' = name), body)
+    
+    if (output == 'metafile') {
+        if (is.null(destfile)) stop('destfile must be provided')
+        body = toJSON(body, auto_unbox = TRUE)
+        writeLines(body, con = destfile)
+    } else if (output == 'json') {
+        body = toJSON(body, auto_unbox = TRUE)
+        return(body)
+    } else if (output == 'list') {
+        return(body)
+    }
+    
 }
 
 #' Upload files using SBG uploader
 #'
 #' Upload files using SBG uploader.
+#'
+#' @return The uploaded file's ID number.
 #'
 #' @param auth_token auth token
 #' @param uploader The directory where the SBG uploader is located
@@ -168,27 +180,28 @@ misc_make_metadata = function (output = c('list', 'json', 'metafile'),
 #' \url{https://developer.sbgenomics.com/tools/uploader/documentation}
 #'
 #' @examples
-#' \donttest{misc_upload_cli(auth_token = 'your token',
+#' token = '420b4672ebfc43bab48dc0d18a32fb6f'
+#' \donttest{misc_upload_cli(auth_token = token,
 #'                           uploader = '~/sbg-uploader/',
-#'                           file = '~/test.fastq', project_id = '1234')}
+#'                           file = '~/example.fastq', project_id = '1234')}
 misc_upload_cli = function (auth_token = NULL, uploader = NULL,
                             file = NULL, project_id = NULL,
                             proxy = NULL) {
-  
-  if (is.null(auth_token)) stop('auth_token must be provided')
-  if (is.null(uploader)) stop('SBG uploader location must be provided')
-  if (is.null(file)) stop('File location must be provided')
-  
-  auth_token = paste('-t', auth_token)
-  uploader = file.path(paste0(uploader, '/bin/sbg-uploader.sh'))
-  file = file.path(file)
-  
-  if (!is.null(project_id)) project_id = paste('-p', project_id)
-  if (!is.null(proxy)) proxy = paste('-x', proxy)
-  
-  cmd = paste(uploader, auth_token, project_id, proxy, file)
-  res = system(command = cmd, intern = TRUE)
-  fid = strsplit(res, '\t')[[1]][1]
-  return(fid)
-  
+    
+    if (is.null(auth_token)) stop('auth_token must be provided')
+    if (is.null(uploader)) stop('SBG uploader location must be provided')
+    if (is.null(file)) stop('File location must be provided')
+    
+    auth_token = paste('-t', auth_token)
+    uploader = file.path(paste0(uploader, '/bin/sbg-uploader.sh'))
+    file = file.path(file)
+    
+    if (!is.null(project_id)) project_id = paste('-p', project_id)
+    if (!is.null(proxy)) proxy = paste('-x', proxy)
+    
+    cmd = paste(uploader, auth_token, project_id, proxy, file)
+    res = system(command = cmd, intern = TRUE)
+    fid = strsplit(res, '\t')[[1]][1]
+    return(fid)
+    
 }

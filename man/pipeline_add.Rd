@@ -28,11 +28,11 @@ Add a pipeline to a specified project. You can use this function to add
 a pipeline from your other project or a public pipeline to a project.
 }
 \examples{
-\donttest{token = '58aeb140-1970-0130-6386-001f5b34aa78'
-req = pipeline_add(token,
-                   project_id_to = '7f7a72d0-da77-4f51-9416-99f14f7316ab',
-                   project_id_from = 'f0eb447f-3511-4b28-9253-eba96191d432',
-                   pipeline_id = '53452130d79f0049c0c94441')}
+token = '58aeb140-1970-0130-6386-001f5b34aa78'
+\donttest{req = pipeline_add(token,
+            project_id_to = '7f7a72d0-da77-4f51-9416-99f14f7316ab',
+            project_id_from = 'f0eb447f-3511-4b28-9253-eba96191d432',
+            pipeline_id = '53452130d79f0049c0c94441')}
 }
 \references{
 \url{https://developer.sbgenomics.com/api/1.1/post/project/\%3Aproject_id/pipeline}

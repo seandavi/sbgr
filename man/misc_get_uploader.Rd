@@ -10,10 +10,15 @@ misc_get_uploader(destdir = NULL)
 \item{destdir}{The directory to extract SBG uploader to.
 If not present, it will be created automatically.}
 }
+\value{
+\code{0L} if the SBG CLI uploader is successfully
+downloaded and unarchived.
+}
 \description{
 Download SBG uploader and extract to a specified directory.
 }
 \examples{
-\donttest{misc_get_uploader('~/sbg-uploader/')}
+dir = '~/sbg-uploader/'
+\donttest{misc_get_uploader(dir)}
 }
 

@@ -32,11 +32,11 @@ specify the quality score encoding scheme by setting
 \code{qual_scale} inside the pipeline. For BAM files, this value
 should always be \code{'sanger'}.}
 
-\item{seq_tech}{Sequencing technology. The \code{seq_tech} parameter allows you to specify
-the sequencing technology used. This metadata parameter is only
-required by some the tools and pipelines; however, it is strongly
-recommended that you set it whenever possible, unless you are certain
-that your pipeline will work without it.}
+\item{seq_tech}{Sequencing technology. The \code{seq_tech} parameter
+allows you to specify the sequencing technology used. This metadata
+parameter is only required by some the tools and pipelines;
+however, it is strongly recommended that you set it whenever possible,
+unless you are certain that your pipeline will work without it.}
 
 \item{sample}{Sample ID. You can use the \code{sample} parameter to specify
 the sample identifier. The value supplied in this field will be written
@@ -75,13 +75,13 @@ File Metadata Documentation:
 \url{https://developer.sbgenomics.com/platform/metadata}.
 }
 \examples{
-\donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
-req = file_meta_update(token,
-                       project_id = '1c1d06d2-5862-48f6-b595-e0099b20937e',
-                       file_id = '530854e2e4b036506b803c7e',
-                       name = 'c.elegans_chr2_test.fastq',
-                       file_type = 'fastq', qual_scale = 'illumina13',
-                       seq_tech = 'Illumina')}
+token = '420b4672ebfc43bab48dc0d18a32fb6f'
+\donttest{req = file_meta_update(token,
+            project_id = '1c1d06d2-5862-48f6-b595-e0099b20937e',
+            file_id = '530854e2e4b036506b803c7e',
+            name = 'c.elegans_chr2_test.fastq',
+            file_type = 'fastq', qual_scale = 'illumina13',
+            seq_tech = 'Illumina')}
 }
 \references{
 \enumerate{

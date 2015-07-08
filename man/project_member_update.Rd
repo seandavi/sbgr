@@ -21,7 +21,8 @@ project_member_update(auth_token = NULL, project_id = NULL,
 
 \item{execute}{Logical. Ability to run tasks.}
 
-\item{admin}{Logical. User has all rights on the project (including changing).}
+\item{admin}{Logical. User has all rights on the project
+(including changing).}
 }
 \value{
 parsed list of the returned json
@@ -34,10 +35,10 @@ Note that you must get the user IDs by performing the project_members()
 call and gathering id of the user with a specific permission.
 }
 \examples{
-\donttest{token = '58aeb140-1970-0130-6386-001f5b34aa78'
-req = project_member_update(token,
-                            project_id = '7f7a72d0-da77-4f51-9416-99f14f7316ab',
-                            user_id = '08890148-6d9e-4a10-b284-924228d3f99a')}
+token = '58aeb140-1970-0130-6386-001f5b34aa78'
+\donttest{req = project_member_update(token,
+            project_id = '7f7a72d0-da77-4f51-9416-99f14f7316ab',
+            user_id = '08890148-6d9e-4a10-b284-924228d3f99a')}
 }
 \references{
 \url{https://developer.sbgenomics.com/api/1.1/put/project/\%3Aproject_id/members/\%3Auser_id}

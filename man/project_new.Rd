@@ -14,7 +14,8 @@ project_new(auth_token = NULL, name = NULL, description = NULL,
 
 \item{description}{Description of the project you wish to create.}
 
-\item{billing_group_id}{ID of the billing group you wish to use for this project.}
+\item{billing_group_id}{ID of the billing group you wish to use
+for this project.}
 }
 \value{
 parsed list of the returned json
@@ -26,10 +27,10 @@ of the JSON, sent as the body of the request. This call returns
 details of the project.
 }
 \examples{
-\donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
-req = project_new(token, name = 'Test API project',
-                  description = 'My first API project',
-                  billing_group_id = '5b6d5e71-dff8-42fc-8583-500d858f1093')}
+token = '420b4672ebfc43bab48dc0d18a32fb6f'
+\donttest{req = project_new(token, name = 'Test API project',
+                description = 'My first API project',
+                billing_group_id = '5b6d5e71-dff8-42fc-8583-500d858f1093')}
 }
 \references{
 \url{https://developer.sbgenomics.com/api/1.1/post/project}

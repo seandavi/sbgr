@@ -39,10 +39,10 @@ Limits: \itemize{
 \item Default part size is 5MB}
 }
 \examples{
-\donttest{token = '58aeb140-1970-0130-6386-001f5b34aa78'
-req = upload_init(token,
-                  project_id = 'f0eb447f-3511-4b28-9253-eba96191d432',
-                  name = 'Sample1_RNASeq_chr20.pe_1.fastq', size = 5242880)}
+token = '58aeb140-1970-0130-6386-001f5b34aa78'
+\donttest{req = upload_init(token,
+                project_id = 'f0eb447f-3511-4b28-9253-eba96191d432',
+                name = 'Sample1_RNASeq_chr20.pe_1.fastq', size = 5242880)}
 }
 \references{
 \url{https://developer.sbgenomics.com/api/1.1/post/upload/multipart}

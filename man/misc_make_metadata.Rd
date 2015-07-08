@@ -33,11 +33,11 @@ specify the quality score encoding scheme by setting
 \code{qual_scale} inside the pipeline. For BAM files, this value
 should always be \code{'sanger'}.}
 
-\item{seq_tech}{Sequencing technology. The \code{seq_tech} parameter allows you to specify
-the sequencing technology used. This metadata parameter is only
-required by some the tools and pipelines; however, it is strongly
-recommended that you set it whenever possible, unless you are certain
-that your pipeline will work without it.}
+\item{seq_tech}{Sequencing technology. The \code{seq_tech} parameter
+allows you to specify the sequencing technology used. This metadata
+parameter is only required by some the tools and pipelines; however,
+it is strongly recommended that you set it whenever possible, unless
+you are certain that your pipeline will work without it.}
 
 \item{sample}{Sample ID. You can use the \code{sample} parameter to specify
 the sample identifier. The value supplied in this field will be written
@@ -76,8 +76,9 @@ File Metadata Documentation:
 \url{https://developer.sbgenomics.com/platform/metadata}.
 }
 \examples{
+destfile = '~/c.elegans_chr2_test.fastq.meta'
 \donttest{misc_make_metadata(output = 'metafile',
-            destfile = '~/c.elegans_chr2_test.fastq.meta',
+            destfile = destfile,
             name = 'c.elegans_chr2_test.fastq',
             file_type = 'fastq', qual_scale = 'illumina13',
             seq_tech = 'Illumina')}

@@ -18,9 +18,9 @@ parsed list of the returned json
 Returns the upload information for the ongoing upload.
 }
 \examples{
-\donttest{token = '420b4672ebfc43bab48dc0d18a32fb6f'
-req = upload_info(token,
-                  upload_id = '8D7sQJxQk14ubsEnKaoeQZlRvV6ouQtMzBWaQNJdxPDLypUC3WogwtJdncevHxnT')}
+token = '420b4672ebfc43bab48dc0d18a32fb6f'
+\donttest{req = upload_info(token,
+                upload_id = '8D7sQJxQk14ubsEnKaoeQZlRvV6ouQtMzBWaQNJdxPDLypUC3WogwtJdncevHxnT')}
 }
 \references{
 \url{https://developer.sbgenomics.com/api/1.1/get/upload/multipart/\%3Aupload_id}
