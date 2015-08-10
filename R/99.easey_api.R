@@ -1,117 +1,15 @@
 setClassUnion("characterORNULL", c("character", "NULL"))
 setClassUnion("numericORNULL", c("numeric", "NULL"))
 setClassUnion("listORNULL", c("list", "NULL"))
-## MISC
-response <- function(x){
-    attr(x, "response")
-}
 
-.getFields <- function(x, values) {
-                           ## from Martin's code
-                           flds = names(x$getRefClass()$fields())
-                           if (!missing(values))
-                               flds = flds[flds %in% values]
-                           result = setNames(vector("list", length(flds)), flds)
-                           for (fld in flds)
-                               result[[fld]] = .self[[fld]]
-                           result
-                       }
-
-stopifnot_provided <- function(..., msg = "is not provided"){
-    n <- length(ll <- list(...))
-    if(n == 0)
-        return(invisible())
-    mc <- match.call()
-    x = NULL
-    for(i in 1:n){
-        if(!(is.logical(r <- eval(ll[[i]])) && all(r))){
-            l <- mc[[i+1]][[2]]
-            x <- c(x, deparse(l[[length(l)]]))
-        }
-    }
-    if(length(x))
-        stop(paste(paste(x, collapse = ","), msg), call. = FALSE)
-}
-
-
-
-
-m.fun <- function(x, y, exact = TRUE, ignore.case = TRUE, ...){
-    if(exact){
-        pmatch(x, y, ...)
-    }else{
-        grep(x, y, ignore.case = ignore.case, ...)
-    }
-}
-
-## match by id and name
-m.match <- function(obj, id = NULL, name = NULL,
-                    .id = "id",
-                    .name = "name",
-                    exact = TRUE, ignore.case = TRUE){
-    ## if no match, return whole list
-    if(is.null(id)){
-        if(is.null(name)){
-            return(obj)
-        }else{
-            ## id is null, so use username
-            nms <- sapply(obj, function(x) x[[.name]])
-            if(ignore.case){
-                name <- tolower(name)
-                nms <- tolower(nms)
-            }
-            index <- m.fun(name, nms,
-                           exact = exact,
-                           ignore.case = ignore.case)
-        }
-    }else{
-        ## id is not NULL
-        ids <- sapply(obj, function(x) x[[.id]])
-        index <- m.fun(id, ids,
-                       exact = exact,
-                       ignore.case = ignore.case)
-
-    }
-    if(length(index) == 1 && is.na(index)){
-        stop("no matching")
-    }else{
-        if(length(index) ==1){
-            obj[[index]]
-        }else{
-            obj[index]
-        }
-    }
-}
-
-
-.showFields <- function(x, title = NULL, values = NULL){
-    if (missing(values)){
-        flds = names(x$getRefClass()$fields())
-    }else{
-        flds = values
-    }
-
-    ## if(is.null(title))
-    ##     title <- class(x)
-    if(!is.null(title)){
-        message(title)        
-    }
-    
-    for (fld in flds)
-        message(fld, " : ", x[[fld]])
-    
-}
-
-.showList <- function(x){
-    if(length(x)){
-        x <- x[!sapply(x, is.null)]
-        for (fld in names(x))
-            message(fld, " : ", x[[fld]])
-    }
-}
-
-## suppose to be httr reponse class
-## fixme: contains url, propogate auth_token
+#' Class Item
+#'
+#' Class Item
+#'
+#' To describe a set of objects, Project, Task, Pipeline, File etc.
+#' 
+#' @field response save the raw response from a request.
+#' @field auth_token propogate the auth_token from parent.
 Item <- setRefClass("Item", fields = list(response = "ANY",
                                 auth_token = "characterORNULL"),
                     methods = list(
@@ -120,7 +18,28 @@ Item <- setRefClass("Item", fields = list(response = "ANY",
                         }
                     ))
 
-## Want to define a set of class to represent the data more
+#' Class Auth
+#'
+#' Auth token object
+#'
+#' Every object coud be requested from this Auth object and any action
+#' could start from this object using cascading. 
+#'
+#' @field auth_token [character] your auth token.
+#' @field url [character] basic url used for API.
+#'
+#' @param auth_token [character] your auth token.
+#' @param api [character %in% 'sbg-us', 'cgc'] which api you are
+#' using, by default it is sbg us platform.
+#' @param url [chracter] a URL for the API, default is \code{NULL},
+#' will use \code{api} parameter to switch to the right one.
+#' @param version [character] default: 1.1 version used for api.
+#'
+#' 
+#' 
+#'
+#' @export Auth
+#' @exportClass Auth
 Auth <- setRefClass("Auth", fields = list(auth_token = "character",
                                 url = "character"),
                     methods = list(
@@ -128,8 +47,7 @@ Auth <- setRefClass("Auth", fields = list(auth_token = "character",
                             auth_token = NULL,
                             api = c("sbg-us", "cgc"),
                             url = NULL,
-                            version = "1.1",
-                            ...){
+                            version = "1.1"){
 
                             api <- match.arg(api)
 
@@ -150,7 +68,7 @@ Auth <- setRefClass("Auth", fields = list(auth_token = "character",
                             }else{
                                 url <<- url                                    
                             }
-                            callSuper(...)
+
                         },
                         project_list = function(){
                             res <- sbgr::project_list(auth_token)
@@ -800,8 +718,11 @@ Upload <- setRefClass("Upload",
                               close(pb)                              
                               res <- upload_complete_all()
                               close(con)
+                              message("file uploading complete")
+                             
                               ## when we complete we could add meta
                               if(length(.self$metadata)){
+                                  message("Adding metadata ...")
                                   req <- sbgapi(auth_token = auth_token,
                                                        path = paste0('project/',
                                                            project_id,
@@ -809,6 +730,7 @@ Upload <- setRefClass("Upload",
                                                        body = .self$metadata,
                                                        method = 'PUT')
                                   res <- status_check(req)
+                                  message("Metadata complete")
                               }
                               res <- .asFile(res)                              
                               res
@@ -878,8 +800,11 @@ Upload$methods(list(
                  'solexa')
 
 .seq_tech <- c('454', 'Helicos', 'Illumina', 'Solid', 'IonTorrent')
+.paired_end <- c(NA, "1", "2")
+library(objectProperties)
 
-## NOT used
+FileTypleSingleEnum <- setSingleEnum("FileType", .file_type)
+##
 Metadata <- setRefClass("Metadata",
                         fields = list(
                             file_type = "characterORNULL",
@@ -1149,4 +1074,113 @@ Task <- setRefClass("Task", contains = "Item",
 
 
 
+
+## MISC
+response <- function(x){
+    attr(x, "response")
+}
+
+.getFields <- function(x, values) {
+                           ## from Martin's code
+                           flds = names(x$getRefClass()$fields())
+                           if (!missing(values))
+                               flds = flds[flds %in% values]
+                           result = setNames(vector("list", length(flds)), flds)
+                           for (fld in flds)
+                               result[[fld]] = .self[[fld]]
+                           result
+                       }
+
+stopifnot_provided <- function(..., msg = "is not provided"){
+    n <- length(ll <- list(...))
+    if(n == 0)
+        return(invisible())
+    mc <- match.call()
+    x = NULL
+    for(i in 1:n){
+        if(!(is.logical(r <- eval(ll[[i]])) && all(r))){
+            l <- mc[[i+1]][[2]]
+            x <- c(x, deparse(l[[length(l)]]))
+        }
+    }
+    if(length(x))
+        stop(paste(paste(x, collapse = ","), msg), call. = FALSE)
+}
+
+
+
+
+m.fun <- function(x, y, exact = TRUE, ignore.case = TRUE, ...){
+    if(exact){
+        pmatch(x, y, ...)
+    }else{
+        grep(x, y, ignore.case = ignore.case, ...)
+    }
+}
+
+## match by id and name
+m.match <- function(obj, id = NULL, name = NULL,
+                    .id = "id",
+                    .name = "name",
+                    exact = TRUE, ignore.case = TRUE){
+    ## if no match, return whole list
+    if(is.null(id)){
+        if(is.null(name)){
+            return(obj)
+        }else{
+            ## id is null, so use username
+            nms <- sapply(obj, function(x) x[[.name]])
+            if(ignore.case){
+                name <- tolower(name)
+                nms <- tolower(nms)
+            }
+            index <- m.fun(name, nms,
+                           exact = exact,
+                           ignore.case = ignore.case)
+        }
+    }else{
+        ## id is not NULL
+        ids <- sapply(obj, function(x) x[[.id]])
+        index <- m.fun(id, ids,
+                       exact = exact,
+                       ignore.case = ignore.case)
+
+    }
+    if(length(index) == 1 && is.na(index)){
+        stop("no matching")
+    }else{
+        if(length(index) ==1){
+            obj[[index]]
+        }else{
+            obj[index]
+        }
+    }
+}
+
+
+.showFields <- function(x, title = NULL, values = NULL){
+    if (missing(values)){
+        flds = names(x$getRefClass()$fields())
+    }else{
+        flds = values
+    }
+
+    ## if(is.null(title))
+    ##     title <- class(x)
+    if(!is.null(title)){
+        message(title)        
+    }
+    
+    for (fld in flds)
+        message(fld, " : ", x[[fld]])
+    
+}
+
+.showList <- function(x){
+    if(length(x)){
+        x <- x[!sapply(x, is.null)]
+        for (fld in names(x))
+            message(fld, " : ", x[[fld]])
+    }
+}
 

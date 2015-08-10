@@ -1,0 +1,203 @@
+---
+title: "Easy API: A more user-friendly API"
+output:
+  BiocStyle::html_document:
+    toc: true
+    number_sections: true
+    highlight: haddock
+    css: style.css
+    includes:
+      in_header: logo.md
+---
+
+<!--
+%\VignetteIndexEntry{Easy API: A more user-friendly API}
+%\VignettePackage{sbgr}
+%\VignetteEngine{knitr::rmarkdown}
+-->
+
+```{r style, echo = FALSE, results = 'asis'}
+BiocStyle::markdown(css.files = "custom.css")
+```
+
+<!-- override white background for classless code chunks -->
+<style type="text/css" scoped>
+  pre:not([class]) { background-color: #F8F8F8; }
+  pre code { background-color: transparent; }
+</style>
+
+```{r code, echo = FALSE}
+code <- function(...) {
+    cat(paste(..., sep = "\n"))
+}
+
+code2 <- function(...) {
+    cat(paste("```markdown", ..., "\n", "```", sep = "\n"))
+}
+```
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+```
+
+# Introduction
+This "easy API" is built on lower level R API function calls provided by this pacakge, (please check the other tutorial and manual) but with a more user friendly interface that provides
+
+- Simpler cascading style from a _Auth_ object or its children, for example
+
+```{r, eval = FALSE}
+## download a file
+a$project("wgs")$file("17.vcf")$download()
+## upload a file
+a$project("wgs")$upload("sample.tgz")
+```
+
+- Exact mathcing or fuzz matching by names and id.
+- Actions for each different objects
+- Nice print format than a long list
+- Return an R5 object in stead of a list
+- Extensible with more actions
+
+We defined several different objects easy to manipulate, including _Auth_, _Project_, _Task_, _File_, _Upload_, _Member_, etc, each comes with their own methods to access the server, send request and get a response.
+
+To understand the cascading style, you has to under stand the structure of the SBG platforms. 
+
+- Each account could generate one auth token, it's our top level object. 
+- Each account has several different projects represented by  _Project_ object
+- Each account had different billing group and each project is assigned to particular billing group in order to run on AWS cloud. 
+- Each project is composed with files (_File_ object), tasks (_Task_ object), pipelines (_Pipeline_ object) and members or users (_Member_ object) with different permission level.
+- Each member has its own permission to particular project.
+- A task is a scheuled pipeline job with files and parameters. 
+
+So our cascading visually represent this relationship and structure, if you are familiar with SBG platform, you will find this interface very easy to understand.
+
+To understand the API better, you can also check the original SBG developer hub [documents](https://docs.sbgenomics.com/display/developerhub/API)
+
+## Cheatsheet
+
+```{r}
+a <- Auth()
+a$billing()
+a$project(name = , id = )
+a$project("single")$member(name = , id = )
+a$project("single")$file(name = , id = )
+a$project("single")$file("single")$download()
+a$project("single")$upload(file = , metadata = )
+a$project("single")$pipeline(name = , id = )
+a$project("single")$task(name = , id = )
+a$project("single")$task("single")$run()
+a$project("single")$task("single")$abort()
+```
+
+# Quick start: running the FastQC pipeline
+I will go through the same tutorial again, but this time use a more simpler API.
+
+## Create an Auth object
+First thing you do is to get your authentication token following this [tutorial](https://docs.sbgenomics.com/display/sbg/Managing+Account+Settings#ManagingAccountSettings-GenerateanAuthenticationToken), then create a _Auth_ object which will be our master ojbect for reqeust and actions.
+
+By default we are using SBG US platform API url "https://api.sbgenomics.com/1.1/", you can aslo pass another url, for example, NCI cancer cloud API url.
+
+```{r}
+library(sbgr)
+a <- Auth("aef7e9e3f6c54fb1b338ac4ecddf1a56")
+a
+``` 
+
+## Billing group
+Just call _billing_ function 
+```{r}
+b <- a$billing()
+b
+```
+## Create a project
+Let's list all projects you have under your account
+```{r}
+a$project()
+```
+
+You can search it by `name` or by `id`, __note__: `id` is unique, but `name` may have multiple hits, by default, we are using exact matching, only return it when it has single hits. There are two additional parameters to control it `exact` and `ignore.case`.
+
+```{r}
+a$project(name = "my first") # return one matching
+```
+
+Maybe you want to create another project called "API" just for testing.
+
+```{r}
+a$project_new(name = "API", description = "API tutorial",
+              billing_group_id = b[[1]]$id)
+```
+
+## Upload file and set metadata
+
+
+To save your typing/lines for casading style, I want to save the project I am gonna use for this tutorial to a object first.    
+
+```{r}
+## get the project we just created
+p <- a$project("API")
+```
+
+To list all files in that project and search for a file, it's also easy
+
+```{r}
+a$project("my first")$file()
+a$project("my first")$file("illumina", exact = FALSE)
+```
+
+Get the file we are going to upload and get the metadata ready as well.
+
+```{r}
+fl <- system.file("extdata", "sample1.fastq", package = "sbgr")
+## create meta data
+fl.meta <- list(file_type = "fastq", 
+                seq_tech = "Illumina", 
+                sample = "sample1")
+```
+
+To upload the file to the project, just call `upload` method from project object, it will initialize the multiparts automatically, checking each part and complete the call when finished. You will see the progress bar. 
+
+```{r}
+p$upload(fl, metadata = fl.meta)
+```
+
+```
+Initialized
+|=============================================================================| 100%
+== File ==
+id : 55c90c73e4b01cacdc4fbf64
+name : sample1.fastq
+size : 16
+-- metadata --
+file_type : fastq
+seq_tech : Illumina
+sample : sample1
+```
+
+To check if it's uploaded successfully, just check the file on the server to see if it exists or not.
+
+```{r}
+p$file(basename(fl))
+```
+
+### Keep playing with file metadata
+
+To add more metadata items, you can pass more named list entries, and to keep original turn on parameter `append`. 
+
+```{r}
+p$file(basename(fl))$set_metadata(list())
+```
+To delete a file, just call `delete` method on a _File_ object. for example.
+
+```{r}
+p$file(basename(fl))$delete()
+```
+
+## Get pipelines
+
+## Run a task
+
+## Download the results
+
+
+
