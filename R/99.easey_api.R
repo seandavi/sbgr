@@ -2,6 +2,99 @@ setClassUnion("characterORNULL", c("character", "NULL"))
 setClassUnion("numericORNULL", c("numeric", "NULL"))
 setClassUnion("listORNULL", c("list", "NULL"))
 
+## define meta data
+.file_type <- c('text', 'binary', 'fasta', 'csfasta',
+                'fastq', 'qual', 'xsq', 'sff', 'bam',
+                'bam_index', 'illumina_export',
+                'vcf', 'sam', 'bed', 'archive',
+                'juncs', 'gtf','gff',
+                'enlis_genome', NA)
+
+.qual_scale <- c('sanger', 'illumina13',
+                 'illumina15', 'illumina18',
+                 'solexa', NA)
+
+.seq_tech <- c('454', 'Helicos', 'Illumina', 'Solid', 'IonTorrent', NA)
+.paired_end <- c(NA, "1", "2")
+
+
+
+
+FileTypeSingleEnum <- setSingleEnum("FileType", .file_type)
+QualScaleSingleEnum <- setSingleEnum("QualScale", .qual_scale)
+SeqTechSingleEnum <- setSingleEnum("SeqTech", .seq_tech)
+PairedEndSingleEnum <- setSingleEnum("PairedEnd", .paired_end)
+
+#' Metadata class
+#'
+#' Metadata class
+#'
+#' Used for SBG GUI, fixed set of enums and fields are visible for now
+#'
+#' @export Metadata
+#' @exportClass Metadata
+#' @importFrom objectProperties setSingleEnum
+Metadata <- setRefClass("Metadata",
+                        fields = list(
+                            file_type = "FileTypeSingleEnum",
+                            qual_scale = "QualScaleSingleEnum",
+                            seq_tech = "SeqTechSingleEnum",
+                            sample = "characterORNULL",
+                            library = "characterORNULL",
+                            platform_unit = "characterORNULL",
+                            paired_end = "PairedEndSingleEnum",
+                            extra = "listORNULL"
+                        ),
+                        methods = list(
+                            initialize = function(file_type = NA,
+                                                  qual_scale = NA,
+                                                  seq_tech = NA,
+                                                  sample = NULL,
+                                                  library = NULL,
+                                                  platform_unit = NULL,
+                                                  paired_end = NA, ...){
+                                
+                                .l <- list(...)
+                                if(length(.l))
+                                    extra <<- .l
+                                
+                                file_type <<- FileTypeSingleEnum(tolower(file_type))
+                                qual_scale <<- QualScaleSingleEnum(tolower(qual_scale))
+                                seq_tech <<- SeqTechSingleEnum(seq_tech)
+                                sample <<- sample
+                                library <<- library
+                                platform_unit <<- platform_unit
+                                paired_end <<- PairedEndSingleEnum(tolower(paired_end))
+                                
+                            },
+                            show = function(){
+                                .showFields(.self, "-- Metadata --",
+                                            c("file_type",
+                                              "qual_scale",
+                                              "seq_tech",
+                                              "sample",
+                                              "library",
+                                              "platform_unit",
+                                              "paired_end"))
+                                .showList(extra)
+                            },
+                            asList = function(){
+                                lst <- .getFields(.self, c("file_type",
+                                                           "qual_scale",
+                                                           "seq_tech",
+                                                           "sample",
+                                                           "library",
+                                                           "platform_unit",
+                                                           "paired_end"))
+                                res <- list(c(lst, extra))
+                                names(res) <- "metadata"
+                                res
+                            }
+                        ))
+
+setClassUnion("MetadataORNULL", c("Metadata", "NULL"))
+
+
 #' Class Item
 #'
 #' Class Item
@@ -17,6 +110,7 @@ Item <- setRefClass("Item", fields = list(response = "ANY",
                             auth_token <<- auth_token
                         }
                     ))
+
 
 #' Class Auth
 #'
@@ -35,7 +129,6 @@ Item <- setRefClass("Item", fields = list(response = "ANY",
 #' will use \code{api} parameter to switch to the right one.
 #' @param version [character] default: 1.1 version used for api.
 #'
-#' 
 #' 
 #'
 #' @export Auth
@@ -109,6 +202,38 @@ Auth <- setRefClass("Auth", fields = list(auth_token = "character",
                             pl <- .self$project_list()
                             m.match(pl, id = id, name = name, exact = exact,
                                     ignore.case = ignore.case)
+                        },
+                        pipeline = function(repos = c("public", "my", "project"), 
+                                            project_name = NULL,
+                                            project_id = NULL, 
+                                            pipeline_name = NULL,
+                                            pipeline_id = NULL,
+                                            ignore.case = TRUE,
+                                            exact = FALSE){
+                            repos <- match.arg(repos)
+                            
+                            if(is.null(project_name) &
+                                   is.null(project_id)){
+                            if(repos == "public"){                                
+                                res <- pipeline_list_pub()
+                            }else if(repos == "my"){
+                                res <- pipeline_list_my()
+                            }else{
+                                stop("Please provide project_name or project_id")  
+                            }
+                            }else{
+                                res <- pipeline_list_project(project_name, 
+                                                             project_id)
+                            }
+                            
+                            if(!is.null(pipeline_name) | !is.null(pipeline_id)){
+                                res <- m.match(res, 
+                                               id = pipeline_id,
+                                               name = pipeline_name, 
+                                               ignore.case = ignore.case,
+                                               exact = exact)
+                            }
+                            return(res)
                         },
                         pipeline_list_pub = function(){
                             res <- sbgr::pipeline_list_pub(auth_token)
@@ -357,16 +482,25 @@ Project <- setRefClass("Project", contains = "Item",
                                }
                                return(res)
                            },
-                           ## pipeline_add = function(project_name_from = NULL,
-                           ##     pipeline_name = NULL,
-                           ##     project_id_from = NULL,
-                           ##     pipeline_id = NULL,
-                           ##     revision = NULL){
+                           pipeline_add = function(project_name_from = NULL,
+                               pipeline_name = NULL,
+                               project_id_from = NULL,
+                               pipeline_id = NULL,
+                               revision = NULL, ...){
 
+                             
+                                                   
+                               Auth(auth_token)$pipeline_add(
+                                   project_name_to = name, 
+                                   project_name_from,
+                                   pipeline_name,
+                                   project_id_from, 
+                                   project_id_to = id,
+                                   pipeline_id, 
+                                   revision,
+                                 ...)
                            
-                           ##     sbgr::pipeline_add()
-                           
-                           ## },
+                           },
                            file_list = function(){
                                res <- sbgr::file_list(auth_token, id)
                                res <- .asFileList(res[[1]])
@@ -422,6 +556,10 @@ Project <- setRefClass("Project", contains = "Item",
                                m.match(tks, id = id, name = name, exact = exact,
                                        ignore.case = ignore.case)
                                   
+                           },
+                           delete = function(){
+                               sbgr::project_delete(auth_token,
+                                                    project_id = id)
                            },
                            show = function(){
                                ## callSuper()
@@ -566,7 +704,7 @@ Upload <- setRefClass("Upload",
                           part_length = "integer",
                           part_finished = "integer",
                           initialized = "logical",
-                          metadata = "list"
+                          metadata = "Metadata"
                       ),
                       methods = list(
                           initialize = function(
@@ -581,8 +719,7 @@ Upload <- setRefClass("Upload",
                               part_length = NULL,
                               metadata = list(), ...){
 
-                              metadata <<- list(metadata)
-                              names(metadata) <<- "metadata"
+                              metadata <<- normalizeMeta(metadata)
                               
                               initialized <<- initialized
                               part_finished <<- part_finished 
@@ -721,13 +858,14 @@ Upload <- setRefClass("Upload",
                               message("file uploading complete")
                              
                               ## when we complete we could add meta
-                              if(length(.self$metadata)){
+                              meta <- .self$metadata$asList()
+                              if(length(meta)){
                                   message("Adding metadata ...")
                                   req <- sbgapi(auth_token = auth_token,
                                                        path = paste0('project/',
                                                            project_id,
                                                            '/file/', res$id),
-                                                       body = .self$metadata,
+                                                       body = meta,
                                                        method = 'PUT')
                                   res <- status_check(req)
                                   message("Metadata complete")
@@ -787,90 +925,6 @@ Upload$methods(list(
 }
 
 
-## define meta data
-.file_type <- c('text', 'binary', 'fasta', 'csfasta',
-                'fastq', 'qual', 'xsq', 'sff', 'bam',
-                'bam_index', 'illumina_export',
-                'vcf', 'sam', 'bed', 'archive',
-                'juncs', 'gtf','gff',
-                'enlis_genome')
-
-.qual_scale <- c('sanger', 'illumina13',
-                 'illumina15', 'illumina18',
-                 'solexa')
-
-.seq_tech <- c('454', 'Helicos', 'Illumina', 'Solid', 'IonTorrent')
-.paired_end <- c(NA, "1", "2")
-library(objectProperties)
-
-FileTypleSingleEnum <- setSingleEnum("FileType", .file_type)
-##
-Metadata <- setRefClass("Metadata",
-                        fields = list(
-                            file_type = "characterORNULL",
-                            qual_scale = "characterORNULL",
-                            seq_tech = "characterORNULL",
-                            sample = "characterORNULL",
-                            library = "characterORNULL",
-                            platform_unit = "characterORNULL",
-                            paired_end = "characterORNULL"
-                        ),
-                        methods = list(
-                            initialize = function(file_type = NULL,
-                                qual_scale = NULL,
-                                seq_tech = NULL,
-                                sample = NULL,
-                                library = NULL,
-                                platform_unit = NULL,
-                                paired_end = NULL){
-
-                                ## validation
-                                if(is.character(file_type)){
-                                    if(!(file_type %in% .file_type)){
-                                        stop("file_type has to be one of ",
-                                             paste(.file_type, collapse = "/"))
-                                    }
-                                }
-                                
-
-                                if(is.character(qual_scale)){
-                                    if(!(qual_scale %in% .qual_scale)){
-                                        stop("qual_scale has to be one of ",
-                                             paste(.qual_scale, collapse = "/"))
-                                    }
-                                }
-                                
-
-                                if(is.character(seq_tech)){
-                                    if(!(seq_tech %in% .seq_tech)){
-                                        stop("seq_tech has to be one of ",
-                                             paste(.seq_tech, collapse = "/"))
-                                    }
-                                }
-
-
-                                file_type <<- file_type
-                                qual_scale <<- qual_scale
-                                seq_tech <<- seq_tech
-                                sample <<- sample
-                                library <<- library
-                                platform_unit <<- platform_unit
-                                paired_end <<- paired_end
-                                
-                            },
-                            show = function(){
-                                .showFields(.self, "-- Metadata --",
-                                            c("file_type",
-                                              "qual_scale",
-                                              "seq_tech",
-                                              "sample",
-                                              "library",
-                                              "platform_unit",
-                                              "paired_end"))
-                            }
-                        ))
-
-setClassUnion("MetadataORNULL", c("Metadata", "NULL"))
 
 ## Files: Wednesday
 
@@ -921,22 +975,10 @@ File <- setRefClass("File", contains = "Item",
                             'when append = TRUE, keep original, overwrite with the new value;
                              if FALSE, clean meta and replace everything with new metadata'
 
-                            .update_list <- function(o, n){
-                                o.nm <- names(o)
-                                n.nm <- names(n)
-                                i.nm <- intersect(o.nm, n.nm)
-                                
-                                if(length(i.nm)){
-                                    o.nm <- setdiff(o.nm, i.nm)
-                                    return(c(o[o.nm], n))
-                                }else{
-                                    return(c(o, n))
-                                }
-                            }
                             o <- .self$metadata
                             if(length(metadata)){
                                 if(append){
-                                    new.meta <- list(.update_list(o = o, n))
+                                    new.meta <- list(.update_list(o = o, metadata))
                                     names(new.meta) <- "metadata"
 
                                 }else{
@@ -1087,7 +1129,7 @@ response <- function(x){
                                flds = flds[flds %in% values]
                            result = setNames(vector("list", length(flds)), flds)
                            for (fld in flds)
-                               result[[fld]] = .self[[fld]]
+                               result[[fld]] = x[[fld]]
                            result
                        }
 
@@ -1182,5 +1224,37 @@ m.match <- function(obj, id = NULL, name = NULL,
         for (fld in names(x))
             message(fld, " : ", x[[fld]])
     }
+}
+
+
+.update_list <- function(o, n){
+    o.nm <- names(o)
+    n.nm <- names(n)
+    i.nm <- intersect(o.nm, n.nm)
+    
+    if(length(i.nm)){
+        o.nm <- setdiff(o.nm, i.nm)
+        return(c(o[o.nm], n))
+    }else{
+        return(c(o, n))
+    }
+}
+
+normalizeMeta <- function(x){
+    ## normalize it
+    if(is.list(x)){
+        if(length(x) > 1){
+            res <- do.call(Metadata, x)
+        }else if(length(x) == 1){
+            res <- do.call(Metadata, x[[1]])
+        }else{
+            res <- Metadata()
+        }
+    }else if(is(x, "Metadata")){
+        res <- x
+    }else{
+        stop("metadata has to be a list or Metadata object")
+    }
+    return(res)
 }
 

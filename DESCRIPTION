@@ -13,7 +13,8 @@ BugReports: https://github.com/road2stat/sbgr/issues
 biocViews: DataImport, ThirdPartyClient
 Imports:
     httr,
-    jsonlite
+    jsonlite,
+    objectProperties
 Suggests:
     BiocStyle,
     knitr,

@@ -13,5 +13,4 @@
 #'         Teng-Fei Yin <\email{tengfei.yin@@sbgenomics.com}>
 #'
 #' @import httr jsonlite
-#'
 NULL

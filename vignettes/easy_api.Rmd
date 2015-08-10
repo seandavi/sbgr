@@ -78,7 +78,9 @@ To understand the API better, you can also check the original SBG developer hub 
 ```{r}
 a <- Auth()
 a$billing()
+a$project_new(name = , description = , billing_group_id = )
 a$project(name = , id = )
+a$project("single")$delete()
 a$project("single")$member(name = , id = )
 a$project("single")$file(name = , id = )
 a$project("single")$file("single")$download()
@@ -152,7 +154,8 @@ fl <- system.file("extdata", "sample1.fastq", package = "sbgr")
 ## create meta data
 fl.meta <- list(file_type = "fastq", 
                 seq_tech = "Illumina", 
-                sample = "sample1")
+                sample = "sample1",
+                author = "tengfei")
 ```
 
 To upload the file to the project, just call `upload` method from project object, it will initialize the multiparts automatically, checking each part and complete the call when finished. You will see the progress bar. 
@@ -172,6 +175,7 @@ size : 16
 file_type : fastq
 seq_tech : Illumina
 sample : sample1
+author: tengfei
 ```
 
 To check if it's uploaded successfully, just check the file on the server to see if it exists or not.
@@ -181,20 +185,63 @@ p$file(basename(fl))
 ```
 
 ### Keep playing with file metadata
+Metadata is designed with fixed fields in the GUI with fixed enum types for some fields, like fiel_type, to check what's fixed, please do
 
+```{r, eval = TRUE}
+Metadata()
+Metadata()$file_type
+```
 To add more metadata items, you can pass more named list entries, and to keep original turn on parameter `append`. 
 
 ```{r}
-p$file(basename(fl))$set_metadata(list())
+p$file(basename(fl))$set_metadata(list(version = "2.0"), append = TRUE)
 ```
+
+### Delete a file
 To delete a file, just call `delete` method on a _File_ object. for example.
 
 ```{r}
 p$file(basename(fl))$delete()
 ```
 
-## Get pipelines
+## Get pipelines information
 
+```{r}
+p$pipeline()
+```
+
+It's a new project, there is no pipeline yet, there are several other ways to check out available pipelines for public, my pipeline and pipelines in particular project.
+
+```{r}
+## project pipelines
+a$project("my first")$pipeline()
+## all public pipeline
+a$pipeline()
+## my pipeline
+a$pipeline("my")
+## particular project
+a$pipeline(project_name = "my first")
+
+```
+
+Let's look for a pipeline about "FastQC", from public repos
+
+```{r}
+f.pipe <- a$pipeline(pipeline_name = "FastQC")
+f.pipe
+```
+
+Cool, we got a unique hit, let's copy the FastQC pipeline to the new project
+
+```{r}
+p$pipeline_add(pipeline_name = f.pipe$name)
+```
+
+To confirm 
+
+```{r}
+p$pipeline()
+```
 ## Run a task
 
 ## Download the results
