@@ -6,8 +6,9 @@
 #' 
 #' @keywords internal
 sbgapi = function (auth_token = NULL, version = '1.1', path,
-                   method = c('GET', 'POST', 'PUT', 'DELETE'),
-                   query = NULL, body = NULL) {
+    method = c('GET', 'POST', 'PUT', 'DELETE'),
+    query = NULL, body = list(),
+    base_url = paste0("https://api.sbgenomics.com/", version, "/")) {
     
     if (is.null(auth_token)) stop('auth_token must be provided')
     
@@ -17,27 +18,29 @@ sbgapi = function (auth_token = NULL, version = '1.1', path,
         'Content-type' = 'application/json'
     )
     
-    base_url = paste0('https://api.sbgenomics.com/', version, '/')
-    
     if (method == 'GET') {
-        req = GET(paste0(base_url, path), add_headers(headers), query = query)
+        req = GET(paste0(base_url, path),
+            add_headers(.headers = headers), query = query)
     }
     
     if (method == 'POST') {
         stopifnot(is.list(body))
         body_json = toJSON(body, auto_unbox = TRUE)
-        req = POST(paste0(base_url, path), add_headers(headers), query = query,
+        req = POST(paste0(base_url, path),
+            add_headers(.headers = headers), query = query,
                    body = body_json)
     }
     
     if (method == 'PUT') {
         stopifnot(is.list(body))
         body_json = toJSON(body, auto_unbox = TRUE)
-        req = PUT(paste0(base_url, path), add_headers(headers), body = body_json)
+        req = PUT(paste0(base_url, path),
+            add_headers(.headers = headers), body = body_json)
     }
     
     if (method == 'DELETE') {
-        req = DELETE(paste0(base_url, path), add_headers(headers))
+        req = DELETE(paste0(base_url, path),
+            add_headers(.headers = headers))
     }
     
     return(req)
@@ -54,7 +57,10 @@ sbgapi = function (auth_token = NULL, version = '1.1', path,
 status_check = function (req) {
     
     if (status_code(req) %in% c('200', '201', '204')) {
-        return(content(req, 'parsed'))
+        res <- content(req, "parsed")        
+        if(!is.null(res))
+            attr(res, "response") <- req
+        return(res)
     } else if (status_code(req) %in% c('401', '403', '404', '503')) {
         msg = content(req, 'parsed')$message
         stop(paste0('HTTP Status ', status_code(req), ': ', msg), call. = FALSE)
