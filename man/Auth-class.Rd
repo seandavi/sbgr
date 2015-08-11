@@ -21,14 +21,15 @@ Auth token object
 }
 \details{
 Every object coud be requested from this Auth object and any action
-could start from this object using cascading.
+could start from this object using cascading style. Please check vignette
+'easy-api' for more information.
 }
 \section{Fields}{
 
 \describe{
 \item{\code{auth_token}}{[character] your auth token.}
 
-\item{\code{url}}{[character] basic url used for API.}
+\item{\code{url}}{[character] basic url used for API, by default it's \url{https://api.sbgenomics.com/1.1/}}
 }}
 \section{Methods}{
 
@@ -36,4 +37,7 @@ could start from this object using cascading.
 \item{\code{project(name = NULL, id = NULL, index = NULL, ignore.case = TRUE,
   exact = TRUE)}}{find project}
 }}
+\examples{
+a <- Auth("fake_token")
+}
 

@@ -1,5 +1,5 @@
 ---
-title: "Easy API: A more user-friendly API"
+title: "Easy API: A user-friendly cascading API"
 output:
   BiocStyle::html_document:
     toc: true
@@ -11,7 +11,7 @@ output:
 ---
 
 <!--
-%\VignetteIndexEntry{Easy API: A more user-friendly API}
+%\VignetteIndexEntry{Easy API: A user-friendly cascading API}
 %\VignettePackage{sbgr}
 %\VignetteEngine{knitr::rmarkdown}
 -->
@@ -74,45 +74,73 @@ So our cascading visually represent this relationship and structure, if you are 
 To understand the API better, you can also check the original SBG developer hub [documents](https://docs.sbgenomics.com/display/developerhub/API)
 
 ## Cheatsheet
+This cheatsheet provide main API designed for end users, please note "single" 
+is not real project name, just means the cascading method expecting a single returned object not a list, so you name better has a single hit or you pick 
+the one you want from the list. Remember the logic structure and relationship of those concept will help you remember the API easily. For example, a project has
+members so of course you can run member() method on project object.
+
+For a searching function that need name or id, when both are empty, they will return every object (file, project, pipeline, task, memeber) in a list. These function usually has opetional parameter called `ignore.case` and `exact` used 
+for matching, when `exact = FALSE` you can use pattern to grep objects.
+
+The cheatsheet only show some most used arguments, please check their help function to read more details.
 
 ```{r}
 a <- Auth()
 a$billing()
 a$project_new(name = , description = , billing_group_id = )
-a$project(name = , id = )
-a$project("single")$delete()
-a$project("single")$member(name = , id = )
-a$project("single")$file(name = , id = )
-a$project("single")$file("single")$download()
-a$project("single")$upload(file = , metadata = )
-a$project("single")$pipeline(name = , id = )
-a$project("single")$task(name = , id = )
-a$project("single")$task("single")$run()
-a$project("single")$task("single")$abort()
+a$project(repos = c("public", "my", "project"), project_name = , project_id = )
+## to save some typing
+p <- a$project("single")
+p$delete()
+p$member(name = , id = )
+p$member_add()
+p$member_update()
+p$member_delete()
+p$file(name = , id = )
+p$file("single")$download()
+p$upload(file = , metadata = )
+p$pipeline(name = , id = )
+p$pipeline_add()
+p$task(name = , id = )
+p$task("single")$run()
+p$task("single")$abort()
 ```
 
+So you can do a cascading like
+
+```{r}
+a$project("API")$file("sample1.tgz")$download("~/Desktop/")
+```
+
+Plesase play the main function yourself, we are not covering all the function in this tutorial. Also some users may notice the object actually has lower level API binding as well for example, you can call `a$pipeline_list_project()` but those are used intenally not supposed to be used by end users. user can just call `a$prject("public")`
+
+
 # Quick start: running the FastQC pipeline
-I will go through the same tutorial again, but this time use a more simpler API.
+I will go through the same tutorial again, but this time use a more simpler cascading API. 
 
 ## Create an Auth object
 First thing you do is to get your authentication token following this [tutorial](https://docs.sbgenomics.com/display/sbg/Managing+Account+Settings#ManagingAccountSettings-GenerateanAuthenticationToken), then create a _Auth_ object which will be our master ojbect for reqeust and actions.
 
 By default we are using SBG US platform API url "https://api.sbgenomics.com/1.1/", you can aslo pass another url, for example, NCI cancer cloud API url.
 
-```{r}
+Now let's use some fake auth token and load the library.
+
+```{r, eval  = TRUE}
 library(sbgr)
 a <- Auth("aef7e9e3f6c54fb1b338ac4ecddf1a56")
 a
 ``` 
 
 ## Billing group
-Just call _billing_ function 
+Billing group speicfy how your computation charges, when you first registered, you should have some free credit, with billing group called something like "FreeAccount". Or maybe your company/organization purchased a license, you should have other billing group attached as well 
+
+To show how many billing group you belong too, just call _billing_ function 
 ```{r}
 b <- a$billing()
 b
 ```
 ## Create a project
-Let's list all projects you have under your account
+Let's first list all projects you have under your account
 ```{r}
 a$project()
 ```
@@ -123,7 +151,7 @@ You can search it by `name` or by `id`, __note__: `id` is unique, but `name` may
 a$project(name = "my first") # return one matching
 ```
 
-Maybe you want to create another project called "API" just for testing.
+Maybe you want to create another project called "API" just for testing, but make sure you pass the required field `name`, `description` and `billing_group_id`.
 
 ```{r}
 a$project_new(name = "API", description = "API tutorial",
@@ -133,7 +161,7 @@ a$project_new(name = "API", description = "API tutorial",
 ## Upload file and set metadata
 
 
-To save your typing/lines for casading style, I want to save the project I am gonna use for this tutorial to a object first.    
+To save your typing/lines for casading style, I want to save the project I am gonna use for this tutorial to a Project object first.    
 
 ```{r}
 ## get the project we just created
@@ -185,18 +213,19 @@ p$file(basename(fl))
 ```
 
 ### Keep playing with file metadata
-Metadata is designed with fixed fields in the GUI with fixed enum types for some fields, like fiel_type, to check what's fixed, please do
+Metadata is designed with fixed fields in the GUI with fixed enum types for some fields, like fiel_type, to check what's fixed, please do 
 
 ```{r, eval = TRUE}
 Metadata()
 Metadata()$file_type
+levels(Metadata()$file_type)
 ```
 To add more metadata items, you can pass more named list entries, and to keep original turn on parameter `append`. 
 
 ```{r}
 p$file(basename(fl))$set_metadata(list(version = "2.0"), append = TRUE)
 ```
-
+Read more about metadata please visit SBG [developer hub page](https://docs.sbgenomics.com/display/sbg/Metadata)
 ### Delete a file
 To delete a file, just call `delete` method on a _File_ object. for example.
 
@@ -240,11 +269,132 @@ p$pipeline_add(pipeline_name = f.pipe$name)
 To confirm 
 
 ```{r}
-p$pipeline()
+f.pipe <- p$pipeline(name = "FastQC")
+f.pipe
 ```
-## Run a task
+## Run a task with the pipeline
+
+Please call `detail` function to check the required inputs, here I quote the SBG API [introduction](https://docs.sbgenomics.com/display/developerhub/API%3A+Pipelines#API:Pipelines-Getpipelinedetails:GET/project/:project_id/pipeline/:pipeline_id)
+
+- **id**: The ID number of the pipeline, used by the API to uniquely refer to it
+- **revision**: The revision of the pipeline
+- **name**: The human-readable name of the pipeline
+- **description**: A short description of the pipeline's function
+- **inputs**: An array listing the pipeline's input nodes, i.e. those pipeline apps which require files as input
+- **nodes**: An array of intermediary nodes, representing the pipeline apps which transform the data. These may have editable parameters that should be set before running the pipeline, although in this particular pipeline example no parameters are editable.
+- **outputs**: An array of output nodes, producing files, reports, visualizations, etc.
+
+```{r}
+f.pipe$details()
+f.pipe$details()$inputs
+f.pipe$details()$nodes
+```
+To run the pipeline, we need to provide task details, we know we want to input our upload sample file as input node here. So we need to link our file id with the input node id.
+
+```{r}
+f.task <- p$task_run(name = "my task", 
+                      description = "A text description", 
+                      pipeline_id = f.pipe$id,
+                      inputs = list( 
+                          "177252" = list(f.file$id)
+                          ))
+
+f.task
+```
+
+## Monitor your task
+Pass the interval time (in seconds) this will check status of a task, print finish when it's finished.
+
+```{r}
+f.task$monitor(30)
+```
+
+Or simple call `details` method
+
+```{r}
+f.task$details()
+```
+
+## Abort a task
+```{r}
+f.task$abort()
+```
 
 ## Download the results
+
+```{r}
+f.task <- p$task(id = "fed9279b-8677-4eef-9c16-9135a457f53f")
+f.task$download("~/Desktop/")
+```
+
+## Wrap the example up
+Ok the full script is something like 
+```{r}
+library(sbgr)
+a <- Auth("aef7e9e3f6c54fb1b338ac4ecddf1a56")
+#new remove soon
+token <- "9ba2f6296ea34de9a33c9f2f0b546f46"
+a <- Auth(token)
+## get billing info
+b <- a$billing()
+## create project
+a$project_new(name = "API", description = "API tutorial",
+              billing_group_id = b[[1]]$id)
+p <- a$project("API")
+## get data
+fl <- system.file("extdata", "sample1.fastq", package = "sbgr")
+## create meta data
+fl.meta <- list(file_type = "fastq", 
+                seq_tech = "Illumina", 
+                sample = "sample1",
+                author = "tengfei")
+## upload data
+p$upload(fl, metadata = fl.meta)
+## check uploading success
+f.file <- p$file(basename(fl))
+f.file
+## get the pipeline from public repos
+f.pipe <- a$pipeline(pipeline_name = "FastQC")
+## copy the pipeline to your poject
+p$pipeline_add(pipeline_name = f.pipe$name)
+f.pipe <- p$pipeline(name = "FastQC")
+
+## check the inputs needed
+f.pipe$details()
+## Ready to run a task? go
+f.pipe
+f.task <- p$task_run(name = "my task", 
+                      description = "A text description", 
+                      pipeline_id = f.pipe$id,
+                      inputs = list( 
+                          "177252" = list(f.file$id)
+                          ))
+
+
+f.task
+## 
+f.task$run()
+## or you can just run with Task constructor
+f.task <- Task(auth = Auth(token),
+               name = "my task", 
+               description = "A text description", 
+               pipeline_id = f.pipe$id, 
+               project_id = p$id,
+               inputs = list( 
+                   "177252" = list(f.file$id)
+                   ))
+
+f.task
+## Monitor you task
+f.task$monitor(30)
+
+## download a task output files
+f.task <- p$task("my task")
+f.task$download("~/Desktop/")
+
+## Abort the task
+f.task$abort()   
+```
 
 
 
