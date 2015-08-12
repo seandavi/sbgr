@@ -29,7 +29,8 @@ could start from this object using cascading style. Please check vignette
 \describe{
 \item{\code{auth_token}}{[character] your auth token.}
 
-\item{\code{url}}{[character] basic url used for API, by default it's \url{https://api.sbgenomics.com/1.1/}}
+\item{\code{url}}{[character] basic url used for API, by default
+it's \url{https://api.sbgenomics.com/1.1/}}
 }}
 \section{Methods}{
 
@@ -38,6 +39,61 @@ could start from this object using cascading style. Please check vignette
   exact = TRUE)}}{find project}
 }}
 \examples{
+\donttest{
 a <- Auth("fake_token")
+token <- "aef7e9e3f6c54fb1b338ac4ecddf1a56"
+a <- Auth(token)
+## get billing info
+b <- a$billing()
+## create project
+a$project_new(name = "API", description = "API tutorial",
+              billing_group_id = b[[1]]$id)
+p <- a$project("API")
+## get data
+fl <- system.file("extdata", "sample1.fastq", package = "sbgr")
+## create meta data
+fl.meta <- list(file_type = "fastq",
+                seq_tech = "Illumina",
+                sample = "sample1",
+                author = "tengfei")
+## upload data with metadata
+p$upload(fl, metadata = fl.meta)
+## check uploading success
+f.file <- p$file(basename(fl))
+## get the pipeline from public repos
+f.pipe <- a$pipeline(pipeline_name = "FastQC")
+## copy the pipeline to your poject
+p$pipeline_add(pipeline_name = f.pipe$name)
+## get the pipeline from your project not public one
+f.pipe <- p$pipeline(name = "FastQC")
+## check the inputs needed for running tasks
+f.pipe$details()
+## Ready to run a task? go
+f.task <- p$task_run(name = "my task",
+                      description = "A text description",
+                      pipeline_id = f.pipe$id,
+                      inputs = list(
+                          "177252" = list(f.file$id)
+                          ))
+f.task$run()
+## or you can just run with Task constructor
+f.task <- Task(auth = Auth(token),
+               name = "my task",
+               description = "A text description",
+               pipeline_id = f.pipe$id,
+               project_id = p$id,
+               inputs = list(
+                   "177252" = list(f.file$id)
+                   ))
+## Monitor you task
+f.task$monitor(30)
+
+## download a task output files
+f.task <- p$task("my task")
+f.task$download("~/Desktop/")
+
+## Abort the task
+f.task$abort()
+}
 }
 

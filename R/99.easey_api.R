@@ -19,38 +19,47 @@ setClassUnion("listORNULL", c("list", "NULL"))
 
 
 
+##' @rdname Metadata
+##' @aliases file_type FileTypeSingleEnum qual_scale QualScaleSingleEnum seq_tech SeqTechSingleEnum paired_end PairedEndSingleEnum
+##' @export file_type FileTypeSingleEnum
+##' @export qual_scale QualScaleSingleEnum
+##' @export seq_tech SeqTechSingleEnum
+##' @export paired_end PairedEndSingleEnum
+file_type <- FileTypeSingleEnum <- setSingleEnum("FileType", .file_type)
+qual_scale <- QualScaleSingleEnum <- setSingleEnum("QualScale", .qual_scale)
+seq_tech <- SeqTechSingleEnum <- setSingleEnum("SeqTech", .seq_tech)
+paired_end <- PairedEndSingleEnum <- setSingleEnum("PairedEnd", .paired_end)
 
-FileTypeSingleEnum <- setSingleEnum("FileType", .file_type)
-QualScaleSingleEnum <- setSingleEnum("QualScale", .qual_scale)
-SeqTechSingleEnum <- setSingleEnum("SeqTech", .seq_tech)
-PairedEndSingleEnum <- setSingleEnum("PairedEnd", .paired_end)
-
-#' Metadata class
-#'
-#' Metadata class
-#'
-#' This funcion will help you create a Metadata object, what it does it to accept 
-#' a named list or just pass meta as argument one by one. Then it first match SBG's 
-#' build-in meta field which will be shown in the graphic interface on the platform,
-#' then save extra meta infomation in extra field, but not visible on the platform yet, 
-#' you can view it via the API.  
-#' 
-#' There are four pre-defined field with pre-defined levels, they are file_type, 
-#' qual_scale, seq_tech, and paired_end, to check there levels, you can simply
-#' create a empty Metadata object and access the field levels. Please see examples.
-#' 
-#' Metadata is in progress, we will keep it updated. 
-#' 
-#' 
-#'
-#' @export Metadata
-#' @exportClass Metadata
-#' @importFrom objectProperties setSingleEnum
-#' @examples
-#' Metadata()
-#' ## to check levels
-#' Metadata()$file_type 
-#' levels(Metadata()$file_type)
+##' Metadata class
+##'
+##' Metadata class
+##'
+##' This funcion will help you create a Metadata object, what it does
+##' it to accept a named list or just pass meta key-value pairs as
+##' argument one by one. Then it first matches SBG's build-in meta field
+##' which will be shown in the graphic interface on the platform, then
+##' save extra meta infomation in extra field, but not visible on the
+##' platform yet, you can view it via the API.
+##' 
+##' There are four pre-defined fields with pre-defined levels, they are
+##' file_type, qual_scale, seq_tech, and paired_end, thos are also
+##' constructor names to construct a single Enum object, it's different
+##' from characters, it has validation against levels, to check their
+##' levels, you can simply create a empty Metadata object and access
+##' the field levels. Please see examples.
+##' 
+##' @references \url{https://docs.sbgenomics.com/display/sbg/Metadata}
+##' @rdname Metadata
+##' @export Metadata
+##' @exportClass Metadata
+##' @importFrom objectProperties setSingleEnum
+##' @examples
+##' m <- Metadata()
+##' ## to check levels
+##' m$file_type 
+##' levels(m$file_type)
+##' ## to replace a Enum class need to use constructor
+##' m$file_type <- file_type("text")
 Metadata <- setRefClass("Metadata",
                         fields = list(
                             file_type = "FileTypeSingleEnum",
@@ -115,30 +124,86 @@ setClassUnion("MetadataORNULL", c("Metadata", "NULL"))
 
 
 
-#' Class Auth
-#'
-#' Auth token object
-#'
-#' Every object coud be requested from this Auth object and any action
-#' could start from this object using cascading style. Please check vignette
-#' 'easy-api' for more information.
-#'
-#' @field auth_token [character] your auth token.
-#' @field url [character] basic url used for API, by default it's \url{https://api.sbgenomics.com/1.1/}
-#'
-#' @param auth_token [character] your auth token.
-#' @param api [character %in% 'sbg-us', 'cgc'] which api you are
-#' using, by default it is sbg us platform.
-#' @param url [chracter] a URL for the API, default is \code{NULL},
-#' will use \code{api} parameter to switch to the right one.
-#' @param version [character] default: 1.1 version used for api.
-#'
-#' 
-#'
-#' @export Auth
-#' @exportClass Auth
-#' @examples
-#' a <- Auth("fake_token")
+##' Class Auth
+##' 
+##' Auth token object
+##' 
+##' Every object coud be requested from this Auth object and any action
+##' could start from this object using cascading style. Please check vignette
+##' 'easy-api' for more information.
+##' 
+##' @field auth_token [character] your auth token.
+##' @field url [character] basic url used for API, by default
+##' it's \url{https://api.sbgenomics.com/1.1/}
+##' 
+##' @param auth_token [character] your auth token.
+##' @param api [character %in% 'sbg-us', 'cgc'] which api you are
+##'  using, by default it is sbg us platform.
+##' @param url [chracter] a URL for the API, default is \code{NULL},
+##'  will use \code{api} parameter to switch to the right one.
+##' @param version [character] default: 1.1 version used for api.
+##' 
+##'  
+##' 
+##' @export Auth
+##' @exportClass Auth
+##' @examples
+##' \donttest{
+##' a <- Auth("fake_token")
+##' token <- "aef7e9e3f6c54fb1b338ac4ecddf1a56"
+##' a <- Auth(token)
+##' ## get billing info
+##' b <- a$billing()
+##' ## create project
+##' a$project_new(name = "API", description = "API tutorial",
+##'               billing_group_id = b[[1]]$id)
+##' p <- a$project("API")
+##' ## get data
+##' fl <- system.file("extdata", "sample1.fastq", package = "sbgr")
+##' ## create meta data
+##' fl.meta <- list(file_type = "fastq", 
+##'                 seq_tech = "Illumina", 
+##'                 sample = "sample1",
+##'                 author = "tengfei")
+##' ## upload data with metadata
+##' p$upload(fl, metadata = fl.meta)
+##' ## check uploading success
+##' f.file <- p$file(basename(fl))
+##' ## get the pipeline from public repos
+##' f.pipe <- a$pipeline(pipeline_name = "FastQC")
+##' ## copy the pipeline to your poject
+##' p$pipeline_add(pipeline_name = f.pipe$name)
+##' ## get the pipeline from your project not public one
+##' f.pipe <- p$pipeline(name = "FastQC")
+##' ## check the inputs needed for running tasks
+##' f.pipe$details()
+##' ## Ready to run a task? go
+##' f.task <- p$task_run(name = "my task", 
+##'                       description = "A text description", 
+##'                       pipeline_id = f.pipe$id,
+##'                       inputs = list( 
+##'                           "177252" = list(f.file$id)
+##'                           ))
+##' f.task$run()
+##' ## or you can just run with Task constructor
+##' f.task <- Task(auth = Auth(token),
+##'                name = "my task", 
+##'                description = "A text description", 
+##'                pipeline_id = f.pipe$id, 
+##'                project_id = p$id,
+##'                inputs = list( 
+##'                    "177252" = list(f.file$id)
+##'                    ))
+##' ## Monitor you task
+##' f.task$monitor(30)
+##' 
+##' ## download a task output files
+##' f.task <- p$task("my task")
+##' f.task$download("~/Desktop/")
+##' 
+##' ## Abort the task
+##' f.task$abort()
+##' }
 Auth <- setRefClass("Auth", fields = list(auth_token = "character",
                                 url = "character"),
                     methods = list(
@@ -359,14 +424,15 @@ Auth <- setRefClass("Auth", fields = list(auth_token = "character",
                     ))
 
 setClassUnion("AuthORNULL", c("Auth", "NULL"))
-#' Class Item
-#'
-#' Class Item
-#'
-#' To describe a set of objects, Project, Task, Pipeline, File etc.
-#' 
-#' @field response save the raw response from a request.
-#' @field auth_token propogate the auth_token from parent.
+
+##' Class Item
+##'
+##' Class Item
+##'
+##' To describe a set of objects, Project, Task, Pipeline, File etc.
+##' 
+##' @field response save the raw response from a request.
+##' @field auth_token propogate the auth_token from parent.
 Item <- setRefClass("Item", fields = list(response = "ANY",
                                           auth = "AuthORNULL")) ## to stored the called Auth parent
 
@@ -667,6 +733,7 @@ Project <- setRefClass("Project", contains = "Item",
                            },
                            
                            delete = function(){
+                              
                                sbgr::project_delete(auth$auth_token,
                                                     project_id = id)
                            },
@@ -811,7 +878,7 @@ Part <- setRefClass("Part", contains = "Item",
                             .part_number <- as.integer(as.character(part_number))
                             .part_size <- as.integer(as.character(part_size))
                             if(.part_number >  10000 | .part_number <1){
-                                stop("par_number has to be a number in the range 1 – 10000.")
+                                stop("par_number has to be a number in the range 1-10000.")
                             }
                             uri <<- uri
                             part_number <<- .part_number
@@ -892,9 +959,9 @@ Upload <- setRefClass("Upload", contains = "Item",
                               if(is.numeric(.self$size)){
                                   if(!(.self$size <= 5497558138880 &
                                            .self$size >= 0))
-                                      stop("size must be between 0 – 5497558138880, inclusive")
+                                      stop("size must be between 0 - 5497558138880, inclusive")
                               }else{
-                                  stop("size must be between 0 – 5497558138880, inclusive")                                  
+                                  stop("size must be between 0 - 5497558138880, inclusive")                                  
                               }
 
                               auth <<- Auth(auth_token)
@@ -954,7 +1021,7 @@ Upload <- setRefClass("Upload", contains = "Item",
                           upload_info_part = function(part_number = NULL){
                               stopifnot_provided(!is.null(part_number))
                               if(part_number >  10000 | part_number <1){
-                                  stop("par_number has to be a number in the range 1 – 10000.")
+                                  stop("par_number has to be a number in the range 1- 10000.")
                               }
                               cl <- c("Content-Length" = as.character(part[[part_number]]$part_size))
                               res <- status_check(sbgapi(auth$auth_token,
@@ -1181,40 +1248,87 @@ File <- setRefClass("File", contains = "Item",
     lapply(x, .asFile)
 }
 
-#' Task class
-#' 
-#' Task class
-#' 
-#' @field id [characterORNULL] The task ID number, used when referring to the 
-#' task in other Seven Bridges API calls
-#' @field name [characterORNULL] Name of the task you wish to execute. If this 
-#' is not specified, the task will be named automatically.
-#' @field description [characterORNULL] Description of the task you wish to execute.
-#' @field pipeline_id [characterORNULL] ID of the pipeline you wish to execute.
-#' @field pipeline_revision [characterORNULL] Revision number of the pipeline 
-#' you wish to execute. If this is not specified, the latest pipeline revision 
-#' is used.
-#' @field start_time [numericORNULL] start time.
-#' @field status [characterORNULL] 1) active: task is currently running. 
-#' 2) completed: task has finished successfully. 3) aborted: task was aborted by 
-#' user. 4) failed: task has failed to finish due to either bad inputs and/or 
-#' parameters, or because of the internal infrastructure failures.
-#' @field message [characterORNULL] task message
-#' @field jobs_completed [numericORNULL] completed jobs
-#' @field jobs_total [numericORNULL] total jobs.
-#' @field inputs [listORNULL] required for task execution. List of key-value 
-#' pairs containing mappings of pipeline input node ID to file IDs.
-#'  Note that you must supply an array of file IDs for each input nodes, 
-#'  even if the array is empty.
-#' @field parameters [listORNULL] required for task execution. List of key-value 
-#' pairs containing mappings of node IDs to apps specific parameters. Note that 
-#' you must supply some value for parameters, even if this an empty list of 
-#' key-value pairs.
-#' @field project_id [characterORNULL] required for task execution. 
-#' ID of the project you want to execute the task in.
-#' 
-#' @exportClass Task
-#' @export Task
+##' Task class
+##' 
+##' Task class
+##'
+##' A task execution require auth, project_id, pipeline_id and inputs
+##' parameters, there are two ways to execute a task, the recommended
+##' way is to use a cascading method to create a project object called
+##' \code{p} then just call \code{p$task_run()} to pass your
+##' parameters. This way you save your time passing auth and
+##' project_id. The other way is to create a Task object with all
+##' required fields and call \code{run} method. Please check example
+##' in the end or tutorial for easy API.
+##' 
+##' @field id [characterORNULL] The task ID number, used when referring to the 
+##' task in other Seven Bridges API calls
+##' @field name [characterORNULL] Name of the task you wish to execute. If this 
+##' is not specified, the task will be named automatically.
+##' @field description [characterORNULL] Description of the task you wish to execute.
+##' @field pipeline_id [characterORNULL] ID of the pipeline you wish to execute.
+##' @field pipeline_revision [characterORNULL] Revision number of the pipeline 
+##' you wish to execute. If this is not specified, the latest pipeline revision 
+##' is used.
+##' @field start_time [numericORNULL] start time.
+##' @field status [characterORNULL] 1) active: task is currently running. 
+##' 2) completed: task has finished successfully. 3) aborted: task was aborted by 
+##' user. 4) failed: task has failed to finish due to either bad inputs and/or 
+##' parameters, or because of the internal infrastructure failures.
+##' @field message [characterORNULL] task message
+##' @field jobs_completed [numericORNULL] completed jobs
+##' @field jobs_total [numericORNULL] total jobs.
+##' @field inputs [listORNULL] required for task execution. List of key-value 
+##' pairs containing mappings of pipeline input node ID to file IDs.
+##'  Note that you must supply an array of file IDs for each input nodes, 
+##'  even if the array is empty.
+##' @field parameters [listORNULL] required for task execution. List of key-value 
+##' pairs containing mappings of node IDs to apps specific parameters. Note that 
+##' you must supply some value for parameters, even if this an empty list of 
+##' key-value pairs.
+##' @field project_id [characterORNULL] required for task execution. 
+##' ID of the project you want to execute the task in.
+##' 
+##' @exportClass Task
+##' @export Task
+##' @examples
+##' \donttest{
+##' token <- "aef7e9e3f6c54fb1b338ac4ecddf1a56"
+##' a <- Auth(token)
+##' ## get billing info
+##' b <- a$billing()
+##' p <- a$project("API")
+##' ## get the pipeline from your project not public one
+##' f.pipe <- p$pipeline(name = "FastQC")
+##' ## check the inputs needed for running tasks
+##' f.pipe$details()
+##' ## Ready to run a task? go
+##' f.task <- p$task_run(name = "my task", 
+##'                       description = "A text description", 
+##'                       pipeline_id = f.pipe$id,
+##'                       inputs = list( 
+##'                           "177252" = list(f.file$id)
+##'                           ))
+##' f.task$run()
+##' ## or you can just run with Task constructor
+##' f.task <- Task(auth = Auth(token),
+##'                name = "my task", 
+##'                description = "A text description", 
+##'                pipeline_id = f.pipe$id, 
+##'                project_id = p$id,
+##'                inputs = list( 
+##'                    "177252" = list(f.file$id)
+##'                    ))
+##' ## Monitor you task
+##' f.task$monitor(30)
+##' 
+##' ## download a task output files
+##' f.task <- p$task("my task")
+##' f.task$download("~/Desktop/")
+##' 
+##' ## Abort the task
+##' f.task$abort()
+##' }
 Task <- setRefClass("Task", contains = "Item",
                     fields = list(id = "characterORNULL",
                         name = "characterORNULL",
@@ -1246,7 +1360,7 @@ Task <- setRefClass("Task", contains = "Item",
                             }
                             req <- sbgr::task_action(auth$auth_token, project_id,
                                 id, action)
-                            .asTask(req)
+                            req
                         },
                         abort = function(){
                             action(action = "abort")
@@ -1425,7 +1539,8 @@ m.match <- function(obj, id = NULL, name = NULL,
 
     }
     if(length(index) == 1 && is.na(index)){
-        stop("no matching")
+        message("sorry, no matching ", class(obj[[1]]))
+        return(NULL)
     }else{
         if(length(index) ==1){
             obj[[index]]
@@ -1492,5 +1607,30 @@ normalizeMeta <- function(x){
         stop("metadata has to be a list or Metadata object")
     }
     return(res)
+}
+
+## self testing method to run tutorial
+## Warning: this is used internally for maintainer, it will
+## 1. delete API project first and start clean
+## 2. re-build the rmarkdown easy-api docs with real auth.
+## in progress
+.test_build <- function(token = NULL, file = "easy_api_eval.Rmd", 
+                        output_dir = "~/Downloads/"){
+    if(is.null(token))    
+        stop("token not provided")
+    
+    fl <- system.file("extdata", file, package = "sbgr")
+    rmarkdown::render(fl, BiocStyle::html_document(), output_dir = output_dir)
+}
+
+.test_examples <- function(token = NULL, file = "test-easy-api.R", 
+                           extdata = TRUE, clean = TRUE){
+    if(is.null(token))    
+        stop("token not provided")
+    if(extdata)
+        file <- system.file("extdata", file, package = "sbgr")
+    token <<- token
+    clean <<- clean
+    source(file)
 }
 

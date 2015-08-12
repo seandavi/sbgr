@@ -8,6 +8,16 @@
 \description{
 Task class
 }
+\details{
+A task execution require auth, project_id, pipeline_id and inputs
+parameters, there are two ways to execute a task, the recommended
+way is to use a cascading method to create a project object called
+\code{p} then just call \code{p$task_run()} to pass your
+parameters. This way you save your time passing auth and
+project_id. The other way is to create a Task object with all
+required fields and call \code{run} method. Please check example
+in the end or tutorial for easy API.
+}
 \section{Fields}{
 
 \describe{
@@ -51,4 +61,43 @@ key-value pairs.}
 \item{\code{project_id}}{[characterORNULL] required for task execution.
 ID of the project you want to execute the task in.}
 }}
+\examples{
+\donttest{
+token <- "aef7e9e3f6c54fb1b338ac4ecddf1a56"
+a <- Auth(token)
+## get billing info
+b <- a$billing()
+p <- a$project("API")
+## get the pipeline from your project not public one
+f.pipe <- p$pipeline(name = "FastQC")
+## check the inputs needed for running tasks
+f.pipe$details()
+## Ready to run a task? go
+f.task <- p$task_run(name = "my task",
+                      description = "A text description",
+                      pipeline_id = f.pipe$id,
+                      inputs = list(
+                          "177252" = list(f.file$id)
+                          ))
+f.task$run()
+## or you can just run with Task constructor
+f.task <- Task(auth = Auth(token),
+               name = "my task",
+               description = "A text description",
+               pipeline_id = f.pipe$id,
+               project_id = p$id,
+               inputs = list(
+                   "177252" = list(f.file$id)
+                   ))
+## Monitor you task
+f.task$monitor(30)
+
+## download a task output files
+f.task <- p$task("my task")
+f.task$download("~/Desktop/")
+
+## Abort the task
+f.task$abort()
+}
+}
 
