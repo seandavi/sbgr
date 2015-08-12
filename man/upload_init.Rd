@@ -5,7 +5,7 @@
 \title{Initializes the upload of the specified file}
 \usage{
 upload_init(auth_token = NULL, project_id = NULL, name = NULL,
-  size = NULL, part_size = NULL)
+  size = NULL, part_size = NULL, ...)
 }
 \arguments{
 \item{auth_token}{auth token}
@@ -18,6 +18,8 @@ upload_init(auth_token = NULL, project_id = NULL, name = NULL,
 
 \item{part_size}{Requested part size. Note that API may reject your
 requested part size and return proper one in response.}
+
+\item{...}{parameters passed to sbgapi function}
 }
 \value{
 parsed list of the returned json

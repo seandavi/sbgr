@@ -4,10 +4,12 @@
 \alias{billing}
 \title{Returns the list of all billing groups you have access to}
 \usage{
-billing(auth_token = NULL)
+billing(auth_token = NULL, ...)
 }
 \arguments{
 \item{auth_token}{auth token}
+
+\item{...}{parameters passed to sbgapi function}
 }
 \value{
 parsed list of the returned json

@@ -4,10 +4,12 @@
 \alias{project_list}
 \title{Returns the list of all projects you have access to}
 \usage{
-project_list(auth_token = NULL)
+project_list(auth_token = NULL, ...)
 }
 \arguments{
 \item{auth_token}{auth token}
+
+\item{...}{parameters passed to sbgapi function}
 }
 \value{
 parsed list of the returned json

@@ -4,12 +4,14 @@
 \alias{upload_info}
 \title{Returns upload information for the ongoing upload}
 \usage{
-upload_info(auth_token = NULL, upload_id = NULL)
+upload_info(auth_token = NULL, upload_id = NULL, ...)
 }
 \arguments{
 \item{auth_token}{auth token}
 
 \item{upload_id}{ID of the upload}
+
+\item{...}{parameters passed to sbgapi function}
 }
 \value{
 parsed list of the returned json

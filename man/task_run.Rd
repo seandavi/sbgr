@@ -4,7 +4,7 @@
 \alias{task_run}
 \title{Runs a task as a part of a project}
 \usage{
-task_run(auth_token = NULL, project_id = NULL, task_details = NULL)
+task_run(auth_token = NULL, project_id = NULL, task_details = NULL, ...)
 }
 \arguments{
 \item{auth_token}{auth token}
@@ -24,6 +24,8 @@ an list, even if empty or with one element.
 \item \code{parameters} - Named list containing mappings of node IDs
 to apps specific parameters. Note that parameters are always specified
 as an list, even if empty or with one element.}}
+
+\item{...}{parameters passed to sbgapi function}
 }
 \value{
 parsed list of the returned json

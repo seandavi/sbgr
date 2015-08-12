@@ -9,6 +9,7 @@
 #' @param auth_token auth token
 #' @param project_id ID of a project you want to access.
 #' Note that specifying \code{"public"} you can list public files.
+#' @param ... parameters passed to sbgapi function
 #'
 #' @return parsed list of the returned json
 #'
@@ -21,12 +22,12 @@
 #' token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' \donttest{req = file_list(token,
 #'             project_id = '1c1d06d2-5862-48f6-b595-e0099b20937e')}
-file_list = function (auth_token = NULL, project_id = NULL) {
+file_list = function (auth_token = NULL, project_id = NULL, ...) {
     
     if (is.null(project_id)) stop('project_id must be provided')
     
     req = sbgapi(auth_token = auth_token,
-                 path = paste0('project/', project_id, '/file'), method = 'GET')
+                 path = paste0('project/', project_id, '/file'), method = 'GET', ...)
     
     return(status_check(req))
     
@@ -39,6 +40,7 @@ file_list = function (auth_token = NULL, project_id = NULL) {
 #' @param auth_token auth token
 #' @param project_id ID of a project you want to access.
 #' @param file_id ID of a file you want to access.
+#' @param ... parameters passed to sbgapi function
 #'
 #' @return parsed list of the returned json
 #'
@@ -52,14 +54,15 @@ file_list = function (auth_token = NULL, project_id = NULL) {
 #' \donttest{req = file_details(token,
 #'             project_id = '1c1d06d2-5862-48f6-b595-e0099b20937e',
 #'             file_id = '530854e2e4b036506b803c7e')}
-file_details = function (auth_token = NULL, project_id = NULL, file_id = NULL) {
+file_details = function (auth_token = NULL, project_id = NULL,
+    file_id = NULL, ...) {
     
     if (is.null(project_id) | is.null(file_id))
         stop('project_id and file_id must be both provided')
     
     req = sbgapi(auth_token = auth_token,
                  path = paste0('project/', project_id, '/file/', file_id),
-                 method = 'GET')
+                 method = 'GET', ...)
     
     return(status_check(req))
     
@@ -73,6 +76,7 @@ file_details = function (auth_token = NULL, project_id = NULL, file_id = NULL) {
 #' @param project_id ID of a project you want to copy files to.
 #' @param file_id Character vector. IDs of the files you wish to copy to
 #' the project.
+#' @param ... parameters passed to sbgapi function
 #'
 #' @return parsed list of the returned json
 #'
@@ -88,7 +92,8 @@ file_details = function (auth_token = NULL, project_id = NULL, file_id = NULL) {
 #'             file_id = c('5506a44ae4b04a4ab3ae7250',
 #'                         '5506a44ae4b04a4ab3ae7254',
 #'                         '5506a44ae4b04a4ab3ae7252'))}
-file_copy = function (auth_token = NULL, project_id = NULL, file_id = NULL) {
+file_copy = function (auth_token = NULL, project_id = NULL,
+    file_id = NULL, ...) {
     
     if (is.null(project_id) | is.null(file_id))
         stop('project_id and file_id must be both provided')
@@ -97,7 +102,7 @@ file_copy = function (auth_token = NULL, project_id = NULL, file_id = NULL) {
     
     req = sbgapi(auth_token = auth_token, 
                  path = paste0('project/', project_id, '/file'),
-                 body = body, method = 'POST')
+                 body = body, method = 'POST', ...)
     
     return(status_check(req))
     
@@ -149,6 +154,7 @@ file_copy = function (auth_token = NULL, project_id = NULL, file_id = NULL) {
 #' indicates if the read file is left end (1) or right end (2).
 #' For SOLiD CSFASTA files, paired end files 1 and 2 correspond to R3
 #' and F3 files, respectively.
+#' @param ... parameters passed to sbgapi function
 #'
 #' @return parsed list of the returned json
 #'
@@ -182,7 +188,7 @@ file_meta_update = function (auth_token = NULL,
                              seq_tech = c('454', 'Helicos', 'Illumina', 'Solid',
                                           'IonTorrent'),
                              sample = NULL, library = NULL,
-                             platform_unit = NULL, paired_end = NULL) {
+                             platform_unit = NULL, paired_end = NULL, ...) {
     
     if (is.null(project_id) | is.null(file_id))
         stop('project_id and file_id must be both provided')
@@ -201,7 +207,7 @@ file_meta_update = function (auth_token = NULL,
     
     req = sbgapi(auth_token = auth_token,
                  path = paste0('project/', project_id, '/file/', file_id),
-                 body = body, method = 'PUT')
+                 body = body, method = 'PUT', ...)
     
     return(status_check(req))
     
@@ -214,6 +220,7 @@ file_meta_update = function (auth_token = NULL,
 #' @param auth_token auth token
 #' @param project_id ID of a project you want to access.
 #' @param file_id ID of a file you want to delete.
+#' @param ... parameters passed to sbgapi function
 #'
 #' @return parsed list of the returned json
 #'
@@ -228,14 +235,14 @@ file_meta_update = function (auth_token = NULL,
 #'             project_id = '1c1d06d2-5862-48f6-b595-e0099b20937e',
 #'             file_id = '530854e2e4b036506b803c7e')}
 file_delete = function (auth_token = NULL,
-                        project_id = NULL, file_id = NULL) {
+                        project_id = NULL, file_id = NULL, ...) {
     
     if (is.null(project_id) | is.null(file_id))
         stop('project_id and file_id must be both provided')
     
     req = sbgapi(auth_token = auth_token,
                  path = paste0('project/', project_id, '/file/', file_id),
-                 method = 'DELETE')
+                 method = 'DELETE', ...)
     
     return(status_check(req))
     
@@ -251,6 +258,7 @@ file_delete = function (auth_token = NULL,
 #' @param auth_token auth token
 #' @param project_id ID of a project you want to access.
 #' @param file_id ID of a file you want to access.
+#' @param ... parameters passed to sbgapi function
 #'
 #' @return parsed list of the returned json
 #'
@@ -265,7 +273,7 @@ file_delete = function (auth_token = NULL,
 #'             project_id = '1c1d06d2-5862-48f6-b595-e0099b20937e',
 #'             file_id = '530854e2e4b036506b803c7e')}
 file_download_url = function (auth_token = NULL, 
-                              project_id = NULL, file_id = NULL) {
+                              project_id = NULL, file_id = NULL, ...) {
     
     if (is.null(project_id) | is.null(file_id))
         stop('project_id and file_id must be both provided')
@@ -273,7 +281,7 @@ file_download_url = function (auth_token = NULL,
     req = sbgapi(auth_token = auth_token,
                  path = paste0('project/', project_id,
                                '/file/', file_id, '/download'),
-                 method = 'GET')
+                 method = 'GET', ...)
     
     return(status_check(req))
     

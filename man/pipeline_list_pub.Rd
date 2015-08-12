@@ -4,10 +4,12 @@
 \alias{pipeline_list_pub}
 \title{Returns the list of all public pipelines}
 \usage{
-pipeline_list_pub(auth_token = NULL)
+pipeline_list_pub(auth_token = NULL, ...)
 }
 \arguments{
 \item{auth_token}{auth token}
+
+\item{...}{parameters passed to sbgapi function}
 }
 \value{
 parsed list of the returned json

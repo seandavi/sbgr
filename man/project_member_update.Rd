@@ -6,7 +6,7 @@
 \usage{
 project_member_update(auth_token = NULL, project_id = NULL,
   user_id = NULL, write = FALSE, copy = FALSE, execute = FALSE,
-  admin = FALSE)
+  admin = FALSE, ...)
 }
 \arguments{
 \item{auth_token}{auth token}
@@ -23,6 +23,8 @@ project_member_update(auth_token = NULL, project_id = NULL,
 
 \item{admin}{Logical. User has all rights on the project
 (including changing).}
+
+\item{...}{parameters passed to sbgapi function}
 }
 \value{
 parsed list of the returned json

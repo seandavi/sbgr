@@ -5,7 +5,7 @@
 \title{Performs action on the task}
 \usage{
 task_action(auth_token = NULL, project_id = NULL, task_id = NULL,
-  action = "abort")
+  action = "abort", ...)
 }
 \arguments{
 \item{auth_token}{auth token}
@@ -16,6 +16,8 @@ task_action(auth_token = NULL, project_id = NULL, task_id = NULL,
 
 \item{action}{Character string specifying the action.
 Currently, only supported action is \code{'abort'}.}
+
+\item{...}{parameters passed to sbgapi function}
 }
 \value{
 parsed list of the returned json

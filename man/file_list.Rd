@@ -4,13 +4,15 @@
 \alias{file_list}
 \title{Returns the list of all project files for a project}
 \usage{
-file_list(auth_token = NULL, project_id = NULL)
+file_list(auth_token = NULL, project_id = NULL, ...)
 }
 \arguments{
 \item{auth_token}{auth token}
 
 \item{project_id}{ID of a project you want to access.
 Note that specifying \code{"public"} you can list public files.}
+
+\item{...}{parameters passed to sbgapi function}
 }
 \value{
 parsed list of the returned json

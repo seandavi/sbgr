@@ -5,7 +5,7 @@
 \title{Returns information about the task}
 \usage{
 task_details(auth_token = NULL, project_id = NULL, task_id = NULL,
-  download.url = FALSE)
+  download.url = FALSE, ...)
 }
 \arguments{
 \item{auth_token}{auth token}
@@ -15,6 +15,8 @@ task_details(auth_token = NULL, project_id = NULL, task_id = NULL,
 \item{task_id}{ID of a task you want to access.}
 
 \item{download.url}{Logical. Return the download URL or not.}
+
+\item{...}{parameters passed to sbgapi function}
 }
 \value{
 parsed list of the returned json

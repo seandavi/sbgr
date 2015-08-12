@@ -5,7 +5,7 @@
 \title{Add a pipeline to a specified project}
 \usage{
 pipeline_add(auth_token = NULL, project_id_to = NULL,
-  project_id_from = NULL, pipeline_id = NULL, revision = NULL)
+  project_id_from = NULL, pipeline_id = NULL, revision = NULL, ...)
 }
 \arguments{
 \item{auth_token}{auth token}
@@ -19,6 +19,8 @@ Specify values such as \code{"my"} to specify a pipeline from
 \item{pipeline_id}{ID of the pipeline you wish to add to project.}
 
 \item{revision}{Revision of the pipeline you wish to add to the project.}
+
+\item{...}{parameters passed to sbgapi function}
 }
 \value{
 parsed list of the returned json

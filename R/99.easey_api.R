@@ -235,13 +235,15 @@ Auth <- setRefClass("Auth", fields = list(auth_token = "character",
 
                         },
                         project_list = function(){
-                            res <- sbgr::project_list(auth_token)
+                            res <- sbgr::project_list(auth_token,
+                                                      base_url = url)
                             .asProjectList(res[[1]])
                         },
                         project_new = function(name = NULL,
                             description = NULL,
                             billing_group_id = NULL){
                             res <- sbgr::project_new(auth_token, name = name,
+                                                     base_url = url,
                                                      description = description,
                                                      billing_group_id = billing_group_id)
 
@@ -251,6 +253,7 @@ Auth <- setRefClass("Auth", fields = list(auth_token = "character",
                             name = NULL){
                             if(!is.null(id)){
                                 sbgr::project_delete(auth_token,
+                                                     base_url = url,
                                                      project_id = id)
                             }else{
                                 ## match name
@@ -259,6 +262,7 @@ Auth <- setRefClass("Auth", fields = list(auth_token = "character",
                                 message("Following projects will be deleted")
                                 print(p)
                                 sbgr::project_delete(auth_token,
+                                                     base_url = url,
                                                      project_id = p$id)
                             }
                         },
@@ -333,7 +337,8 @@ Auth <- setRefClass("Auth", fields = list(auth_token = "character",
                             return(res)
                         },
                         pipeline_list_pub = function(){
-                            res <- sbgr::pipeline_list_pub(auth_token)
+                            res <- sbgr::pipeline_list_pub(auth_token,
+                                                           base_url = url)
                             res <- .asPipelineList(res[[1]])
                             lapply(res, function(x) {
                                 ## x$set_auth(auth_token)
@@ -341,7 +346,8 @@ Auth <- setRefClass("Auth", fields = list(auth_token = "character",
                                 x})
                         },
                         pipeline_list_my = function(){
-                            res <- sbgr::pipeline_list_my(auth_token)
+                            res <- sbgr::pipeline_list_my(auth_token,
+                                                          base_url = url)
                             res <- .asPipelineList(res[[1]])
                             lapply(res, function(x) {
                                 ## x$set_auth(auth_token)
@@ -400,7 +406,7 @@ Auth <- setRefClass("Auth", fields = list(auth_token = "character",
                                     }
                                 }
                             }
-                            res <- sbgr::pipeline_add(auth_token,
+                            res <- sbgr::pipeline_add(auth_token, base_url = url,
                                                       project_id_to = project_id_to, 
                                                       project_id_from = project_id_from,
                                                       pipeline_id = pipeline_id,
@@ -409,7 +415,7 @@ Auth <- setRefClass("Auth", fields = list(auth_token = "character",
                             
                         },
                         billing = function(){
-                            res <- sbgr::billing(auth_token)
+                            res <- sbgr::billing(auth_token, base_url = url)
                             res <- .asBillingList(res[[1]])
                             lapply(res, function(x){
                                 x$auth <- .self
@@ -505,7 +511,8 @@ Project <- setRefClass("Project", contains = "Item",
                                callSuper(...)
                            },
                            details = function(){
-                               res <- sbgr::project_details(auth$auth_token, id)
+                               res <- sbgr::project_details(auth$auth_token, id,
+                                                            base_url = auth$url)
                                response <<- res
                                id <<- res$id
                                name <<- res$name
@@ -543,7 +550,8 @@ Project <- setRefClass("Project", contains = "Item",
                                                                copy = copy,
                                                                write = write,
                                                                execute = execute,
-                                                               admin = admin)
+                                                               admin = admin,
+                                                               base_url = auth$url)
 
                                .asMember(res)
 
@@ -571,7 +579,8 @@ Project <- setRefClass("Project", contains = "Item",
                                                                   write = write,
                                                                   copy = copy,
                                                                   execute = execute,
-                                                                  admin = admin)
+                                                                  admin = admin,
+                                                                  base_url = auth$url)
                                .asMember(res)
                            },
                            member_delete = function(
@@ -588,11 +597,13 @@ Project <- setRefClass("Project", contains = "Item",
                                }
                                sbgr::project_member_delete(auth$auth_token,
                                                            .self$id,
-                                                           user_id = user_id)
+                                                           user_id = user_id,
+                                                           base_url = auth$url)
                            },
                            pipeline = function(name = NULL, id = NULL,
                                detail = FALSE, exact = TRUE){
                                res <- sbgr::pipeline_list_project(auth$auth_token,
+                                                                  base_url = auth$url, 
                                                                   .self$id)
                                res <- .asPipelineList(res[[1]])
                                res <- m.match(res, name = name, id = id,
@@ -601,7 +612,8 @@ Project <- setRefClass("Project", contains = "Item",
                                    res<- lapply(res, function(x){
                                        x <- sbgr::pipeline_details(auth$auth_token,
                                                               project_id = .self$id,
-                                                              pipeline_id = x$id)
+                                                                   pipeline_id = x$id,
+                                                                   base_url = auth$url)
                                        .asPipeline(x)
                                    })
                                    
@@ -642,7 +654,8 @@ Project <- setRefClass("Project", contains = "Item",
                            
                            },
                            file_list = function(){
-                               res <- sbgr::file_list(auth$auth_token, id)
+                               res <- sbgr::file_list(auth$auth_token, id,
+                                                      base_url = auth$url)
                                res <- .asFileList(res[[1]])
                                lapply(res, function(x) {
                                    ## x$set_auth(auth_token)
@@ -674,15 +687,15 @@ Project <- setRefClass("Project", contains = "Item",
                                f <- file(name, file_id, exact = exact)
                                ## exact = FALSE is very dangerous operation
                                sapply(f$id, function(fid){
-                                   sbgr::file_delete(auth$auth_token, id, fid)
+                                   sbgr::file_delete(auth$auth_token, id, fid, base_url = auth$url)
                                })
                            },
                            file_copy = function(file_id = NULL){
                                res <- sbgr::file_copy(auth$auth_token,
-                                                      id, file_id)
+                                                      id, file_id, base_url = auth$url)
                            },
                            upload = function(file = NULL, metadata = list()){
-                               u <- Upload(auth$auth_token,
+                               u <- Upload(auth = auth,
                                            file,
                                            project_id = id,
                                            metadata = metadata)
@@ -690,7 +703,7 @@ Project <- setRefClass("Project", contains = "Item",
                            },
                            ## task
                            task_list = function(){
-                               req <- sbgr::task_list(auth$auth_token, id)
+                               req <- sbgr::task_list(auth$auth_token, id, base_url = auth$url)
                                res <- .asTaskList(req[[1]])
                                lapply(res, function(x){
                                    x$response <- response(req)
@@ -735,7 +748,8 @@ Project <- setRefClass("Project", contains = "Item",
                            delete = function(){
                               
                                sbgr::project_delete(auth$auth_token,
-                                                    project_id = id)
+                                                    project_id = id,
+                                                    base_url = auth$url)
                            },
                            show = function(){
                                ## callSuper()
@@ -811,18 +825,21 @@ Pipeline <- setRefClass("Pipeline", contains = "Item",
                             details = function(){
                                 if(repos == "public"){
                                     req <- sbgapi(auth_token = auth$auth_token,
+                                                  base_url = auth$url,
                                            path = paste0('pipeline/public/', id), method = 'GET')
                                     res <- status_check(req)
                                 }
                                 if(repos == "my"){
                                     req <- sbgapi(auth_token = auth$auth_token,
+                                                  base_url = auth$url,
                                                   path = paste0('pipeline/my/', id), method = 'GET')
                                     res <- status_check(req) 
                                 }
                                 if(repos == "project"){
                                     res <- sbgr::pipeline_details(auth$auth_token,
                                                                   project_id = project_id,
-                                                                  pipeline_id = id) 
+                                                                  pipeline_id = id,
+                                                                  base_url = auth$url) 
                                 }
                                 
                                
@@ -900,7 +917,6 @@ Upload <- setRefClass("Upload", contains = "Item",
                       fields = list(
                           ## filepath = "characterORNULL",
                           file = "characterORNULL",                          
-                          auth_token = "characterORNULL",
                           project_id = "characterORNULL",
                           name = "characterORNULL",
                           size = "numericORNULL",
@@ -914,7 +930,6 @@ Upload <- setRefClass("Upload", contains = "Item",
                       ),
                       methods = list(
                           initialize = function(
-                              auth_token = NULL,
                               file = NULL,
                               project_id = NULL,
                               name = NULL,
@@ -951,9 +966,7 @@ Upload <- setRefClass("Upload", contains = "Item",
                                   size <<- size
                               }
                               
-                              stopifnot_provided(
-                                  !is.null(auth_token),
-                                  !is.null(project_id))
+                              stopifnot_provided(!is.null(project_id))
 
 
                               if(is.numeric(.self$size)){
@@ -964,7 +977,7 @@ Upload <- setRefClass("Upload", contains = "Item",
                                   stop("size must be between 0 - 5497558138880, inclusive")                                  
                               }
 
-                              auth <<- Auth(auth_token)
+
                               project_id <<- project_id
                               ## fixme: try manual part-size
                               if(is.null(part_size))
@@ -1003,7 +1016,8 @@ Upload <- setRefClass("Upload", contains = "Item",
                               res <- sbgr::upload_init(auth_token = auth$auth_token,
                                                        project_id = project_id,
                                                        name = name,
-                                                       size = size)
+                                                       size = size,
+                                                       base_url = auth$url)
 
                               upload_id <<- res$upload_id
                               initialized <<- TRUE
@@ -1014,7 +1028,8 @@ Upload <- setRefClass("Upload", contains = "Item",
                               if(is.null(upload_id)){
                                   stop("Upload is not initialized yet")
                               }
-                              res <- sbgr::upload_info(auth$auth_token, upload_id)
+                              res <- sbgr::upload_info(auth$auth_token, upload_id,
+                                                       base_url = auth$url)
                               show()
                               invisible(res)
                           },
@@ -1025,6 +1040,7 @@ Upload <- setRefClass("Upload", contains = "Item",
                               }
                               cl <- c("Content-Length" = as.character(part[[part_number]]$part_size))
                               res <- status_check(sbgapi(auth$auth_token,
+                                                         base_url = auth$url,
                                              path = paste0("upload/multipart/", 
                                                  upload_id, "/", part_number),
                                              method = "GET"))
@@ -1068,6 +1084,7 @@ Upload <- setRefClass("Upload", contains = "Item",
                               if(length(meta)){
                                   message("Adding metadata ...")
                                   req <- sbgapi(auth_token = auth$auth_token,
+                                                base_url = auth$url,
                                                        path = paste0('project/',
                                                            project_id,
                                                            '/file/', res$id),
@@ -1084,12 +1101,13 @@ Upload <- setRefClass("Upload", contains = "Item",
                               res <- sbgr::upload_complete_part(auth$auth_token,
                                                                 upload_id,
                                                                 part_number,
-                                                                etag)
+                                                                etag, base_url = auth$url)
 
                           },
                           upload_complete_all = function(){
                               ## fixme:
                               req <- sbgapi(auth_token = auth$auth_token,
+                                            base_url = auth$url,
                                              path = paste0("upload/multipart/", 
                                                  upload_id, "/complete"),
                                              method = "POST")
@@ -1097,7 +1115,8 @@ Upload <- setRefClass("Upload", contains = "Item",
                               
                           },
                           upload_delete = function(){
-                              sbgr::upload_delete(auth$auth_token, upload_id)
+                              sbgr::upload_delete(auth$auth_token, upload_id,
+                                                  base_url = auth$url)
                           },
                           show = function(){
                               .showFields(.self, "== Upload ==",
@@ -1119,7 +1138,8 @@ Upload$methods(list(
 
 
 .asUpload <- function(x){
-    Upload(auth = Auth(x$auth_token),
+    Upload(
+        ## auth = Auth(x$auth_token),
            project_id = x$project_id,
            name = x$name,
            size = x$size,
@@ -1160,10 +1180,12 @@ File <- setRefClass("File", contains = "Item",
                             callSuper(...)
                         },
                         delete = function(){
-                            sbgr::file_delete(auth$auth_token, project_id, id)
+                            sbgr::file_delete(auth$auth_token, project_id, id,
+                                              base_url = auth$url)
                         },
                         download_url = function(){
-                            sbgr::file_download_url(auth$auth_token, project_id, id)
+                            sbgr::file_download_url(auth$auth_token, project_id, id ,
+                                                    base_url = auth$url)
                         },
                         download = function(destfile, ..., method = "curl"){
                             'see help(download.file) for more options'
@@ -1194,6 +1216,7 @@ File <- setRefClass("File", contains = "Item",
                                 metadata <<- new.meta$metadata
                                 
                                 req <- sbgapi( auth$auth_token,
+                                              base_url = auth$url,
                                                      path = paste0('project/',
                                                          project_id,
                                                          '/file/', id),
@@ -1208,6 +1231,7 @@ File <- setRefClass("File", contains = "Item",
                                         names(new.meta) <- "metadata"
                                         message("cleaning metadata ...")
                                         req <- sbgapi(auth$auth_token,
+                                                      base_url = auth$url,
                                                              path = paste0('project/',
                                                                  project_id,
                                                                  '/file/', id),
@@ -1359,7 +1383,7 @@ Task <- setRefClass("Task", contains = "Item",
                                 stop("please specify action: currently only support 'abort'")
                             }
                             req <- sbgr::task_action(auth$auth_token, project_id,
-                                id, action)
+                                id, action, base_url = auth$url)
                             req
                         },
                         abort = function(){
@@ -1368,7 +1392,7 @@ Task <- setRefClass("Task", contains = "Item",
                         details = function(){
                             req <- sbgr::task_details(auth$auth_token,
                                                project_id,
-                                               id)
+                                               id, base_url = auth$url)
                             
                            ## update
                             start_time <<- req$start_time
@@ -1421,7 +1445,8 @@ Task <- setRefClass("Task", contains = "Item",
                     
                             req <- sbgr::task_run(auth$auth_token,
                                                   project_id,
-                                                  body)
+                                                  body,
+                                                  base_url = auth$url)
                             
                             ## update task object
                             id <<- req$id
@@ -1623,13 +1648,13 @@ normalizeMeta <- function(x){
     rmarkdown::render(fl, BiocStyle::html_document(), output_dir = output_dir)
 }
 
-.test_examples <- function(token = NULL, file = "test-easy-api.R", 
+.test_examples <- function(auth = NULL, file = "test-easy-api.R", 
                            extdata = TRUE, clean = TRUE){
-    if(is.null(token))    
-        stop("token not provided")
+    if(is.null(auth))    
+        stop("auth not provided")
     if(extdata)
         file <- system.file("extdata", file, package = "sbgr")
-    token <<- token
+    a <<- auth
     clean <<- clean
     source(file)
 }

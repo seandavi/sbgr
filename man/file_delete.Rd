@@ -4,7 +4,7 @@
 \alias{file_delete}
 \title{Removes a file from a project}
 \usage{
-file_delete(auth_token = NULL, project_id = NULL, file_id = NULL)
+file_delete(auth_token = NULL, project_id = NULL, file_id = NULL, ...)
 }
 \arguments{
 \item{auth_token}{auth token}
@@ -12,6 +12,8 @@ file_delete(auth_token = NULL, project_id = NULL, file_id = NULL)
 \item{project_id}{ID of a project you want to access.}
 
 \item{file_id}{ID of a file you want to delete.}
+
+\item{...}{parameters passed to sbgapi function}
 }
 \value{
 parsed list of the returned json

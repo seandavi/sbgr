@@ -4,7 +4,7 @@
 \alias{file_copy}
 \title{Copy specified file(s) to the specified project}
 \usage{
-file_copy(auth_token = NULL, project_id = NULL, file_id = NULL)
+file_copy(auth_token = NULL, project_id = NULL, file_id = NULL, ...)
 }
 \arguments{
 \item{auth_token}{auth token}
@@ -13,6 +13,8 @@ file_copy(auth_token = NULL, project_id = NULL, file_id = NULL)
 
 \item{file_id}{Character vector. IDs of the files you wish to copy to
 the project.}
+
+\item{...}{parameters passed to sbgapi function}
 }
 \value{
 parsed list of the returned json

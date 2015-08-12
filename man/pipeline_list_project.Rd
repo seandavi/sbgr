@@ -4,12 +4,14 @@
 \alias{pipeline_list_project}
 \title{Returns a list of all the pipelines in project}
 \usage{
-pipeline_list_project(auth_token = NULL, project_id = NULL)
+pipeline_list_project(auth_token = NULL, project_id = NULL, ...)
 }
 \arguments{
 \item{auth_token}{auth token}
 
 \item{project_id}{ID of a project you want to access.}
+
+\item{...}{parameters passed to sbgapi function}
 }
 \value{
 parsed list of the returned json

@@ -11,7 +11,7 @@ file_meta_update(auth_token = NULL, project_id = NULL, file_id = NULL,
   qual_scale = c("sanger", "illumina13", "illumina15", "illumina18",
   "solexa"), seq_tech = c("454", "Helicos", "Illumina", "Solid",
   "IonTorrent"), sample = NULL, library = NULL, platform_unit = NULL,
-  paired_end = NULL)
+  paired_end = NULL, ...)
 }
 \arguments{
 \item{auth_token}{auth token}
@@ -61,6 +61,8 @@ as the value for the read group tag of a SAM/BAM file.}
 indicates if the read file is left end (1) or right end (2).
 For SOLiD CSFASTA files, paired end files 1 and 2 correspond to R3
 and F3 files, respectively.}
+
+\item{...}{parameters passed to sbgapi function}
 }
 \value{
 parsed list of the returned json

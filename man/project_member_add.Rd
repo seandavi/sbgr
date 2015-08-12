@@ -5,7 +5,7 @@
 \title{Add a user to the project with appropriate permissions}
 \usage{
 project_member_add(auth_token = NULL, project_id = NULL, username = NULL,
-  copy = FALSE, write = FALSE, execute = FALSE, admin = FALSE)
+  copy = FALSE, write = FALSE, execute = FALSE, admin = FALSE, ...)
 }
 \arguments{
 \item{auth_token}{auth token}
@@ -23,6 +23,8 @@ the project.}
 
 \item{admin}{Logical. User has all rights on the project
 (including changing).}
+
+\item{...}{parameters passed to sbgapi function}
 }
 \value{
 parsed list of the returned json

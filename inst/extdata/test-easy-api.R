@@ -2,8 +2,7 @@
 ## missing token
 message("loading ...")
 library(sbgr)
-print(token)
-a <- Auth(token)
+
 if(clean){
     p <- a$project("API")
     message("cleaning ...")
@@ -49,7 +48,7 @@ f.task <- p$task_run(name = "my task",
                           ))
 
 ## or you can just run with Task constructor
-f.task2 <- Task(auth = Auth(token),
+f.task2 <- Task(auth = a,
                name = "my task2", 
                description = "A text description", 
                pipeline_id = f.pipe$id, 

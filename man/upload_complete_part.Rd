@@ -5,7 +5,7 @@
 \title{Reports the completion of the part upload}
 \usage{
 upload_complete_part(auth_token = NULL, upload_id = NULL,
-  part_number = NULL, e_tag = NULL)
+  part_number = NULL, e_tag = NULL, ...)
 }
 \arguments{
 \item{auth_token}{auth token}
@@ -16,6 +16,8 @@ upload_complete_part(auth_token = NULL, upload_id = NULL,
 
 \item{e_tag}{Value of the ETag header returned by AWS S3 when uploading
 part of the file.}
+
+\item{...}{parameters passed to sbgapi function}
 }
 \value{
 parsed list of the returned json

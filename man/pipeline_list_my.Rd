@@ -4,10 +4,12 @@
 \alias{pipeline_list_my}
 \title{Returns the list of pipelines in user's "My Pipelines" section}
 \usage{
-pipeline_list_my(auth_token = NULL)
+pipeline_list_my(auth_token = NULL, ...)
 }
 \arguments{
 \item{auth_token}{auth token}
+
+\item{...}{parameters passed to sbgapi function}
 }
 \value{
 parsed list of the returned json

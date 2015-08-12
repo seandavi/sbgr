@@ -5,7 +5,7 @@
 \title{Removes a member from a project}
 \usage{
 project_member_delete(auth_token = NULL, project_id = NULL,
-  user_id = NULL)
+  user_id = NULL, ...)
 }
 \arguments{
 \item{auth_token}{auth token}
@@ -13,6 +13,8 @@ project_member_delete(auth_token = NULL, project_id = NULL,
 \item{project_id}{ID of a project you want to access.}
 
 \item{user_id}{ID of the user you wish to remove.}
+
+\item{...}{parameters passed to sbgapi function}
 }
 \value{
 parsed list of the returned json

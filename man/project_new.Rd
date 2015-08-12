@@ -5,7 +5,7 @@
 \title{Create new project}
 \usage{
 project_new(auth_token = NULL, name = NULL, description = NULL,
-  billing_group_id = NULL)
+  billing_group_id = NULL, ...)
 }
 \arguments{
 \item{auth_token}{auth token}
@@ -16,6 +16,8 @@ project_new(auth_token = NULL, name = NULL, description = NULL,
 
 \item{billing_group_id}{ID of the billing group you wish to use
 for this project.}
+
+\item{...}{parameters passed to sbgapi function}
 }
 \value{
 parsed list of the returned json

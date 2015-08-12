@@ -4,12 +4,14 @@
 \alias{task_list}
 \title{Returns the list of all the tasks for a project}
 \usage{
-task_list(auth_token = NULL, project_id = NULL)
+task_list(auth_token = NULL, project_id = NULL, ...)
 }
 \arguments{
 \item{auth_token}{auth token}
 
 \item{project_id}{ID of a project you want to access.}
+
+\item{...}{parameters passed to sbgapi function}
 }
 \value{
 parsed list of the returned json

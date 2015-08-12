@@ -12,6 +12,7 @@
 #'
 #' @param auth_token auth token
 #' @param project_id ID of a project you want to access.
+#' @param ... parameters passed to sbgapi function
 #'
 #' @return parsed list of the returned json
 #'
@@ -24,12 +25,13 @@
 #' token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' \donttest{req = task_list(token,
 #'                 '1c1d06d2-5862-48f6-b595-e0099b20937e')}
-task_list = function (auth_token = NULL, project_id = NULL) {
+task_list = function (auth_token = NULL, project_id = NULL, ...) {
     
     if (is.null(project_id)) stop('project_id must be both provided')
     
     req = sbgapi(auth_token = auth_token,
-                 path = paste0('project/', project_id, '/task'), method = 'GET')
+        path = paste0('project/', project_id, '/task'),
+        method = 'GET', ...)
     
     return(status_check(req))
     
@@ -57,6 +59,7 @@ task_list = function (auth_token = NULL, project_id = NULL) {
 #' \item \code{parameters} - Named list containing mappings of node IDs
 #' to apps specific parameters. Note that parameters are always specified
 #' as an list, even if empty or with one element.}
+#' @param ... parameters passed to sbgapi function
 #'
 #' @return parsed list of the returned json
 #'
@@ -83,7 +86,7 @@ task_list = function (auth_token = NULL, project_id = NULL) {
 #'                 project_id = '7f7a72d0-da77-4f51-9416-99f14f7316ab',
 #'                 task_details = details)}
 task_run = function (auth_token = NULL,
-                     project_id = NULL, task_details = NULL) {
+                     project_id = NULL, task_details = NULL, ...) {
     
     if (is.null(project_id) | is.null(task_details))
         stop('project_id and task_details must be both provided')
@@ -92,7 +95,7 @@ task_run = function (auth_token = NULL,
     
     req = sbgapi(auth_token = auth_token, 
                  path = paste0('project/', project_id, '/task'),
-                 body = body, method = 'POST')
+                 body = body, method = 'POST', ...)
     
     return(status_check(req))
     
@@ -117,6 +120,7 @@ task_run = function (auth_token = NULL,
 #' @param project_id ID of a project you want to access.
 #' @param task_id ID of a task you want to access.
 #' @param download.url Logical. Return the download URL or not.
+#' @param ... parameters passed to sbgapi function
 #'
 #' @return parsed list of the returned json
 #'
@@ -135,7 +139,7 @@ task_run = function (auth_token = NULL,
 #'        task_id = '22237', download.url = TRUE)}
 task_details = function (auth_token = NULL,
                          project_id = NULL, task_id = NULL,
-                         download.url = FALSE) {
+                         download.url = FALSE, ...) {
     
     if (is.null(project_id) | is.null(task_id))
         stop('project_id and task_id must be both provided')
@@ -143,11 +147,11 @@ task_details = function (auth_token = NULL,
     if (download.url == FALSE) {
         req = sbgapi(auth_token = auth_token,
                      path = paste0('project/', project_id, '/task/', task_id),
-                     method = 'GET')
+                     method = 'GET', ...)
     } else {
         req = sbgapi(auth_token = auth_token,
                      path = paste0('project/', project_id, '/task/', task_id),
-                     query = list('action' = 'download'), method = 'GET')
+                     query = list('action' = 'download'), method = 'GET', ...)
     }
     
     return(status_check(req))
@@ -163,6 +167,7 @@ task_details = function (auth_token = NULL,
 #' @param task_id ID of a task you want to access.
 #' @param action Character string specifying the action.
 #' Currently, only supported action is \code{'abort'}.
+#' @param ... parameters passed to sbgapi function
 #'
 #' @return parsed list of the returned json
 #'
@@ -178,14 +183,14 @@ task_details = function (auth_token = NULL,
 #'                 task_id = '5506a44ae4b04a4ab3ae7250',
 #'                 action = 'abort')}
 task_action = function (auth_token = NULL, project_id = NULL,
-                        task_id = NULL, action = 'abort') {
+                        task_id = NULL, action = 'abort', ...) {
     
     if (is.null(project_id) | is.null(task_id))
         stop('project_id and task_id must be both provided')
     
     req = sbgapi(auth_token = auth_token, 
                  path = paste0('project/', project_id, '/task/', task_id),
-                 query = list('action' = action), method = 'POST')
+                 query = list('action' = action), method = 'POST', ...)
     
     return(status_check(req))
     

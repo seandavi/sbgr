@@ -4,12 +4,14 @@
 \alias{project_delete}
 \title{Delete a project}
 \usage{
-project_delete(auth_token = NULL, project_id = NULL)
+project_delete(auth_token = NULL, project_id = NULL, ...)
 }
 \arguments{
 \item{auth_token}{auth token}
 
 \item{project_id}{ID of a project you want to delete.}
+
+\item{...}{parameters passed to sbgapi function}
 }
 \value{
 parsed list of the returned json

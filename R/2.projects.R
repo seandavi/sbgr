@@ -5,7 +5,8 @@
 #' Returns the list of all projects you have access to.
 #'
 #' @param auth_token auth token
-#'
+#' @param ... parameters passed to sbgapi function
+#' 
 #' @return parsed list of the returned json
 #'
 #' @export project_list
@@ -16,9 +17,9 @@
 #' @examples
 #' token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' \donttest{req = project_list(token)}
-project_list = function (auth_token = NULL) {
+project_list = function (auth_token = NULL, ...) {
     
-    req = sbgapi(auth_token = auth_token, path = 'project', method = 'GET')
+    req = sbgapi(auth_token = auth_token, path = 'project', method = 'GET', ...)
     
     return(status_check(req))
     
@@ -30,6 +31,7 @@ project_list = function (auth_token = NULL) {
 #'
 #' @param auth_token auth token
 #' @param project_id ID of a project you want to access.
+#' @param ... parameters passed to sbgapi function
 #'
 #' @return parsed list of the returned json
 #'
@@ -42,12 +44,12 @@ project_list = function (auth_token = NULL) {
 #' token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' \donttest{req = project_details(token,
 #'                 project_id = 'b0b3a611-6bb0-47e5-add7-a83402cf7858')}
-project_details = function (auth_token = NULL, project_id = NULL) {
+project_details = function (auth_token = NULL, project_id = NULL, ...) {
     
     if (is.null(project_id)) stop('project_id must be provided')
     
     req = sbgapi(auth_token = auth_token,
-                 path = paste0('project/', project_id), method = 'GET')
+                 path = paste0('project/', project_id), method = 'GET', ...)
     
     return(status_check(req))
     
@@ -61,6 +63,7 @@ project_details = function (auth_token = NULL, project_id = NULL) {
 #'
 #' @param auth_token auth token
 #' @param project_id ID of a project you want to access.
+#' @param ... parameters passed to sbgapi function
 #'
 #' @return parsed list of the returned json
 #'
@@ -73,13 +76,13 @@ project_details = function (auth_token = NULL, project_id = NULL) {
 #' token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' \donttest{req = project_members(token,
 #'                 project_id = 'b0b3a611-6bb0-47e5-add7-a83402cf7858')}
-project_members = function (auth_token = NULL, project_id = NULL) {
+project_members = function (auth_token = NULL, project_id = NULL, ...) {
     
     if (is.null(project_id)) stop('project_id must be provided')
     
     req = sbgapi(auth_token = auth_token,
                  path = paste0('project/', project_id, '/members'),
-                 method = 'GET')
+                 method = 'GET', ...)
     
     return(status_check(req))
     
@@ -97,6 +100,7 @@ project_members = function (auth_token = NULL, project_id = NULL) {
 #' @param description Description of the project you wish to create.
 #' @param billing_group_id ID of the billing group you wish to use
 #' for this project.
+#' @param ... parameters passed to sbgapi function
 #'
 #' @return parsed list of the returned json
 #'
@@ -111,7 +115,7 @@ project_members = function (auth_token = NULL, project_id = NULL) {
 #'                 description = 'My first API project',
 #'                 billing_group_id = '5b6d5e71-dff8-42fc-8583-500d858f1093')}
 project_new = function (auth_token = NULL, name = NULL,
-                        description = NULL, billing_group_id = NULL) {
+                        description = NULL, billing_group_id = NULL, ...) {
     
     if (is.null(name) | is.null(description) | is.null(billing_group_id))
         stop('name, description, and billing_group_id must be provided')
@@ -122,7 +126,7 @@ project_new = function (auth_token = NULL, name = NULL,
     
     req = sbgapi(auth_token = auth_token, 
                  path = 'project', body = body,
-                 method = 'POST')
+                 method = 'POST', ...)
     
     return(status_check(req))
     
@@ -143,6 +147,7 @@ project_new = function (auth_token = NULL, name = NULL,
 #' @param execute Logical. Ability to run tasks.
 #' @param admin Logical. User has all rights on the project
 #' (including changing).
+#' @param ... parameters passed to sbgapi function
 #'
 #' @return parsed list of the returned json
 #'
@@ -158,7 +163,7 @@ project_new = function (auth_token = NULL, name = NULL,
 #'                 username = 'testuser', write = TRUE)}
 project_member_add = function (auth_token = NULL, project_id = NULL,
                                username = NULL, copy = FALSE, write = FALSE,
-                               execute = FALSE, admin = FALSE) {
+                               execute = FALSE, admin = FALSE, ...) {
     
     if (is.null(project_id) | is.null(username))
         stop('project_id and username must be both provided')
@@ -170,7 +175,7 @@ project_member_add = function (auth_token = NULL, project_id = NULL,
     
     req = sbgapi(auth_token = auth_token, 
                  path = paste0('project/', project_id, '/members'),
-                 body = body, method = 'POST')
+                 body = body, method = 'POST', ...)
     
     return(status_check(req))
     
@@ -192,6 +197,7 @@ project_member_add = function (auth_token = NULL, project_id = NULL,
 #' @param execute Logical. Ability to run tasks.
 #' @param admin Logical. User has all rights on the project
 #' (including changing).
+#' @param ... parameters passed to sbgapi function
 #'
 #' @return parsed list of the returned json
 #'
@@ -208,7 +214,7 @@ project_member_add = function (auth_token = NULL, project_id = NULL,
 project_member_update = function (auth_token = NULL,
                                   project_id = NULL, user_id = NULL,
                                   write = FALSE, copy = FALSE,
-                                  execute = FALSE, admin = FALSE) {
+                                  execute = FALSE, admin = FALSE, ...) {
     
     if (is.null(project_id) | is.null(user_id))
         stop('project_id and user_id must be both provided')
@@ -220,7 +226,7 @@ project_member_update = function (auth_token = NULL,
     
     req = sbgapi(auth_token = auth_token,
                  path = paste0('project/', project_id, '/members/', user_id),
-                 body = body, method = 'PUT')
+                 body = body, method = 'PUT', ...)
     
     return(status_check(req))
     
@@ -232,6 +238,7 @@ project_member_update = function (auth_token = NULL,
 #'
 #' @param auth_token auth token
 #' @param project_id ID of a project you want to delete.
+#' @param ... parameters passed to sbgapi function
 #'
 #' @return parsed list of the returned json
 #'
@@ -244,12 +251,12 @@ project_member_update = function (auth_token = NULL,
 #' token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' \donttest{req = project_delete(token, 
 #'             project_id = '3a21ade8-ef3e-41f8-8ac2-1dc3b434ac77')}
-project_delete = function (auth_token = NULL, project_id = NULL) {
+project_delete = function (auth_token = NULL, project_id = NULL, ...) {
     
     if (is.null(project_id)) stop('project_id must be provided')
     
     req = sbgapi(auth_token = auth_token,
-                 path = paste0('project/', project_id), method = 'DELETE')
+                 path = paste0('project/', project_id), method = 'DELETE', ...)
     
     return(status_check(req))
     
@@ -263,6 +270,7 @@ project_delete = function (auth_token = NULL, project_id = NULL) {
 #' @param auth_token auth token
 #' @param project_id ID of a project you want to access.
 #' @param user_id ID of the user you wish to remove.
+#' @param ... parameters passed to sbgapi function
 #'
 #' @return parsed list of the returned json
 #'
@@ -277,14 +285,14 @@ project_delete = function (auth_token = NULL, project_id = NULL) {
 #'             project_id = '7f7a72d0-da77-4f51-9416-99f14f7316ab',
 #'             user_id = '08890148-6d9e-4a10-b284-924228d3f99a')}
 project_member_delete = function (auth_token = NULL,
-                                  project_id = NULL, user_id = NULL) {
+                                  project_id = NULL, user_id = NULL, ...) {
     
     if (is.null(project_id) | is.null(user_id))
         stop('project_id and user_id must be both provided')
     
     req = sbgapi(auth_token = auth_token,
                  path = paste0('project/', project_id, '/members/', user_id),
-                 method = 'DELETE')
+                 method = 'DELETE', ...)
     
     return(status_check(req))
     
