@@ -117,7 +117,7 @@ project_members = function (auth_token = NULL, project_id = NULL, ...) {
 project_new = function (auth_token = NULL, name = NULL,
                         description = NULL, billing_group_id = NULL, ...) {
     
-    if (is.null(name) | is.null(description) | is.null(billing_group_id))
+    if (is.null(name) || is.null(description) || is.null(billing_group_id))
         stop('name, description, and billing_group_id must be provided')
     
     body = list('name' = name,
@@ -165,7 +165,7 @@ project_member_add = function (auth_token = NULL, project_id = NULL,
                                username = NULL, copy = FALSE, write = FALSE,
                                execute = FALSE, admin = FALSE, ...) {
     
-    if (is.null(project_id) | is.null(username))
+    if (is.null(project_id) || is.null(username))
         stop('project_id and username must be both provided')
     
     body = list('username' = username,
@@ -216,7 +216,7 @@ project_member_update = function (auth_token = NULL,
                                   write = FALSE, copy = FALSE,
                                   execute = FALSE, admin = FALSE, ...) {
     
-    if (is.null(project_id) | is.null(user_id))
+    if (is.null(project_id) || is.null(user_id))
         stop('project_id and user_id must be both provided')
     
     body = list('write' = write,
@@ -287,7 +287,7 @@ project_delete = function (auth_token = NULL, project_id = NULL, ...) {
 project_member_delete = function (auth_token = NULL,
                                   project_id = NULL, user_id = NULL, ...) {
     
-    if (is.null(project_id) | is.null(user_id))
+    if (is.null(project_id) || is.null(user_id))
         stop('project_id and user_id must be both provided')
     
     req = sbgapi(auth_token = auth_token,

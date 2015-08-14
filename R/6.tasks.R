@@ -88,7 +88,7 @@ task_list = function (auth_token = NULL, project_id = NULL, ...) {
 task_run = function (auth_token = NULL,
                      project_id = NULL, task_details = NULL, ...) {
     
-    if (is.null(project_id) | is.null(task_details))
+    if (is.null(project_id) || is.null(task_details))
         stop('project_id and task_details must be both provided')
     
     body = task_details
@@ -141,7 +141,7 @@ task_details = function (auth_token = NULL,
                          project_id = NULL, task_id = NULL,
                          download.url = FALSE, ...) {
     
-    if (is.null(project_id) | is.null(task_id))
+    if (is.null(project_id) || is.null(task_id))
         stop('project_id and task_id must be both provided')
     
     if (download.url == FALSE) {
@@ -185,7 +185,7 @@ task_details = function (auth_token = NULL,
 task_action = function (auth_token = NULL, project_id = NULL,
                         task_id = NULL, action = 'abort', ...) {
     
-    if (is.null(project_id) | is.null(task_id))
+    if (is.null(project_id) || is.null(task_id))
         stop('project_id and task_id must be both provided')
     
     req = sbgapi(auth_token = auth_token, 

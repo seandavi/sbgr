@@ -112,7 +112,7 @@ pipeline_list_project = function (auth_token = NULL, project_id = NULL, ...) {
 pipeline_details = function (auth_token = NULL, 
                              project_id = NULL, pipeline_id = NULL, ...) {
     
-    if (is.null(project_id) | is.null(pipeline_id))
+    if (is.null(project_id) || is.null(pipeline_id))
         stop('project_id and pipeline_id must be both provided')
     
     req = sbgapi(auth_token = auth_token,
@@ -155,7 +155,7 @@ pipeline_add = function (auth_token = NULL, project_id_to = NULL,
                          project_id_from = NULL, pipeline_id = NULL,
                          revision = NULL, ...) {
     
-    if (is.null(project_id_to) | is.null(pipeline_id))
+    if (is.null(project_id_to) || is.null(pipeline_id))
         stop('project_id_to and pipeline_id must be provided')
     
     if (is.null(project_id_from)) {

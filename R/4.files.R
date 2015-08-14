@@ -57,7 +57,7 @@ file_list = function (auth_token = NULL, project_id = NULL, ...) {
 file_details = function (auth_token = NULL, project_id = NULL,
     file_id = NULL, ...) {
     
-    if (is.null(project_id) | is.null(file_id))
+    if (is.null(project_id) || is.null(file_id))
         stop('project_id and file_id must be both provided')
     
     req = sbgapi(auth_token = auth_token,
@@ -95,7 +95,7 @@ file_details = function (auth_token = NULL, project_id = NULL,
 file_copy = function (auth_token = NULL, project_id = NULL,
     file_id = NULL, ...) {
     
-    if (is.null(project_id) | is.null(file_id))
+    if (is.null(project_id) || is.null(file_id))
         stop('project_id and file_id must be both provided')
     
     body = list('file_id' = as.character(file_id))
@@ -190,7 +190,7 @@ file_meta_update = function (auth_token = NULL,
                              sample = NULL, library = NULL,
                              platform_unit = NULL, paired_end = NULL, ...) {
     
-    if (is.null(project_id) | is.null(file_id))
+    if (is.null(project_id) || is.null(file_id))
         stop('project_id and file_id must be both provided')
     
     body = list(list('file_type' = file_type,
@@ -237,7 +237,7 @@ file_meta_update = function (auth_token = NULL,
 file_delete = function (auth_token = NULL,
                         project_id = NULL, file_id = NULL, ...) {
     
-    if (is.null(project_id) | is.null(file_id))
+    if (is.null(project_id) || is.null(file_id))
         stop('project_id and file_id must be both provided')
     
     req = sbgapi(auth_token = auth_token,
@@ -275,7 +275,7 @@ file_delete = function (auth_token = NULL,
 file_download_url = function (auth_token = NULL, 
                               project_id = NULL, file_id = NULL, ...) {
     
-    if (is.null(project_id) | is.null(file_id))
+    if (is.null(project_id) || is.null(file_id))
         stop('project_id and file_id must be both provided')
     
     req = sbgapi(auth_token = auth_token,

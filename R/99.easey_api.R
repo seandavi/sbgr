@@ -1564,7 +1564,7 @@ m.match <- function(obj, id = NULL, name = NULL,
 
     }
     if(length(index) == 1 && is.na(index)){
-        message("sorry, no matching ", class(obj[[1]]))
+        message("sorry, no matching ")
         return(NULL)
     }else{
         if(length(index) ==1){

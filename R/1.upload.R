@@ -57,7 +57,7 @@ upload_info = function (auth_token = NULL, upload_id = NULL, ...) {
 upload_info_part = function (auth_token = NULL, 
                              upload_id = NULL, part_number = NULL, ...) {
     
-    if (is.null(upload_id) | is.null(part_number))
+    if (is.null(upload_id) || is.null(part_number))
         stop('upload_id and part_number must be both provided')
     
     req = sbgapi(auth_token = auth_token,
@@ -107,7 +107,7 @@ upload_info_part = function (auth_token = NULL,
 upload_init = function (auth_token = NULL, project_id = NULL,
                         name = NULL, size = NULL, part_size = NULL, ...) {
     
-    if (is.null(project_id) | is.null(name))
+    if (is.null(project_id) || is.null(name))
         stop('project_id and name must be both provided')
     
     body = list('project_id' = project_id, 'name' = name)
@@ -151,7 +151,7 @@ upload_init = function (auth_token = NULL, project_id = NULL,
 upload_complete_part = function (auth_token = NULL, upload_id = NULL,
                                  part_number = NULL, e_tag = NULL, ...) {
     
-    if (is.null(upload_id) | is.null(part_number) | is.null(e_tag))
+    if (is.null(upload_id) || is.null(part_number) || is.null(e_tag))
         stop('upload_id, part_number and e_tag must be provided')
     
     body = list('part_number' = as.character(part_number),
