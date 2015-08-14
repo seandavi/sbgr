@@ -39,7 +39,7 @@ sbgapi = function (auth_token = NULL, version = '1.1', path,
                PUT(paste0(base_url, path),
                    add_headers(.headers = headers), body = body_json)
            },
-           DELTE = {
+           DELETE = {
                DELETE(paste0(base_url, path),
                       add_headers(.headers = headers))
            })
