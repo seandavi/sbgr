@@ -9,8 +9,11 @@ sbgapi = function (auth_token = NULL, version = '1.1', path,
     method = c('GET', 'POST', 'PUT', 'DELETE'),
     query = NULL, body = list(),
     base_url = paste0("https://api.sbgenomics.com/", version, "/")) {
-    
-    if (is.null(auth_token)) stop('auth_token must be provided')
+
+    if (is.null(auth_token))
+        stop('auth_token must be provided')
+
+    method <- match.args(method)
     
     headers = c(
         'X-SBG-Auth-Token' = auth_token,
@@ -18,34 +21,30 @@ sbgapi = function (auth_token = NULL, version = '1.1', path,
         'Content-type' = 'application/json'
     )
     
-    if (method == 'GET') {
-        req = GET(paste0(base_url, path),
-            add_headers(.headers = headers), query = query)
-    }
-    
-    if (method == 'POST') {
-        stopifnot(is.list(body))
-        body_json = toJSON(body, auto_unbox = TRUE)
-        req = POST(paste0(base_url, path),
-            add_headers(.headers = headers), query = query,
-                   body = body_json)
-    }
-    
-    if (method == 'PUT') {
-        stopifnot(is.list(body))
-        body_json = toJSON(body, auto_unbox = TRUE)
-        req = PUT(paste0(base_url, path),
-            add_headers(.headers = headers), body = body_json)
-    }
-    
-    if (method == 'DELETE') {
-        req = DELETE(paste0(base_url, path),
-            add_headers(.headers = headers))
-    }
-    
-    return(req)
-    
+    switch(method,
+           GET = {
+               GET(paste0(base_url, path),
+                   add_headers(.headers = headers), query = query)
+           },
+           POST = {
+               stopifnot(is.list(body))
+               body_json = toJSON(body, auto_unbox = TRUE)
+               POST(paste0(base_url, path),
+                    add_headers(.headers = headers), query = query,
+                    body = body_json)               
+           },
+           PUT = {
+               stopifnot(is.list(body))
+               body_json = toJSON(body, auto_unbox = TRUE)
+               PUT(paste0(base_url, path),
+                   add_headers(.headers = headers), body = body_json)               
+           },
+           DELTE = {
+               DELETE(paste0(base_url, path),
+                      add_headers(.headers = headers))               
+           })
 }
+       
 
 #' check request status
 #'
