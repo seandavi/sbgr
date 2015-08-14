@@ -13,7 +13,7 @@ sbgapi = function (auth_token = NULL, version = '1.1', path,
     if (is.null(auth_token))
         stop('auth_token must be provided')
 
-    method <- match.args(method)
+    method <- match.arg(method)
 
     headers = c(
         'X-SBG-Auth-Token' = auth_token,
