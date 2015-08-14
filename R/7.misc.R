@@ -15,13 +15,13 @@
 #' token = NULL
 #' \donttest{token = misc_get_auth_token()}
 misc_get_auth_token = function () {
-    
+
     browseURL('https://igor.sbgenomics.com/account/?current=developer#developer')
     cat("\nEnter the generated authentication token:")
     auth_token = scan(what = character(), nlines = 1L, quiet = TRUE)
-    
+
     return(auth_token)
-    
+
 }
 
 #' Download SBG uploader and extract to a specified directory
@@ -40,16 +40,16 @@ misc_get_auth_token = function () {
 #' dir = '~/sbg-uploader/'
 #' \donttest{misc_get_uploader(dir)}
 misc_get_uploader = function (destdir = NULL) {
-    
+
     if (is.null(destdir)) stop('destdir must be provided')
-    
+
     tmpfile = tempfile()
-    
+
     download.file(url = 'https://igor.sbgenomics.com/sbg-uploader/sbg-uploader.tgz',
                   method = 'libcurl', destfile = tmpfile)
-    
+
     untar(tarfile = tmpfile, exdir = path.expand(destdir))
-    
+
 }
 
 #' Specify the parameters of the file metadata and return a list,
@@ -104,7 +104,7 @@ misc_get_uploader = function (destdir = NULL) {
 #' @return list, JSON string, or a file.
 #'
 #' @export misc_make_metadata
-#' 
+#'
 #' @references
 #' \url{https://developer.sbgenomics.com/platform/metadata}
 #'
@@ -131,19 +131,19 @@ misc_make_metadata = function (output = c('list', 'json', 'metafile'),
                                             'Solid', 'IonTorrent'),
                                sample = NULL, library = NULL,
                                platform_unit = NULL, paired_end = NULL) {
-    
+
     body = list(list('file_type' = file_type,
                      'qual_scale' = qual_scale,
                      'seq_tech' = seq_tech))
     names(body) = 'metadata'
-    
+
     if (!is.null(sample)) body$'metadata'$'sample' = as.character(sample)
     if (!is.null(library)) body$'metadata'$'library' = as.character(library)
     if (!is.null(platform_unit)) body$'metadata'$'platform_unit' = as.character(platform_unit)
     if (!is.null(paired_end)) body$'metadata'$'paired_end' = as.character(paired_end)
-    
+
     if (!is.null(name)) body = c(list('name' = name), body)
-    
+
     if (output == 'metafile') {
         if (is.null(destfile)) stop('destfile must be provided')
         body = toJSON(body, auto_unbox = TRUE)
@@ -154,7 +154,7 @@ misc_make_metadata = function (output = c('list', 'json', 'metafile'),
     } else if (output == 'list') {
         return(body)
     }
-    
+
 }
 
 #' Upload files using SBG uploader
@@ -187,21 +187,21 @@ misc_make_metadata = function (output = c('list', 'json', 'metafile'),
 misc_upload_cli = function (auth_token = NULL, uploader = NULL,
                             file = NULL, project_id = NULL,
                             proxy = NULL) {
-    
+
     if (is.null(auth_token)) stop('auth_token must be provided')
     if (is.null(uploader)) stop('SBG uploader location must be provided')
     if (is.null(file)) stop('File location must be provided')
-    
+
     auth_token = paste('-t', auth_token)
     uploader = file.path(paste0(uploader, '/bin/sbg-uploader.sh'))
     file = file.path(file)
-    
+
     if (!is.null(project_id)) project_id = paste('-p', project_id)
     if (!is.null(proxy)) proxy = paste('-x', proxy)
-    
+
     cmd = paste(uploader, auth_token, project_id, proxy, file)
     res = system(command = cmd, intern = TRUE)
     fid = strsplit(res, '\t')[[1]][1]
     return(fid)
-    
+
 }

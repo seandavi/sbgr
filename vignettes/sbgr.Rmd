@@ -121,7 +121,7 @@ token = misc_get_auth_token()
 
 ```
 ## Enter the generated authentication token:
-## 1: 
+## 1:
 ```
 
 This will automatically open the browser and redirect to the token
@@ -329,25 +329,25 @@ This will return a list about the details of the uploaded files in the project:
 ## $items[[1]]
 ## $items[[1]]$id
 ## [1] "559c41ebe4b0566fd159709a"
-## 
+##
 ## $items[[1]]$name
 ## [1] "sample1.fastq"
-## 
+##
 ## $items[[1]]$size
 ## [1] 16
-## 
+##
 ## $items[[1]]$origin
 ## $items[[1]]$origin$upload_name
 ## [1] "1436362037099"
-## 
-## 
+##
+##
 ## $items[[1]]$metadata
 ## $items[[1]]$metadata$file_type
 ## [1] "fastq"
-## 
+##
 ## $items[[1]]$metadata$seq_tech
 ## [1] "illumina"
-## 
+##
 ## $items[[1]]$metadata$sample
 ## [1] "sample1"
 ```
@@ -371,34 +371,34 @@ file_meta_update(token, project_id = sbgr_project_id,
 ```
 ## $id
 ## [1] "559c41ebe4b0566fd159709a"
-## 
+##
 ## $name
 ## [1] "sample1.fastq"
-## 
+##
 ## $size
 ## [1] 16
-## 
+##
 ## $origin
 ## $origin$upload_name
 ## [1] "1436361569553"
-## 
-## 
+##
+##
 ## $metadata
 ## $metadata$file_type
 ## [1] "fastq"
-## 
+##
 ## $metadata$qual_scale
 ## [1] "illumina18"
-## 
+##
 ## $metadata$seq_tech
 ## [1] "Illumina"
-## 
+##
 ## $metadata$sample
 ## [1] "example_human_Illumina"
-## 
+##
 ## $metadata$library
 ## [1] "Test"
-## 
+##
 ## $metadata$paired_end
 ## [1] "1"
 ```
@@ -426,40 +426,40 @@ print(pipeline_mat)
 ```
 
 ```
-## [,1]                       [,2]                                                                        
-## [1,] "534522d3d79f0049c0c9444d" "Targeted Capture Analysis - BWA + GATK 2.3.9-Lite (with Metrics)"          
-## [2,] "534522f6d79f0049c0c9444e" "Whole Exome Analysis - BWA + GATK 2.3.9-Lite (with Metrics)"               
-## [3,] "5345230dd79f0049c0c9444f" "Whole Genome Analysis - BWA + GATK 2.3.9-Lite (with Metrics)"              
-## [4,] "534521e5d79f0049c0c94445" "RNA-Seq Alignment for Ion Proton - TopHat + Bowtie 2"                      
-## [5,] "53452154d79f0049c0c94442" "RNA-Seq Alignment - TopHat"                                                
-## [6,] "546ba1bbd79f00701cb276a6" "Cellular Research Precise Analysis Pipeline"                              
-## [7,] "5392689dd79f007259672c79" "Amplicon Experiment QC"                                                    
-## [8,] "53927c20d79f007259672c8e" "Amplicon Experiment QC - AmpliSeq Exomes"                                  
-## [9,] "534521d1d79f0049c0c94444" "RNA-Seq Alignment for Ion Proton - STAR + Bowtie 2"                        
-## [10,] "53452130d79f0049c0c94441" "RNA-Seq Alignment - STAR"                                                  
-## [11,] "53452273d79f0049c0c94448" "RNA-Seq Differential Expression - Cuffdiff (with Visualization)"           
-## [12,] "540dd19dd79f00766c174ead" "Fusion Transcript Detection - ChimeraScan"                                 
-## [13,] "5346ba3dd79f0049c0c944a6" "RNA-Seq De Novo Assembly - Trinity"                                        
-## [14,] "540dd2fad79f00766c174eb0" "Fusion Transcript Detection - STAR + Chimera"                              
-## [15,] "534521f5d79f0049c0c94446" "RNA-Seq De Novo Assembly and Analysis - Trinity"                           
-## [16,] "534520eed79f0049c0c9443a" "FastQC Analysis"                                                           
-## [17,] "5345222cd79f0049c0c94447" "RNA-Seq Differential Expression - Cuffdiff"                                
-## [18,] "53b2e456d79f004c55605245" "Trio analysis pipeline (Whole Exome)"                                      
-## [19,] "53b2d73bd79f004c5560523d" "Trio analysis pipeline (Whole Genome)"                                     
-## [20,] "53b2a2f0d79f004c55605227" "Illumina BAM to FASTQ"                                                     
-## [21,] "534522b0d79f0049c0c9444b" "Stanford HugeSeq WGS - from Aligned Reads (BAM)"                           
-## [22,] "53452dd2d79f0049c0c94459" "Alignment Metrics QC"                                                      
-## [23,] "534522c4d79f0049c0c9444c" "Stanford HugeSeq WGS - from Unaligned Reads (FASTQ)"                       
-## [24,] "53452299d79f0049c0c9444a" "Stanford HugeSeq WGS - Structural Variation Only"                          
-## [25,] "53452289d79f0049c0c94449" "Stanford HugeSeq WGS - Skip Alignment"                                     
-## [26,] "5345210fd79f0049c0c94440" "On-target variant selection and QC"                                        
-## [27,] "534520ffd79f0049c0c9443b" "Merge FASTQ Files"                                                         
-## [28,] "534520dad79f0049c0c94439" "Exome Variant Quality Score Recalibration - GATK 2.3.9-Lite"               
+## [,1]                       [,2]
+## [1,] "534522d3d79f0049c0c9444d" "Targeted Capture Analysis - BWA + GATK 2.3.9-Lite (with Metrics)"
+## [2,] "534522f6d79f0049c0c9444e" "Whole Exome Analysis - BWA + GATK 2.3.9-Lite (with Metrics)"
+## [3,] "5345230dd79f0049c0c9444f" "Whole Genome Analysis - BWA + GATK 2.3.9-Lite (with Metrics)"
+## [4,] "534521e5d79f0049c0c94445" "RNA-Seq Alignment for Ion Proton - TopHat + Bowtie 2"
+## [5,] "53452154d79f0049c0c94442" "RNA-Seq Alignment - TopHat"
+## [6,] "546ba1bbd79f00701cb276a6" "Cellular Research Precise Analysis Pipeline"
+## [7,] "5392689dd79f007259672c79" "Amplicon Experiment QC"
+## [8,] "53927c20d79f007259672c8e" "Amplicon Experiment QC - AmpliSeq Exomes"
+## [9,] "534521d1d79f0049c0c94444" "RNA-Seq Alignment for Ion Proton - STAR + Bowtie 2"
+## [10,] "53452130d79f0049c0c94441" "RNA-Seq Alignment - STAR"
+## [11,] "53452273d79f0049c0c94448" "RNA-Seq Differential Expression - Cuffdiff (with Visualization)"
+## [12,] "540dd19dd79f00766c174ead" "Fusion Transcript Detection - ChimeraScan"
+## [13,] "5346ba3dd79f0049c0c944a6" "RNA-Seq De Novo Assembly - Trinity"
+## [14,] "540dd2fad79f00766c174eb0" "Fusion Transcript Detection - STAR + Chimera"
+## [15,] "534521f5d79f0049c0c94446" "RNA-Seq De Novo Assembly and Analysis - Trinity"
+## [16,] "534520eed79f0049c0c9443a" "FastQC Analysis"
+## [17,] "5345222cd79f0049c0c94447" "RNA-Seq Differential Expression - Cuffdiff"
+## [18,] "53b2e456d79f004c55605245" "Trio analysis pipeline (Whole Exome)"
+## [19,] "53b2d73bd79f004c5560523d" "Trio analysis pipeline (Whole Genome)"
+## [20,] "53b2a2f0d79f004c55605227" "Illumina BAM to FASTQ"
+## [21,] "534522b0d79f0049c0c9444b" "Stanford HugeSeq WGS - from Aligned Reads (BAM)"
+## [22,] "53452dd2d79f0049c0c94459" "Alignment Metrics QC"
+## [23,] "534522c4d79f0049c0c9444c" "Stanford HugeSeq WGS - from Unaligned Reads (FASTQ)"
+## [24,] "53452299d79f0049c0c9444a" "Stanford HugeSeq WGS - Structural Variation Only"
+## [25,] "53452289d79f0049c0c94449" "Stanford HugeSeq WGS - Skip Alignment"
+## [26,] "5345210fd79f0049c0c94440" "On-target variant selection and QC"
+## [27,] "534520ffd79f0049c0c9443b" "Merge FASTQ Files"
+## [28,] "534520dad79f0049c0c94439" "Exome Variant Quality Score Recalibration - GATK 2.3.9-Lite"
 ## [29,] "534520c9d79f0049c0c94438" "Exome SNP calling Ion Torrent - BWA - MEM + GATK 2.3.9-Lite (with Metrics)"
-## [30,] "534520b5d79f0049c0c94437" "Exome SNP Calling - Mosaik + FreeBayes"                                    
-## [31,] "534520a5d79f0049c0c94432" "Exome Coverage QC"                                                         
-## [32,] "53452096d79f0049c0c94431" "Exome Analysis - BWA + GATK 1.6"                                           
-## [33,] "53452077d79f0049c0c94430" "Convert SFF files to FASTQ files"                                          
+## [30,] "534520b5d79f0049c0c94437" "Exome SNP Calling - Mosaik + FreeBayes"
+## [31,] "534520a5d79f0049c0c94432" "Exome Coverage QC"
+## [32,] "53452096d79f0049c0c94431" "Exome Analysis - BWA + GATK 1.6"
+## [33,] "53452077d79f0049c0c94430" "Convert SFF files to FASTQ files"
 ## [34,] "5345205cd79f0049c0c9442f" "Convert SAM/BAM to FASTQ"
 ```
 
@@ -469,7 +469,7 @@ using the function `pipeline_add()`:
 ```{r pipeline_add, eval=FALSE}
 # Get the FastQC pipeline ID number in pipeline_mat
 pipeline_add(token, project_id_to = sbgr_project_id,
-             pipeline_id = 
+             pipeline_id =
                pipeline_mat[which(pipeline_mat[, 2] == "FastQC Analysis"), 1])
 ```
 
@@ -478,13 +478,13 @@ This call returns the details of the copied pipeline.
 ```
 ## $id
 ## [1] "559c3848896a5d236e19d4a2"
-## 
+##
 ## $name
 ## [1] "FastQC Analysis"
-## 
+##
 ## $description
 ## [1] "The FastQC tool, developed by the Babraham Institute, analyzes sequence data from FASTQ, BAM, or SAM files. It produces a set of metrics and charts that help identify technical problems with the data. It's a good idea to run this pipeline on files you receive from a sequencer or a collaborator to get a general idea of how well the sequencing experiment went. Results from this pipeline can inform if and how you should proceed with your analysis."
-## 
+##
 ## $revision
 ## [1] "0"
 ```
@@ -516,7 +516,7 @@ This will return a list of the pipelines in the specified project:
 ## $items[[1]]
 ## $items[[1]]$id
 ## [1] "559c3848896a5d236e19d4a2"
-## 
+##
 ## $items[[1]]$name
 ## [1] "FastQC Analysis"
 ```
@@ -544,69 +544,69 @@ our chosen pipeline contains a single input node with ID `177252`:
 ```
 ## $id
 ## [1] "559c3848896a5d236e19d4a2"
-## 
+##
 ## $name
 ## [1] "FastQC Analysis"
-## 
+##
 ## $description
 ## [1] "The FastQC tool, developed by the Babraham Institute, analyzes sequence data from FASTQ, BAM, or SAM files. It produces a set of metrics and charts that help identify technical problems with the data. It's a good idea to run this pipeline on files you receive from a sequencer or a collaborator to get a general idea of how well the sequencing experiment went. Results from this pipeline can inform if and how you should proceed with your analysis."
-## 
+##
 ## $revision
 ## [1] "0"
-## 
+##
 ## $inputs
 ## $inputs[[1]]
 ## $inputs[[1]]$id
 ## [1] 177252
-## 
+##
 ## $inputs[[1]]$name
 ## [1] "FASTQ Reads"
-## 
+##
 ## $inputs[[1]]$required
 ## [1] TRUE
-## 
+##
 ## $inputs[[1]]$accepts_list
 ## [1] FALSE
-## 
+##
 ## $inputs[[1]]$file_types
 ## $inputs[[1]]$file_types[[1]]
 ## [1] "bam"
-## 
+##
 ## $inputs[[1]]$file_types[[2]]
 ## [1] "fastq"
-## 
+##
 ## $inputs[[1]]$file_types[[3]]
 ## [1] "sam"
-## 
-## 
-## 
-## 
+##
+##
+##
+##
 ## $nodes
 ## $nodes[[1]]
 ## $nodes[[1]]$id
 ## [1] 680142
-## 
+##
 ## $nodes[[1]]$name
 ## [1] "FastQC"
-## 
+##
 ## $nodes[[1]]$parameters
 ## list()
-## 
-## 
-## 
+##
+##
+##
 ## $outputs
 ## $outputs[[1]]
 ## $outputs[[1]]$id
 ## [1] 556132
-## 
+##
 ## $outputs[[1]]$name
 ## [1] "FastQC Reports Archive"
-## 
-## 
+##
+##
 ## $outputs[[2]]
 ## $outputs[[2]]$id
 ## [1] 1274412
-## 
+##
 ## $outputs[[2]]$name
 ## [1] "FastQC Charts"
 ```
@@ -682,48 +682,48 @@ details of the newly-created task as a response:
 ```
 ## $id
 ## [1] "2bfb18cc-f969-43a1-af75-8d63c1e0f54a"
-## 
+##
 ## $name
 ## [1] "FastQC with sbgr"
-## 
+##
 ## $description
 ## [1] "FastQC task with sbgr"
-## 
+##
 ## $pipeline_id
 ## [1] "559c3848896a5d236e19d4a2"
-## 
+##
 ## $pipeline_revision
 ## [1] "0"
-## 
+##
 ## $start_time
 ## [1] 1.436304e+12
-## 
+##
 ## $status
 ## $status$status
 ## [1] "active"
-## 
-## 
+##
+##
 ## $inputs
 ## $inputs$`177252`
 ## $inputs$`177252`[[1]]
 ## [1] ":559c41ebe4b0566fd159709a"
-## 
-## 
-## 
+##
+##
+##
 ## $parameters
 ## $parameters$`680142`
 ## $parameters$`680142`$files
 ## NULL
-## 
+##
 ## $parameters$`680142`$value
 ## named list()
-## 
-## 
-## 
+##
+##
+##
 ## $outputs
 ## $outputs$`556132`
 ## list()
-## 
+##
 ## $outputs$`1274412`
 ## list()
 ```
@@ -754,53 +754,53 @@ The output would contain the task information:
 ```
 ## $id
 ## [1] "4bf0a677-cc90-4eb8-bcb7-5759adc36449"
-## 
+##
 ## $name
 ## [1] "FastQC with sbgr"
-## 
+##
 ## $description
 ## [1] "FastQC task with sbgr"
-## 
+##
 ## $pipeline_id
 ## [1] "559c3848896a5d236e19d4a2"
-## 
+##
 ## $pipeline_revision
 ## [1] "0"
-## 
+##
 ## $start_time
 ## [1] 1.43629e+12
-## 
+##
 ## $status
 ## $status$status
 ## [1] "completed"
-## 
+##
 ## $status$message
 ## [1] "Completed."
-## 
-## 
+##
+##
 ## $inputs
 ## $inputs$`177252`
 ## $inputs$`177252`[[1]]
 ## [1] ":559c41ebe4b0566fd159709a"
-## 
-## 
-## 
+##
+##
+##
 ## $parameters
 ## $parameters$`680142`
 ## $parameters$`680142`$files
 ## NULL
-## 
+##
 ## $parameters$`680142`$value
 ## named list()
-## 
-## 
-## 
+##
+##
+##
 ## $outputs
 ## $outputs$`556132`
 ## $outputs$`556132`[[1]]
 ## [1] "559c44dbe4b07462e814cb7c"
-## 
-## 
+##
+##
 ## $outputs$`1274412`
 ## $outputs$`1274412`[[1]]
 ## [1] "559c44dbe4b0566fd1597562"

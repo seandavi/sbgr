@@ -60,26 +60,26 @@ a$project("wgs")$upload("sample.tgz")
 
 We defined several different objects easy to manipulate, including _Auth_, _Project_, _Task_, _File_, _Upload_, _Member_, etc, each comes with their own methods to access the server, send request and get a response.
 
-To understand the cascading style, you has to under stand the structure of the SBG platforms. 
+To understand the cascading style, you has to under stand the structure of the SBG platforms.
 
-- Each account could generate one auth token, it's our top level object. 
+- Each account could generate one auth token, it's our top level object.
 - Each account has several different projects represented by  _Project_ object
-- Each account had different billing group and each project is assigned to particular billing group in order to run on AWS cloud. 
+- Each account had different billing group and each project is assigned to particular billing group in order to run on AWS cloud.
 - Each project is composed with files (_File_ object), tasks (_Task_ object), pipelines (_Pipeline_ object) and members or users (_Member_ object) with different permission level.
 - Each member has its own permission to particular project.
-- A task is a scheuled pipeline job with files and parameters. 
+- A task is a scheuled pipeline job with files and parameters.
 
 So our cascading visually represent this relationship and structure, if you are familiar with SBG platform, you will find this interface very easy to understand.
 
 To understand the API better, you can also check the original SBG developer hub [documents](https://docs.sbgenomics.com/display/developerhub/API)
 
 ## Cheatsheet
-This cheatsheet provide main API designed for end users, please note "single" 
-is not real project name, just means the cascading method expecting a single returned object not a list, so you name better has a single hit or you pick 
+This cheatsheet provide main API designed for end users, please note "single"
+is not real project name, just means the cascading method expecting a single returned object not a list, so you name better has a single hit or you pick
 the one you want from the list. Remember the logic structure and relationship of those concept will help you remember the API easily. For example, a project has
 members so of course you can run member() method on project object.
 
-For a searching function that need name or id, when both are empty, they will return every object (file, project, pipeline, task, memeber) in a list. These function usually has opetional parameter called `ignore.case` and `exact` used 
+For a searching function that need name or id, when both are empty, they will return every object (file, project, pipeline, task, memeber) in a list. These function usually has opetional parameter called `ignore.case` and `exact` used
 for matching, when `exact = FALSE` you can use pattern to grep objects.
 
 The cheatsheet only show some most used arguments, please check their help function to read more details.
@@ -117,7 +117,7 @@ Plesase play the main function yourself, we are not covering all the function in
 
 
 # Quick start: running the FastQC pipeline
-I will go through the same tutorial again, but this time use a more simpler cascading API. 
+I will go through the same tutorial again, but this time use a more simpler cascading API.
 
 ## Create an Auth object
 First thing you do is to get your authentication token following this [tutorial](https://docs.sbgenomics.com/display/sbg/Managing+Account+Settings#ManagingAccountSettings-GenerateanAuthenticationToken), then create a _Auth_ object which will be our master ojbect for reqeust and actions.
@@ -130,12 +130,12 @@ Now let's use some fake auth token and load the library.
 library(sbgr)
 a <- Auth("aef7e9e3f6c54fb1b338ac4ecddf1a56")
 a
-``` 
+```
 
 ## Billing group
-Billing group speicfy how your computation charges, when you first registered, you should have some free credit, with billing group called something like "FreeAccount". Or maybe your company/organization purchased a license, you should have other billing group attached as well 
+Billing group speicfy how your computation charges, when you first registered, you should have some free credit, with billing group called something like "FreeAccount". Or maybe your company/organization purchased a license, you should have other billing group attached as well
 
-To show how many billing group you belong too, just call _billing_ function 
+To show how many billing group you belong too, just call _billing_ function
 ```{r}
 b <- a$billing()
 b
@@ -162,7 +162,7 @@ a$project_new(name = "API", description = "API tutorial",
 ## Upload file and set metadata
 
 
-To save your typing/lines for casading style, I want to save the project I am gonna use for this tutorial to a Project object first.    
+To save your typing/lines for casading style, I want to save the project I am gonna use for this tutorial to a Project object first.
 
 ```{r}
 ## get the project we just created
@@ -181,13 +181,13 @@ Get the file we are going to upload and get the metadata ready as well.
 ```{r}
 fl <- system.file("extdata", "sample1.fastq", package = "sbgr")
 ## create meta data
-fl.meta <- list(file_type = "fastq", 
-                seq_tech = "Illumina", 
+fl.meta <- list(file_type = "fastq",
+                seq_tech = "Illumina",
                 sample = "sample1",
                 author = "tengfei")
 ```
 
-To upload the file to the project, just call `upload` method from project object, it will initialize the multiparts automatically, checking each part and complete the call when finished. You will see the progress bar. 
+To upload the file to the project, just call `upload` method from project object, it will initialize the multiparts automatically, checking each part and complete the call when finished. You will see the progress bar.
 
 ```{r}
 p$upload(fl, metadata = fl.meta)
@@ -214,14 +214,14 @@ p$file(basename(fl))
 ```
 
 ### Keep playing with file metadata
-Metadata is designed with fixed fields in the GUI with fixed enum types for some fields, like fiel_type, to check what's fixed, please do 
+Metadata is designed with fixed fields in the GUI with fixed enum types for some fields, like fiel_type, to check what's fixed, please do
 
 ```{r, eval = TRUE}
 Metadata()
 Metadata()$file_type
 levels(Metadata()$file_type)
 ```
-To add more metadata items, you can pass more named list entries, and to keep original turn on parameter `append`. 
+To add more metadata items, you can pass more named list entries, and to keep original turn on parameter `append`.
 
 ```{r}
 p$file(basename(fl))$set_metadata(list(version = "2.0"), append = TRUE)
@@ -267,7 +267,7 @@ Cool, we got a unique hit, let's copy the FastQC pipeline to the new project
 p$pipeline_add(pipeline_name = f.pipe$name)
 ```
 
-To confirm 
+To confirm
 
 ```{r}
 f.pipe <- p$pipeline(name = "FastQC")
@@ -293,10 +293,10 @@ f.pipe$details()$nodes
 To run the pipeline, we need to provide task details, we know we want to input our upload sample file as input node here. So we need to link our file id with the input node id.
 
 ```{r}
-f.task <- p$task_run(name = "my task", 
-                      description = "A text description", 
+f.task <- p$task_run(name = "my task",
+                      description = "A text description",
                       pipeline_id = f.pipe$id,
-                      inputs = list( 
+                      inputs = list(
                           "177252" = list(f.file$id)
                           ))
 
@@ -329,7 +329,7 @@ f.task$download("~/Desktop/")
 ```
 
 ## Wrap the example up
-Ok the full script is something like 
+Ok the full script is something like
 ```{r, eval = FALSE}
 library(sbgr)
 token <- "aef7e9e3f6c54fb1b338ac4ecddf1a56"
@@ -343,8 +343,8 @@ p <- a$project("API")
 ## get data
 fl <- system.file("extdata", "sample1.fastq", package = "sbgr")
 ## create meta data
-fl.meta <- list(file_type = "fastq", 
-                seq_tech = "Illumina", 
+fl.meta <- list(file_type = "fastq",
+                seq_tech = "Illumina",
                 sample = "sample1",
                 author = "tengfei")
 ## upload data with metadata
@@ -360,20 +360,20 @@ f.pipe <- p$pipeline(name = "FastQC")
 ## check the inputs needed for running tasks
 f.pipe$details()
 ## Ready to run a task? go
-f.task <- p$task_run(name = "my task", 
-                      description = "A text description", 
+f.task <- p$task_run(name = "my task",
+                      description = "A text description",
                       pipeline_id = f.pipe$id,
-                      inputs = list( 
+                      inputs = list(
                           "177252" = list(f.file$id)
                           ))
 f.task$run()
 ## or you can just run with Task constructor
 f.task <- Task(auth = Auth(token),
-               name = "my task", 
-               description = "A text description", 
-               pipeline_id = f.pipe$id, 
+               name = "my task",
+               description = "A text description",
+               pipeline_id = f.pipe$id,
                project_id = p$id,
-               inputs = list( 
+               inputs = list(
                    "177252" = list(f.file$id)
                    ))
 ## Monitor you task
@@ -384,7 +384,7 @@ f.task <- p$task("my task")
 f.task$download("~/Desktop/")
 
 ## Abort the task
-f.task$abort()   
+f.task$abort()
 ```
 
 

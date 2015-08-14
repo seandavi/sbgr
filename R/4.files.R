@@ -23,14 +23,14 @@
 #' \donttest{req = file_list(token,
 #'             project_id = '1c1d06d2-5862-48f6-b595-e0099b20937e')}
 file_list = function (auth_token = NULL, project_id = NULL, ...) {
-    
+
     if (is.null(project_id)) stop('project_id must be provided')
-    
+
     req = sbgapi(auth_token = auth_token,
                  path = paste0('project/', project_id, '/file'), method = 'GET', ...)
-    
+
     return(status_check(req))
-    
+
 }
 
 #' Returns detailed information about a project's files
@@ -56,16 +56,16 @@ file_list = function (auth_token = NULL, project_id = NULL, ...) {
 #'             file_id = '530854e2e4b036506b803c7e')}
 file_details = function (auth_token = NULL, project_id = NULL,
     file_id = NULL, ...) {
-    
+
     if (is.null(project_id) || is.null(file_id))
         stop('project_id and file_id must be both provided')
-    
+
     req = sbgapi(auth_token = auth_token,
                  path = paste0('project/', project_id, '/file/', file_id),
                  method = 'GET', ...)
-    
+
     return(status_check(req))
-    
+
 }
 
 #' Copy specified file(s) to the specified project
@@ -94,18 +94,18 @@ file_details = function (auth_token = NULL, project_id = NULL,
 #'                         '5506a44ae4b04a4ab3ae7252'))}
 file_copy = function (auth_token = NULL, project_id = NULL,
     file_id = NULL, ...) {
-    
+
     if (is.null(project_id) || is.null(file_id))
         stop('project_id and file_id must be both provided')
-    
+
     body = list('file_id' = as.character(file_id))
-    
-    req = sbgapi(auth_token = auth_token, 
+
+    req = sbgapi(auth_token = auth_token,
                  path = paste0('project/', project_id, '/file'),
                  body = body, method = 'POST', ...)
-    
+
     return(status_check(req))
-    
+
 }
 
 #' Update project's file metadata
@@ -189,28 +189,28 @@ file_meta_update = function (auth_token = NULL,
                                           'IonTorrent'),
                              sample = NULL, library = NULL,
                              platform_unit = NULL, paired_end = NULL, ...) {
-    
+
     if (is.null(project_id) || is.null(file_id))
         stop('project_id and file_id must be both provided')
-    
+
     body = list(list('file_type' = file_type,
                      'qual_scale' = qual_scale,
                      'seq_tech' = seq_tech))
     names(body) = 'metadata'
-    
+
     if (!is.null(sample)) body$'metadata'$'sample' = as.character(sample)
     if (!is.null(library)) body$'metadata'$'library' = as.character(library)
     if (!is.null(platform_unit)) body$'metadata'$'platform_unit' = as.character(platform_unit)
     if (!is.null(paired_end)) body$'metadata'$'paired_end' = as.character(paired_end)
-    
+
     if (!is.null(name)) body = c(list('name' = name), body)
-    
+
     req = sbgapi(auth_token = auth_token,
                  path = paste0('project/', project_id, '/file/', file_id),
                  body = body, method = 'PUT', ...)
-    
+
     return(status_check(req))
-    
+
 }
 
 #' Removes a file from a project
@@ -236,16 +236,16 @@ file_meta_update = function (auth_token = NULL,
 #'             file_id = '530854e2e4b036506b803c7e')}
 file_delete = function (auth_token = NULL,
                         project_id = NULL, file_id = NULL, ...) {
-    
+
     if (is.null(project_id) || is.null(file_id))
         stop('project_id and file_id must be both provided')
-    
+
     req = sbgapi(auth_token = auth_token,
                  path = paste0('project/', project_id, '/file/', file_id),
                  method = 'DELETE', ...)
-    
+
     return(status_check(req))
-    
+
 }
 
 #' Returns a direct download URL for a project's file
@@ -272,17 +272,17 @@ file_delete = function (auth_token = NULL,
 #' \donttest{req = file_download_url(token,
 #'             project_id = '1c1d06d2-5862-48f6-b595-e0099b20937e',
 #'             file_id = '530854e2e4b036506b803c7e')}
-file_download_url = function (auth_token = NULL, 
+file_download_url = function (auth_token = NULL,
                               project_id = NULL, file_id = NULL, ...) {
-    
+
     if (is.null(project_id) || is.null(file_id))
         stop('project_id and file_id must be both provided')
-    
+
     req = sbgapi(auth_token = auth_token,
                  path = paste0('project/', project_id,
                                '/file/', file_id, '/download'),
                  method = 'GET', ...)
-    
+
     return(status_check(req))
-    
+
 }

@@ -20,8 +20,8 @@ p <- a$project("API")
 ## get data
 fl <- system.file("extdata", "sample1.fastq", package = "sbgr")
 ## create meta data
-fl.meta <- list(file_type = "fastq", 
-                seq_tech = "Illumina", 
+fl.meta <- list(file_type = "fastq",
+                seq_tech = "Illumina",
                 sample = "sample1",
                 author = "tengfei")
 ## upload data with metadata
@@ -40,25 +40,25 @@ f.pipe <- p$pipeline(name = "FastQC")
 f.pipe$details()
 ## Ready to run a task? go
 message("running task ...")
-f.task <- p$task_run(name = "my task", 
-                      description = "A text description", 
+f.task <- p$task_run(name = "my task",
+                      description = "A text description",
                       pipeline_id = f.pipe$id,
-                      inputs = list( 
+                      inputs = list(
                           "177252" = list(f.file$id)
                           ))
 
 ## or you can just run with Task constructor
 f.task2 <- Task(auth = a,
-               name = "my task2", 
-               description = "A text description", 
-               pipeline_id = f.pipe$id, 
+               name = "my task2",
+               description = "A text description",
+               pipeline_id = f.pipe$id,
                project_id = p$id,
-               inputs = list( 
+               inputs = list(
                    "177252" = list(f.file$id)
                    ))
 f.task2$run()
 ## Abort the task
-f.task2$abort() 
+f.task2$abort()
 ## Monitor you task
 f.task$monitor(30)
 

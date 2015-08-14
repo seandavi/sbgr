@@ -3,7 +3,7 @@
 #' wrapper of http logic for SBG API
 #'
 #' @return returned request list of httr
-#' 
+#'
 #' @keywords internal
 sbgapi = function (auth_token = NULL, version = '1.1', path,
     method = c('GET', 'POST', 'PUT', 'DELETE'),
@@ -14,13 +14,13 @@ sbgapi = function (auth_token = NULL, version = '1.1', path,
         stop('auth_token must be provided')
 
     method <- match.args(method)
-    
+
     headers = c(
         'X-SBG-Auth-Token' = auth_token,
         'Accept' = 'application/json',
         'Content-type' = 'application/json'
     )
-    
+
     switch(method,
            GET = {
                GET(paste0(base_url, path),
@@ -31,32 +31,32 @@ sbgapi = function (auth_token = NULL, version = '1.1', path,
                body_json = toJSON(body, auto_unbox = TRUE)
                POST(paste0(base_url, path),
                     add_headers(.headers = headers), query = query,
-                    body = body_json)               
+                    body = body_json)
            },
            PUT = {
                stopifnot(is.list(body))
                body_json = toJSON(body, auto_unbox = TRUE)
                PUT(paste0(base_url, path),
-                   add_headers(.headers = headers), body = body_json)               
+                   add_headers(.headers = headers), body = body_json)
            },
            DELTE = {
                DELETE(paste0(base_url, path),
-                      add_headers(.headers = headers))               
+                      add_headers(.headers = headers))
            })
 }
-       
+
 
 #' check request status
 #'
 #' check request status
 #'
 #' @return request content or the message
-#' 
+#'
 #' @keywords internal
 status_check = function (req) {
-    
+
     if (status_code(req) %in% c('200', '201', '204')) {
-        res <- content(req, "parsed")        
+        res <- content(req, "parsed")
         if(!is.null(res))
             attr(res, "response") <- req
         return(res)
@@ -66,5 +66,5 @@ status_check = function (req) {
     } else {
         stop('Error of unknown type occured')
     }
-    
+
 }

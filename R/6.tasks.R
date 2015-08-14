@@ -26,15 +26,15 @@
 #' \donttest{req = task_list(token,
 #'                 '1c1d06d2-5862-48f6-b595-e0099b20937e')}
 task_list = function (auth_token = NULL, project_id = NULL, ...) {
-    
+
     if (is.null(project_id)) stop('project_id must be both provided')
-    
+
     req = sbgapi(auth_token = auth_token,
         path = paste0('project/', project_id, '/task'),
         method = 'GET', ...)
-    
+
     return(status_check(req))
-    
+
 }
 
 #' Runs a task as a part of a project
@@ -67,7 +67,7 @@ task_list = function (auth_token = NULL, project_id = NULL, ...) {
 #'
 #' @references
 #' \url{https://developer.sbgenomics.com/api/1.1/post/project/\%3Aproject_id/task}
-#' 
+#'
 #' @examples
 #' token = '58aeb140-1970-0130-6386-001f5b34aa78'
 #' details = list(
@@ -87,24 +87,24 @@ task_list = function (auth_token = NULL, project_id = NULL, ...) {
 #'                 task_details = details)}
 task_run = function (auth_token = NULL,
                      project_id = NULL, task_details = NULL, ...) {
-    
+
     if (is.null(project_id) || is.null(task_details))
         stop('project_id and task_details must be both provided')
-    
+
     body = task_details
-    
-    req = sbgapi(auth_token = auth_token, 
+
+    req = sbgapi(auth_token = auth_token,
                  path = paste0('project/', project_id, '/task'),
                  body = body, method = 'POST', ...)
-    
+
     return(status_check(req))
-    
+
 }
 
 #' Returns information about the task
 #'
 #' Returns information about the task.
-#' 
+#'
 #' Each task has a status and status message, containing the more detailed
 #' information about the task status, associated with it. This is a list of
 #' all values that task status can have:
@@ -140,10 +140,10 @@ task_run = function (auth_token = NULL,
 task_details = function (auth_token = NULL,
                          project_id = NULL, task_id = NULL,
                          download.url = FALSE, ...) {
-    
+
     if (is.null(project_id) || is.null(task_id))
         stop('project_id and task_id must be both provided')
-    
+
     if (download.url == FALSE) {
         req = sbgapi(auth_token = auth_token,
                      path = paste0('project/', project_id, '/task/', task_id),
@@ -153,9 +153,9 @@ task_details = function (auth_token = NULL,
                      path = paste0('project/', project_id, '/task/', task_id),
                      query = list('action' = 'download'), method = 'GET', ...)
     }
-    
+
     return(status_check(req))
-    
+
 }
 
 #' Performs action on the task
@@ -184,14 +184,14 @@ task_details = function (auth_token = NULL,
 #'                 action = 'abort')}
 task_action = function (auth_token = NULL, project_id = NULL,
                         task_id = NULL, action = 'abort', ...) {
-    
+
     if (is.null(project_id) || is.null(task_id))
         stop('project_id and task_id must be both provided')
-    
-    req = sbgapi(auth_token = auth_token, 
+
+    req = sbgapi(auth_token = auth_token,
                  path = paste0('project/', project_id, '/task/', task_id),
                  query = list('action' = action), method = 'POST', ...)
-    
+
     return(status_check(req))
-    
+
 }

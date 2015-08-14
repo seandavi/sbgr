@@ -18,12 +18,12 @@
 #' token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' \donttest{req = pipeline_list_pub(token)}
 pipeline_list_pub = function (auth_token = NULL, ...) {
-    
+
     req = sbgapi(auth_token = auth_token,
                  path = 'pipeline/public', method = 'GET', ...)
-    
+
     return(status_check(req))
-    
+
 }
 
 #' Returns the list of pipelines in user's "My Pipelines" section
@@ -44,11 +44,11 @@ pipeline_list_pub = function (auth_token = NULL, ...) {
 #' token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' \donttest{req = pipeline_list_my(token)}
 pipeline_list_my = function (auth_token = NULL, ...) {
-    
+
     req = sbgapi(auth_token = auth_token, path = 'pipeline/my', method = 'GET', ...)
-    
+
     return(status_check(req))
-    
+
 }
 
 #' Returns a list of all the pipelines in project
@@ -71,15 +71,15 @@ pipeline_list_my = function (auth_token = NULL, ...) {
 #' \donttest{req = pipeline_list_project(token,
 #'             project_id = 'b0b3a611-6bb0-47e5-add7-a83402cf7858')}
 pipeline_list_project = function (auth_token = NULL, project_id = NULL, ...) {
-    
+
     if (is.null(project_id)) stop('project_id must be provided')
-    
+
     req = sbgapi(auth_token = auth_token,
                  path = paste0('project/', project_id, '/pipeline'),
                  method = 'GET', ...)
-    
+
     return(status_check(req))
-    
+
 }
 
 #' Returns the details of a pipeline for a project
@@ -109,19 +109,19 @@ pipeline_list_project = function (auth_token = NULL, project_id = NULL, ...) {
 #' \donttest{req = pipeline_details(token,
 #'             project_id = 'b0b3a611-6bb0-47e5-add7-a83402cf7858',
 #'             pipeline_id = '55606ad4896a5d524656afd0')}
-pipeline_details = function (auth_token = NULL, 
+pipeline_details = function (auth_token = NULL,
                              project_id = NULL, pipeline_id = NULL, ...) {
-    
+
     if (is.null(project_id) || is.null(pipeline_id))
         stop('project_id and pipeline_id must be both provided')
-    
+
     req = sbgapi(auth_token = auth_token,
                  path = paste0('project/', project_id,
                                '/pipeline/', pipeline_id),
                  method = 'GET', ...)
-    
+
     return(status_check(req))
-    
+
 }
 
 #' Add a pipeline to a specified project
@@ -154,23 +154,23 @@ pipeline_details = function (auth_token = NULL,
 pipeline_add = function (auth_token = NULL, project_id_to = NULL,
                          project_id_from = NULL, pipeline_id = NULL,
                          revision = NULL, ...) {
-    
+
     if (is.null(project_id_to) || is.null(pipeline_id))
         stop('project_id_to and pipeline_id must be provided')
-    
+
     if (is.null(project_id_from)) {
         body = list('pipeline_id' = pipeline_id)
     } else {
         body = list('project_id' = project_id_from,
                     'pipeline_id' = pipeline_id)
     }
-    
+
     if (!is.null(revision)) body = c(body, 'revision' = as.character(revision))
-    
+
     req = sbgapi(auth_token = auth_token,
                  path = paste0('project/', project_id_to, '/pipeline'),
                  body = body, method = 'POST', ...)
-    
+
     return(status_check(req))
-    
+
 }

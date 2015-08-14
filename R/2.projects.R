@@ -6,7 +6,7 @@
 #'
 #' @param auth_token auth token
 #' @param ... parameters passed to sbgapi function
-#' 
+#'
 #' @return parsed list of the returned json
 #'
 #' @export project_list
@@ -18,11 +18,11 @@
 #' token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' \donttest{req = project_list(token)}
 project_list = function (auth_token = NULL, ...) {
-    
+
     req = sbgapi(auth_token = auth_token, path = 'project', method = 'GET', ...)
-    
+
     return(status_check(req))
-    
+
 }
 
 #' Returns the details of the project
@@ -45,14 +45,14 @@ project_list = function (auth_token = NULL, ...) {
 #' \donttest{req = project_details(token,
 #'                 project_id = 'b0b3a611-6bb0-47e5-add7-a83402cf7858')}
 project_details = function (auth_token = NULL, project_id = NULL, ...) {
-    
+
     if (is.null(project_id)) stop('project_id must be provided')
-    
+
     req = sbgapi(auth_token = auth_token,
                  path = paste0('project/', project_id), method = 'GET', ...)
-    
+
     return(status_check(req))
-    
+
 }
 
 #' Returns a list of all users invited to the project and their privileges
@@ -77,15 +77,15 @@ project_details = function (auth_token = NULL, project_id = NULL, ...) {
 #' \donttest{req = project_members(token,
 #'                 project_id = 'b0b3a611-6bb0-47e5-add7-a83402cf7858')}
 project_members = function (auth_token = NULL, project_id = NULL, ...) {
-    
+
     if (is.null(project_id)) stop('project_id must be provided')
-    
+
     req = sbgapi(auth_token = auth_token,
                  path = paste0('project/', project_id, '/members'),
                  method = 'GET', ...)
-    
+
     return(status_check(req))
-    
+
 }
 
 #' Create new project
@@ -116,20 +116,20 @@ project_members = function (auth_token = NULL, project_id = NULL, ...) {
 #'                 billing_group_id = '5b6d5e71-dff8-42fc-8583-500d858f1093')}
 project_new = function (auth_token = NULL, name = NULL,
                         description = NULL, billing_group_id = NULL, ...) {
-    
+
     if (is.null(name) || is.null(description) || is.null(billing_group_id))
         stop('name, description, and billing_group_id must be provided')
-    
+
     body = list('name' = name,
                 'description' = description,
                 'billing_group_id' = billing_group_id)
-    
-    req = sbgapi(auth_token = auth_token, 
+
+    req = sbgapi(auth_token = auth_token,
                  path = 'project', body = body,
                  method = 'POST', ...)
-    
+
     return(status_check(req))
-    
+
 }
 
 #' Add a user to the project with appropriate permissions
@@ -164,21 +164,21 @@ project_new = function (auth_token = NULL, name = NULL,
 project_member_add = function (auth_token = NULL, project_id = NULL,
                                username = NULL, copy = FALSE, write = FALSE,
                                execute = FALSE, admin = FALSE, ...) {
-    
+
     if (is.null(project_id) || is.null(username))
         stop('project_id and username must be both provided')
-    
+
     body = list('username' = username,
                 'permissions' = list(
                     'copy' = copy, 'write' = write,
                     'execute' = execute, 'admin' = admin))
-    
-    req = sbgapi(auth_token = auth_token, 
+
+    req = sbgapi(auth_token = auth_token,
                  path = paste0('project/', project_id, '/members'),
                  body = body, method = 'POST', ...)
-    
+
     return(status_check(req))
-    
+
 }
 
 #' Set permissions for a user to a project
@@ -187,7 +187,7 @@ project_member_add = function (auth_token = NULL, project_id = NULL,
 #' Privileges you do not explicitly set to "true" will be automatically
 #' set to "false". Project ID and user ID are specified in path parameters.
 #' Note that you must get the user IDs by performing the project_members()
-#' call and gathering id of the user with a specific permission. 
+#' call and gathering id of the user with a specific permission.
 #'
 #' @param auth_token auth token
 #' @param project_id ID of a project you want to access.
@@ -215,21 +215,21 @@ project_member_update = function (auth_token = NULL,
                                   project_id = NULL, user_id = NULL,
                                   write = FALSE, copy = FALSE,
                                   execute = FALSE, admin = FALSE, ...) {
-    
+
     if (is.null(project_id) || is.null(user_id))
         stop('project_id and user_id must be both provided')
-    
+
     body = list('write' = write,
                 'copy' = copy,
                 'execute' = execute,
                 'admin' = admin)
-    
+
     req = sbgapi(auth_token = auth_token,
                  path = paste0('project/', project_id, '/members/', user_id),
                  body = body, method = 'PUT', ...)
-    
+
     return(status_check(req))
-    
+
 }
 
 #' Delete a project
@@ -249,17 +249,17 @@ project_member_update = function (auth_token = NULL,
 #'
 #' @examples
 #' token = '420b4672ebfc43bab48dc0d18a32fb6f'
-#' \donttest{req = project_delete(token, 
+#' \donttest{req = project_delete(token,
 #'             project_id = '3a21ade8-ef3e-41f8-8ac2-1dc3b434ac77')}
 project_delete = function (auth_token = NULL, project_id = NULL, ...) {
-    
+
     if (is.null(project_id)) stop('project_id must be provided')
-    
+
     req = sbgapi(auth_token = auth_token,
                  path = paste0('project/', project_id), method = 'DELETE', ...)
-    
+
     return(status_check(req))
-    
+
 }
 
 #' Removes a member from a project
@@ -286,14 +286,14 @@ project_delete = function (auth_token = NULL, project_id = NULL, ...) {
 #'             user_id = '08890148-6d9e-4a10-b284-924228d3f99a')}
 project_member_delete = function (auth_token = NULL,
                                   project_id = NULL, user_id = NULL, ...) {
-    
+
     if (is.null(project_id) || is.null(user_id))
         stop('project_id and user_id must be both provided')
-    
+
     req = sbgapi(auth_token = auth_token,
                  path = paste0('project/', project_id, '/members/', user_id),
                  method = 'DELETE', ...)
-    
+
     return(status_check(req))
-    
+
 }

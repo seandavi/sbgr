@@ -40,14 +40,14 @@ paired_end <- PairedEndSingleEnum <- setSingleEnum("PairedEnd", .paired_end)
 ##' which will be shown in the graphic interface on the platform, then
 ##' save extra meta infomation in extra field, but not visible on the
 ##' platform yet, you can view it via the API.
-##' 
+##'
 ##' There are four pre-defined fields with pre-defined levels, they are
 ##' file_type, qual_scale, seq_tech, and paired_end, thos are also
 ##' constructor names to construct a single Enum object, it's different
 ##' from characters, it has validation against levels, to check their
 ##' levels, you can simply create a empty Metadata object and access
 ##' the field levels. Please see examples.
-##' 
+##'
 ##' @references \url{https://docs.sbgenomics.com/display/sbg/Metadata}
 ##' @rdname Metadata
 ##' @export Metadata
@@ -56,7 +56,7 @@ paired_end <- PairedEndSingleEnum <- setSingleEnum("PairedEnd", .paired_end)
 ##' @examples
 ##' m <- Metadata()
 ##' ## to check levels
-##' m$file_type 
+##' m$file_type
 ##' levels(m$file_type)
 ##' ## to replace a Enum class need to use constructor
 ##' m$file_type <- file_type("text")
@@ -79,11 +79,11 @@ Metadata <- setRefClass("Metadata",
                                                   library = NULL,
                                                   platform_unit = NULL,
                                                   paired_end = NA, ...){
-                                
+
                                 .l <- list(...)
                                 if(length(.l))
                                     extra <<- .l
-                                
+
                                 file_type <<- FileTypeSingleEnum(tolower(file_type))
                                 qual_scale <<- QualScaleSingleEnum(tolower(qual_scale))
                                 seq_tech <<- SeqTechSingleEnum(seq_tech)
@@ -91,7 +91,7 @@ Metadata <- setRefClass("Metadata",
                                 library <<- library
                                 platform_unit <<- platform_unit
                                 paired_end <<- PairedEndSingleEnum(tolower(paired_end))
-                                
+
                             },
                             show = function(){
                                 .showFields(.self, "-- Metadata --",
@@ -125,26 +125,26 @@ setClassUnion("MetadataORNULL", c("Metadata", "NULL"))
 
 
 ##' Class Auth
-##' 
+##'
 ##' Auth token object
-##' 
+##'
 ##' Every object coud be requested from this Auth object and any action
 ##' could start from this object using cascading style. Please check vignette
 ##' 'easy-api' for more information.
-##' 
+##'
 ##' @field auth_token [character] your auth token.
 ##' @field url [character] basic url used for API, by default
 ##' it's \url{https://api.sbgenomics.com/1.1/}
-##' 
+##'
 ##' @param auth_token [character] your auth token.
 ##' @param api [character %in% 'sbg-us', 'cgc'] which api you are
 ##'  using, by default it is sbg us platform.
 ##' @param url [chracter] a URL for the API, default is \code{NULL},
 ##'  will use \code{api} parameter to switch to the right one.
 ##' @param version [character] default: 1.1 version used for api.
-##' 
-##'  
-##' 
+##'
+##'
+##'
 ##' @export Auth
 ##' @exportClass Auth
 ##' @examples
@@ -161,8 +161,8 @@ setClassUnion("MetadataORNULL", c("Metadata", "NULL"))
 ##' ## get data
 ##' fl <- system.file("extdata", "sample1.fastq", package = "sbgr")
 ##' ## create meta data
-##' fl.meta <- list(file_type = "fastq", 
-##'                 seq_tech = "Illumina", 
+##' fl.meta <- list(file_type = "fastq",
+##'                 seq_tech = "Illumina",
 ##'                 sample = "sample1",
 ##'                 author = "tengfei")
 ##' ## upload data with metadata
@@ -178,29 +178,29 @@ setClassUnion("MetadataORNULL", c("Metadata", "NULL"))
 ##' ## check the inputs needed for running tasks
 ##' f.pipe$details()
 ##' ## Ready to run a task? go
-##' f.task <- p$task_run(name = "my task", 
-##'                       description = "A text description", 
+##' f.task <- p$task_run(name = "my task",
+##'                       description = "A text description",
 ##'                       pipeline_id = f.pipe$id,
-##'                       inputs = list( 
+##'                       inputs = list(
 ##'                           "177252" = list(f.file$id)
 ##'                           ))
 ##' f.task$run()
 ##' ## or you can just run with Task constructor
 ##' f.task <- Task(auth = Auth(token),
-##'                name = "my task", 
-##'                description = "A text description", 
-##'                pipeline_id = f.pipe$id, 
+##'                name = "my task",
+##'                description = "A text description",
+##'                pipeline_id = f.pipe$id,
 ##'                project_id = p$id,
-##'                inputs = list( 
+##'                inputs = list(
 ##'                    "177252" = list(f.file$id)
 ##'                    ))
 ##' ## Monitor you task
 ##' f.task$monitor(30)
-##' 
+##'
 ##' ## download a task output files
 ##' f.task <- p$task("my task")
 ##' f.task$download("~/Desktop/")
-##' 
+##'
 ##' ## Abort the task
 ##' f.task$abort()
 ##' }
@@ -219,18 +219,18 @@ Auth <- setRefClass("Auth", fields = list(auth_token = "character",
                                 stop("missing token")
                             }
                             auth_token <<- auth_token
-                            
+
                             stopifnot(is.null(url) | is.character(url))
-                            
+
                             if(is.null(url)){
                                 url <<- switch(api,
-                                               'sbg-us' = 
+                                               'sbg-us' =
                                                    paste0('https://api.sbgenomics.com/', version, '/'),
-                                               'cgc' = 
+                                               'cgc' =
                                                    paste0('https://cgc-api.sbgenomics.com/', version, '/')
                                                )
                             }else{
-                                url <<- url                                    
+                                url <<- url
                             }
 
                         },
@@ -273,7 +273,7 @@ Auth <- setRefClass("Auth", fields = list(auth_token = "character",
                             ignore.case = TRUE,
                             exact = TRUE){
                             'find project'
-                            
+
                             pl <- .self$project_list()
                             res <- m.match(pl, id = id, name = name, exact = exact,
                                            ignore.case = ignore.case)
@@ -288,52 +288,52 @@ Auth <- setRefClass("Auth", fields = list(auth_token = "character",
                             }
                             return(res)
                         },
-                        pipeline = function(repos = c("public", "my", "project"), 
+                        pipeline = function(repos = c("public", "my", "project"),
                                             project_name = NULL,
-                                            project_id = NULL, 
+                                            project_id = NULL,
                                             pipeline_name = NULL,
                                             pipeline_id = NULL,
                                             ignore.case = TRUE,
                                             exact = FALSE,
                                             detail = TRUE){
                             repos <- match.arg(repos)
-                            
+
                             if(is.null(project_name) &
                                    is.null(project_id)){
-                            if(repos == "public"){                                
+                            if(repos == "public"){
                                 res <- pipeline_list_pub()
                             }else if(repos == "my"){
                                 res <- pipeline_list_my()
                             }else{
-                                stop("Please provide project_name or project_id")  
+                                stop("Please provide project_name or project_id")
                             }
                             }else{
                                 repos <- "project"
-                                res <- pipeline_list_project(project_name, 
+                                res <- pipeline_list_project(project_name,
                                                              project_id)
                             }
-                            
+
                             if(!is.null(pipeline_name) | !is.null(pipeline_id)){
-                                res <- m.match(res, 
+                                res <- m.match(res,
                                                id = pipeline_id,
-                                               name = pipeline_name, 
+                                               name = pipeline_name,
                                                ignore.case = ignore.case,
                                                exact = exact)
                             }
-                    
+
                             if(is(res, "Pipeline")){
                                 res$repos <- repos
                                 res$auth <- .self
-                    
+
                             }else if(all(sapply(res, is, "Pipeline"))){
                                 res <- lapply(res, function(x){
                                     x$repos <- repos
                                     x$auth <- .self
                                     x
-                                })   
+                                })
                             }
-                            
-                            
+
+
                             return(res)
                         },
                         pipeline_list_pub = function(){
@@ -374,7 +374,7 @@ Auth <- setRefClass("Auth", fields = list(auth_token = "character",
                             pipeline_id = NULL,
                             revision = NULL,
                             exact = TRUE){
-                            
+
                             if(is.null(project_id_from)){
                                 if(is.null(project_name_from)){
                                     warning("omit project name or id, assume it's public")
@@ -391,7 +391,7 @@ Auth <- setRefClass("Auth", fields = list(auth_token = "character",
                                     project_id_to <- project(project_name_to)$id
                                 }
                             }
-                            
+
                             if(is.null(pipeline_id)){
                                 if(is.null(pipeline_name)){
                                     stop("Pipeline id or name must be provided")
@@ -407,12 +407,12 @@ Auth <- setRefClass("Auth", fields = list(auth_token = "character",
                                 }
                             }
                             res <- sbgr::pipeline_add(auth_token, base_url = url,
-                                                      project_id_to = project_id_to, 
+                                                      project_id_to = project_id_to,
                                                       project_id_from = project_id_from,
                                                       pipeline_id = pipeline_id,
                                                       revision = revision)
                             .asPipeline(res)
-                            
+
                         },
                         billing = function(){
                             res <- sbgr::billing(auth_token, base_url = url)
@@ -422,7 +422,7 @@ Auth <- setRefClass("Auth", fields = list(auth_token = "character",
                                 x
                             })
                         },
-                        
+
                         show = function(){
                             .showFields(.self, "== Auth ==",
                                         values = c("auth_token", "url"))
@@ -436,7 +436,7 @@ setClassUnion("AuthORNULL", c("Auth", "NULL"))
 ##' Class Item
 ##'
 ##' To describe a set of objects, Project, Task, Pipeline, File etc.
-##' 
+##'
 ##' @field response save the raw response from a request.
 ##' @field auth_token propogate the auth_token from parent.
 Item <- setRefClass("Item", fields = list(response = "ANY",
@@ -454,7 +454,7 @@ Permission <- setRefClass("Permission", contains = "Item",
                                   copy_permission = FALSE,
                                   execute = FALSE,
                                   admin = FALSE, ...){
-                                  
+
                                   write <<- write
                                   copy_permission <<- copy_permission
                                   execute <<- execute
@@ -520,7 +520,7 @@ Project <- setRefClass("Project", contains = "Item",
                                my_permission <<- do.call(Permission,
                                                          res$my_permission)
                                .self
-                               
+
                            },
                            members = function(){
                                res <- project_members(auth$auth_token, id)
@@ -528,7 +528,7 @@ Project <- setRefClass("Project", contains = "Item",
                            },
                            member = function(username = NULL,
                                name = username,
-                               id = NULL, 
+                               id = NULL,
                                ignore.case = TRUE,
                                exact = TRUE){
 
@@ -538,12 +538,12 @@ Project <- setRefClass("Project", contains = "Item",
                            },
                            member_add = function(
                                username = NULL,
-                               name = username, 
+                               name = username,
                                copy = FALSE,
                                write = FALSE,
                                execute = FALSE,
                                admin = FALSE){
-                               
+
                                res <- sbgr::project_member_add(auth$auth_token,
                                                                project_id = .self$id,
                                                                username = name,
@@ -558,7 +558,7 @@ Project <- setRefClass("Project", contains = "Item",
                            },
                            member_update = function(
                                username = NULL,
-                               name = username, 
+                               name = username,
                                user_id = NULL,
                                write = FALSE,
                                copy = FALSE,
@@ -572,7 +572,7 @@ Project <- setRefClass("Project", contains = "Item",
                                        user_id <- member(name = name, exact = TRUE)$id
                                    }
                                }
-                               
+
                                res <- sbgr::project_member_update(auth$auth_token,
                                                                   project_id = .self$id,
                                                                   user_id = user_id,
@@ -603,7 +603,7 @@ Project <- setRefClass("Project", contains = "Item",
                            pipeline = function(name = NULL, id = NULL,
                                detail = FALSE, exact = TRUE){
                                res <- sbgr::pipeline_list_project(auth$auth_token,
-                                                                  base_url = auth$url, 
+                                                                  base_url = auth$url,
                                                                   .self$id)
                                res <- .asPipelineList(res[[1]])
                                res <- m.match(res, name = name, id = id,
@@ -616,14 +616,14 @@ Project <- setRefClass("Project", contains = "Item",
                                                                    base_url = auth$url)
                                        .asPipeline(x)
                                    })
-                                   
+
                                }
-                               
+
                                if(is(res, "Pipeline")){
                                    res$project_id <- .self$id
                                    res$repos <- "project"
                                    res$auth <- .self$auth
-                               }else if(is.list(res) && 
+                               }else if(is.list(res) &&
                                             all(sapply(res, is, "Pipeline"))){
                                    res <- lapply(res, function(x) {
                                        x$project_id <- .self$id
@@ -640,18 +640,18 @@ Project <- setRefClass("Project", contains = "Item",
                                pipeline_id = NULL,
                                revision = NULL, ...){
 
-                             
-                                                   
+
+
                                auth$pipeline_add(
-                                   project_name_to = name, 
+                                   project_name_to = name,
                                    project_name_from,
                                    pipeline_name,
-                                   project_id_from, 
+                                   project_id_from,
                                    project_id_to = id,
-                                   pipeline_id, 
+                                   pipeline_id,
                                    revision,
                                  ...)
-                           
+
                            },
                            file_list = function(){
                                res <- sbgr::file_list(auth$auth_token, id,
@@ -672,7 +672,7 @@ Project <- setRefClass("Project", contains = "Item",
                                if(is(res, "File")){
                                    res$project_id <- .self$id
                                    res$auth <- .self$auth
-                               }else if(is.list(res) && 
+                               }else if(is.list(res) &&
                                             all(sapply(res, is, "File"))){
                                    res <- lapply(res, function(x) {
                                        x$project_id <- .self$id
@@ -718,15 +718,15 @@ Project <- setRefClass("Project", contains = "Item",
                                tks <- task_list()
                                if(is.null(name) & is.null(id))
                                    return(tks)
-                               
+
                                res <- m.match(tks, id = id, name = name,
                                               exact = exact,
                                               ignore.case = ignore.case)
-                               
+
                                if(is(res, "Task")){
                                    res$project_id <- .self$id
                                    res$auth <- .self$auth
-                               }else if(is.list(res) && 
+                               }else if(is.list(res) &&
                                         all(sapply(res, is, "Task"))){
                                    res <- lapply(res, function(x) {
                                        x$project_id <- .self$id
@@ -735,18 +735,18 @@ Project <- setRefClass("Project", contains = "Item",
                                    })
                                }
                                return(res)
-                               
-                               
+
+
                            },
                            task_run = function(...){
                                task = Task(auth = .self$auth,
-                                           project_id = id, ...) 
-                               
+                                           project_id = id, ...)
+
                                task$run()
                            },
-                           
+
                            delete = function(){
-                              
+
                                sbgr::project_delete(auth$auth_token,
                                                     project_id = id,
                                                     base_url = auth$url)
@@ -757,7 +757,7 @@ Project <- setRefClass("Project", contains = "Item",
                                            c("id", "name",
                                              "description"))
                                .self$my_permission$show()
-                               
+
                            }
                        ))
 
@@ -768,8 +768,8 @@ Project <- setRefClass("Project", contains = "Item",
             description = x$description,
             my_permission = do.call(Permission, x$my_permission),
             response = response(x))
-    
-    
+
+
 }
 
 .asProjectList <- function(x){
@@ -833,25 +833,25 @@ Pipeline <- setRefClass("Pipeline", contains = "Item",
                                     req <- sbgapi(auth_token = auth$auth_token,
                                                   base_url = auth$url,
                                                   path = paste0('pipeline/my/', id), method = 'GET')
-                                    res <- status_check(req) 
+                                    res <- status_check(req)
                                 }
                                 if(repos == "project"){
                                     res <- sbgr::pipeline_details(auth$auth_token,
                                                                   project_id = project_id,
                                                                   pipeline_id = id,
-                                                                  base_url = auth$url) 
+                                                                  base_url = auth$url)
                                 }
-                                
-                               
-                            
+
+
+
                                 res <- .asPipeline(res)
                                 revision <<- res$revision
                                 inputs <<- res$inputs
                                 outputs <<- res$outputs
                                 nodes <<- res$nodes
-                                
-                                
-                                
+
+
+
                                 return(.self)
                             },
                             show = function(){
@@ -891,7 +891,7 @@ Part <- setRefClass("Part", contains = "Item",
                             part_size = NULL,
                             uri = NULL,
                             etag = NULL, ...){
-                            
+
                             .part_number <- as.integer(as.character(part_number))
                             .part_size <- as.integer(as.character(part_size))
                             if(.part_number >  10000 | .part_number <1){
@@ -916,7 +916,7 @@ Part <- setRefClass("Part", contains = "Item",
 Upload <- setRefClass("Upload", contains = "Item",
                       fields = list(
                           ## filepath = "characterORNULL",
-                          file = "characterORNULL",                          
+                          file = "characterORNULL",
                           project_id = "characterORNULL",
                           name = "characterORNULL",
                           size = "numericORNULL",
@@ -935,20 +935,20 @@ Upload <- setRefClass("Upload", contains = "Item",
                               name = NULL,
                               size = NULL,
                               part_size = NULL,
-                              part_finished = 0L, 
+                              part_finished = 0L,
                               initialized = FALSE,
                               part_length = NULL,
                               metadata = list(), ...){
 
                               metadata <<- normalizeMeta(metadata)
-                              
+
                               initialized <<- initialized
-                              part_finished <<- part_finished 
+                              part_finished <<- part_finished
                               ## validation
                               stopifnot_provided(!is.null(file))
-                              
+
                               file <<- normalizePath(file)
-                              
+
                               if(!file.exists(file)){
                                   stop("file doesn't exist, please provide relative or aboslution path to the file")
                               }
@@ -959,13 +959,13 @@ Upload <- setRefClass("Upload", contains = "Item",
                                   name <<- name
                               }
 
-                              
+
                               if(is.null(size)){
                                   size <<- file.size(file)
                               }else{
                                   size <<- size
                               }
-                              
+
                               stopifnot_provided(!is.null(project_id))
 
 
@@ -974,7 +974,7 @@ Upload <- setRefClass("Upload", contains = "Item",
                                            .self$size >= 0))
                                       stop("size must be between 0 - 5497558138880, inclusive")
                               }else{
-                                  stop("size must be between 0 - 5497558138880, inclusive")                                  
+                                  stop("size must be between 0 - 5497558138880, inclusive")
                               }
 
 
@@ -986,13 +986,13 @@ Upload <- setRefClass("Upload", contains = "Item",
                                       if(is.null(part_size)){
                                           part_size <<- as.integer(5 * 1024^2)
                                       }
-                                      part_length <<- as.integer(ceiling(.self$size/.self$part_size))                                      
+                                      part_length <<- as.integer(ceiling(.self$size/.self$part_size))
                                   }else{
                                       ## go with priority part_length
                                       ## let's reuire integer here
                                       part_size <<- as.integer(ceiling(.self$size/part_length))
                                       ## round the length number
-                                      part_length <<- as.integer(ceiling(.self$size/.self$part_size))                                    
+                                      part_length <<- as.integer(ceiling(.self$size/.self$part_size))
 
                                   }
 
@@ -1041,7 +1041,7 @@ Upload <- setRefClass("Upload", contains = "Item",
                               cl <- c("Content-Length" = as.character(part[[part_number]]$part_size))
                               res <- status_check(sbgapi(auth$auth_token,
                                                          base_url = auth$url,
-                                             path = paste0("upload/multipart/", 
+                                             path = paste0("upload/multipart/",
                                                  upload_id, "/", part_number),
                                              method = "GET"))
 
@@ -1074,11 +1074,11 @@ Upload <- setRefClass("Upload", contains = "Item",
                                   part_finished <<- as.integer(i)
                                   setTxtProgressBar(pb, i)
                               }
-                              close(pb)                              
+                              close(pb)
                               res <- upload_complete_all()
                               close(con)
                               message("file uploading complete")
-                             
+
                               ## when we complete we could add meta
                               meta <- .self$metadata$asList()
                               if(length(meta)){
@@ -1093,7 +1093,7 @@ Upload <- setRefClass("Upload", contains = "Item",
                                   res <- status_check(req)
                                   message("Metadata complete")
                               }
-                              res <- .asFile(res)                              
+                              res <- .asFile(res)
                               res
                           },
                           upload_complete_part = function(part_number = NULL,
@@ -1108,11 +1108,11 @@ Upload <- setRefClass("Upload", contains = "Item",
                               ## fixme:
                               req <- sbgapi(auth_token = auth$auth_token,
                                             base_url = auth$url,
-                                             path = paste0("upload/multipart/", 
+                                             path = paste0("upload/multipart/",
                                                  upload_id, "/complete"),
                                              method = "POST")
                               status_check(req)
-                              
+
                           },
                           upload_delete = function(){
                               sbgr::upload_delete(auth$auth_token, upload_id,
@@ -1169,7 +1169,7 @@ File <- setRefClass("File", contains = "Item",
                             project_id = NULL,
                             url = NULL, ...){
 
-                            
+
                             id <<- id
                             name <<- name
                             size <<- size
@@ -1214,7 +1214,7 @@ File <- setRefClass("File", contains = "Item",
                                     names(new.meta) <- "metadata"
                                 }
                                 metadata <<- new.meta$metadata
-                                
+
                                 req <- sbgapi( auth$auth_token,
                                               base_url = auth$url,
                                                      path = paste0('project/',
@@ -1247,7 +1247,7 @@ File <- setRefClass("File", contains = "Item",
                                 }else{
                                     stop("Metadata provided is empty")
                                 }
-                                
+
                             }
                             return(res)
                         },
@@ -1273,7 +1273,7 @@ File <- setRefClass("File", contains = "Item",
 }
 
 ##' Task class
-##' 
+##'
 ##' Task class
 ##'
 ##' A task execution require auth, project_id, pipeline_id and inputs
@@ -1284,35 +1284,35 @@ File <- setRefClass("File", contains = "Item",
 ##' project_id. The other way is to create a Task object with all
 ##' required fields and call \code{run} method. Please check example
 ##' in the end or tutorial for easy API.
-##' 
-##' @field id [characterORNULL] The task ID number, used when referring to the 
+##'
+##' @field id [characterORNULL] The task ID number, used when referring to the
 ##' task in other Seven Bridges API calls
-##' @field name [characterORNULL] Name of the task you wish to execute. If this 
+##' @field name [characterORNULL] Name of the task you wish to execute. If this
 ##' is not specified, the task will be named automatically.
 ##' @field description [characterORNULL] Description of the task you wish to execute.
 ##' @field pipeline_id [characterORNULL] ID of the pipeline you wish to execute.
-##' @field pipeline_revision [characterORNULL] Revision number of the pipeline 
-##' you wish to execute. If this is not specified, the latest pipeline revision 
+##' @field pipeline_revision [characterORNULL] Revision number of the pipeline
+##' you wish to execute. If this is not specified, the latest pipeline revision
 ##' is used.
 ##' @field start_time [numericORNULL] start time.
-##' @field status [characterORNULL] 1) active: task is currently running. 
-##' 2) completed: task has finished successfully. 3) aborted: task was aborted by 
-##' user. 4) failed: task has failed to finish due to either bad inputs and/or 
+##' @field status [characterORNULL] 1) active: task is currently running.
+##' 2) completed: task has finished successfully. 3) aborted: task was aborted by
+##' user. 4) failed: task has failed to finish due to either bad inputs and/or
 ##' parameters, or because of the internal infrastructure failures.
 ##' @field message [characterORNULL] task message
 ##' @field jobs_completed [numericORNULL] completed jobs
 ##' @field jobs_total [numericORNULL] total jobs.
-##' @field inputs [listORNULL] required for task execution. List of key-value 
+##' @field inputs [listORNULL] required for task execution. List of key-value
 ##' pairs containing mappings of pipeline input node ID to file IDs.
-##'  Note that you must supply an array of file IDs for each input nodes, 
+##'  Note that you must supply an array of file IDs for each input nodes,
 ##'  even if the array is empty.
-##' @field parameters [listORNULL] required for task execution. List of key-value 
-##' pairs containing mappings of node IDs to apps specific parameters. Note that 
-##' you must supply some value for parameters, even if this an empty list of 
+##' @field parameters [listORNULL] required for task execution. List of key-value
+##' pairs containing mappings of node IDs to apps specific parameters. Note that
+##' you must supply some value for parameters, even if this an empty list of
 ##' key-value pairs.
-##' @field project_id [characterORNULL] required for task execution. 
+##' @field project_id [characterORNULL] required for task execution.
 ##' ID of the project you want to execute the task in.
-##' 
+##'
 ##' @exportClass Task
 ##' @export Task
 ##' @examples
@@ -1327,29 +1327,29 @@ File <- setRefClass("File", contains = "Item",
 ##' ## check the inputs needed for running tasks
 ##' f.pipe$details()
 ##' ## Ready to run a task? go
-##' f.task <- p$task_run(name = "my task", 
-##'                       description = "A text description", 
+##' f.task <- p$task_run(name = "my task",
+##'                       description = "A text description",
 ##'                       pipeline_id = f.pipe$id,
-##'                       inputs = list( 
+##'                       inputs = list(
 ##'                           "177252" = list(f.file$id)
 ##'                           ))
 ##' f.task$run()
 ##' ## or you can just run with Task constructor
 ##' f.task <- Task(auth = Auth(token),
-##'                name = "my task", 
-##'                description = "A text description", 
-##'                pipeline_id = f.pipe$id, 
+##'                name = "my task",
+##'                description = "A text description",
+##'                pipeline_id = f.pipe$id,
 ##'                project_id = p$id,
-##'                inputs = list( 
+##'                inputs = list(
 ##'                    "177252" = list(f.file$id)
 ##'                    ))
 ##' ## Monitor you task
 ##' f.task$monitor(30)
-##' 
+##'
 ##' ## download a task output files
 ##' f.task <- p$task("my task")
 ##' f.task$download("~/Desktop/")
-##' 
+##'
 ##' ## Abort the task
 ##' f.task$abort()
 ##' }
@@ -1393,7 +1393,7 @@ Task <- setRefClass("Task", contains = "Item",
                             req <- sbgr::task_details(auth$auth_token,
                                                project_id,
                                                id, base_url = auth$url)
-                            
+
                            ## update
                             start_time <<- req$start_time
                             status <<- req$status$status
@@ -1402,20 +1402,20 @@ Task <- setRefClass("Task", contains = "Item",
                             jobs_total <<- req$status$jobs_total
                             outputs <<- req$outputs
                             .self
-                          
+
                         },
                         monitor = function(time = 30){
                             t0 <- Sys.time()
                             message("Monitoring ...")
                             while(TRUE){
                                 d <- details()
-                                
+
                                 if(d$status != "active"){
                                     message("Finished")
                                     break
                                 }
-                                
-                            
+
+
                                 Sys.sleep(time)
                             }
                         },
@@ -1425,13 +1425,13 @@ Task <- setRefClass("Task", contains = "Item",
                             }
                             fids <- sapply(outputs, function(x) x[[1]])
                             p <- auth$project(id = project_id)
-                            
+
                             for(fid in fids){
                                 fl <- p$file(id = fid)
                                 message("downloading: ", fl$name)
                                 fl$download(destfile, ..., method = method)
                             }
-                            
+
                         },
                         run = function(){
                             ## turn this into a list
@@ -1439,20 +1439,20 @@ Task <- setRefClass("Task", contains = "Item",
                                       "pipeline_id", "pipeline_revision",
                                       "inputs", "parameters")
 
-                           
-                            
+
+
                             body <- .getFields(.self, .nms)
-                    
+
                             req <- sbgr::task_run(auth$auth_token,
                                                   project_id,
                                                   body,
                                                   base_url = auth$url)
-                            
+
                             ## update task object
                             id <<- req$id
                             name <<- req$name
                             description <<- req$description
-                            pipeline_id <<- req$pipeline_id 
+                            pipeline_id <<- req$pipeline_id
                             pipeline_revision <<- req$pipeline_revision
                             start_time <<- req$start_time
                             status <<- req$status$status
@@ -1462,16 +1462,16 @@ Task <- setRefClass("Task", contains = "Item",
                             inputs <<- req$inputs
                             outputs <<- req$outputs
                             parameters <<- req$parameteres
-                          
+
                             .self
-                            
+
                         },
                         show = function(){
                             .nms <- c("id", "name", "description",
                                       "pipeline_id", "pipeline_revision",
                                       "start_time", "status",
                                       "message", "jobs_completed",
-                                      "jobs_total", "parameters", 
+                                      "jobs_total", "parameters",
                                       "inputs", "outputs")
                             .showFields(.self, "== Task ==", .nms)
                         }
@@ -1586,12 +1586,12 @@ m.match <- function(obj, id = NULL, name = NULL,
     ## if(is.null(title))
     ##     title <- class(x)
     if(!is.null(title)){
-        message(title)        
+        message(title)
     }
-    
+
     for (fld in flds)
         message(fld, " : ", x[[fld]])
-    
+
 }
 
 .showList <- function(x){
@@ -1607,7 +1607,7 @@ m.match <- function(obj, id = NULL, name = NULL,
     o.nm <- names(o)
     n.nm <- names(n)
     i.nm <- intersect(o.nm, n.nm)
-    
+
     if(length(i.nm)){
         o.nm <- setdiff(o.nm, i.nm)
         return(c(o[o.nm], n))
@@ -1639,18 +1639,18 @@ normalizeMeta <- function(x){
 ## 1. delete API project first and start clean
 ## 2. re-build the rmarkdown easy-api docs with real auth.
 ## in progress
-.test_build <- function(token = NULL, file = "easy_api_eval.Rmd", 
+.test_build <- function(token = NULL, file = "easy_api_eval.Rmd",
                         output_dir = "~/Downloads/"){
-    if(is.null(token))    
+    if(is.null(token))
         stop("token not provided")
-    
+
     fl <- system.file("extdata", file, package = "sbgr")
     rmarkdown::render(fl, BiocStyle::html_document(), output_dir = output_dir)
 }
 
-.test_examples <- function(auth = NULL, file = "test-easy-api.R", 
+.test_examples <- function(auth = NULL, file = "test-easy-api.R",
                            extdata = TRUE, clean = TRUE){
-    if(is.null(auth))    
+    if(is.null(auth))
         stop("auth not provided")
     if(extdata)
         file <- system.file("extdata", file, package = "sbgr")
