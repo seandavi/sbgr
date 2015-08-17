@@ -8,7 +8,7 @@
 #' @return auth token
 #'
 #' @export misc_get_auth_token
-#'
+#' @importFrom utils browseURL
 #' @examples
 #' # Paste the auth token into R
 #' # console then press enter:
@@ -35,7 +35,7 @@ misc_get_auth_token = function () {
 #' If not present, it will be created automatically.
 #'
 #' @export misc_get_uploader
-#'
+#' @importFrom utils untar download.file
 #' @examples
 #' dir = '~/sbg-uploader/'
 #' \donttest{misc_get_uploader(dir)}
