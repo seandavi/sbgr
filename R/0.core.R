@@ -2,9 +2,27 @@
 #'
 #' wrapper of http logic for SBG API
 #'
+#' Used for advanced users and the core method for higher level API in
+#' this package, please refer to the easy api manual and the two
+#' vignettes pages for more convenient usage.
+#'
+#' @param auth_token authenticate token string.
+#' @param version API version number, default 1.1.
+#' @param path path connected with base_url.
+#' @param method one of 'GET', 'POST', 'PUT', 'Delete'
+#' @param query Passed to httr package GET/POST call.
+#' @param body Passed to httr package GET/POST/PUT/DELETE call.
+#' @param base_url defeault is 'https://api.sbgenomics.com/1.1'
+#'
 #' @return returned request list of httr
 #'
-#' @keywords internal
+#' @export sbgapi
+#' @examples
+#' token <- "fake_token"
+#' \donttest{
+#' ## list projects
+#' sbgapi(auth_token = token, path = 'project', method = "GET")
+#' }
 sbgapi = function (auth_token = NULL, version = '1.1', path,
     method = c('GET', 'POST', 'PUT', 'DELETE'),
     query = NULL, body = list(),
