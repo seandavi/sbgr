@@ -62,9 +62,19 @@ key-value pairs.}
 ID of the project you want to execute the task in.}
 }}
 \examples{
-\donttest{
 token <- "aef7e9e3f6c54fb1b338ac4ecddf1a56"
 a <- Auth(token)
+## A task constructor
+Task(auth = Auth(token),
+              name = "my task",
+              description = "A text description",
+              pipeline_id = "fake_pipeline_id",
+              project_id = "fake_project_id",
+              inputs = list(
+                  "177252" = list("fake_id")
+                  ))
+\donttest{
+## replace with real token then follow the examples here
 ## get billing info
 b <- a$billing()
 p <- a$project("API")

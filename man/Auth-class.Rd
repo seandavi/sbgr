@@ -39,10 +39,10 @@ it's \url{https://api.sbgenomics.com/1.1/}}
   exact = TRUE)}}{find project}
 }}
 \examples{
-\donttest{
-a <- Auth("fake_token")
+## replace it with real token
 token <- "aef7e9e3f6c54fb1b338ac4ecddf1a56"
 a <- Auth(token)
+\donttest{
 ## get billing info
 b <- a$billing()
 ## create project
