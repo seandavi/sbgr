@@ -41,7 +41,7 @@ knitr::opts_chunk$set(eval = FALSE)
 ```
 
 # Introduction
-This "easy API" is built on lower level R API function calls provided by this pacakge, (please check the other tutorial and manual) but with a more user friendly interface that provides
+This "easy API" is built on lower level R API function calls provided by this package, (please check the other tutorial and manual) but with a more user friendly interface that provides
 
 - Simpler cascading style from a _Auth_ object or its children, for example
 
@@ -52,7 +52,7 @@ a$project("wgs")$file("17.vcf")$download()
 a$project("wgs")$upload("sample.tgz")
 ```
 
-- Exact mathcing or fuzz matching by names and id.
+- Exact matching or fuzz matching by names and id.
 - Actions for each different objects
 - Nice print format than a long list
 - Return an R5 object in stead of a list
@@ -67,22 +67,22 @@ To understand the cascading style, you has to under stand the structure of the S
 - Each account had different billing group and each project is assigned to particular billing group in order to run on AWS cloud.
 - Each project is composed with files (_File_ object), tasks (_Task_ object), pipelines (_Pipeline_ object) and members or users (_Member_ object) with different permission level.
 - Each member has its own permission to particular project.
-- A task is a scheuled pipeline job with files and parameters.
+- A task is a scheduled pipeline job with files and parameters.
 
 So our cascading visually represent this relationship and structure, if you are familiar with SBG platform, you will find this interface very easy to understand.
 
 To understand the API better, you can also check the original SBG developer hub [documents](https://docs.sbgenomics.com/display/developerhub/API)
 
 ## Cheatsheet
-This cheatsheet provide main API designed for end users, please note "single"
+This cheat sheet provide main API designed for end users, please note "single"
 is not real project name, just means the cascading method expecting a single returned object not a list, so you name better has a single hit or you pick
 the one you want from the list. Remember the logic structure and relationship of those concept will help you remember the API easily. For example, a project has
 members so of course you can run member() method on project object.
 
-For a searching function that need name or id, when both are empty, they will return every object (file, project, pipeline, task, memeber) in a list. These function usually has opetional parameter called `ignore.case` and `exact` used
+For a searching function that need name or id, when both are empty, they will return every object (file, project, pipeline, task, member) in a list. These function usually has optional parameter called `ignore.case` and `exact` used
 for matching, when `exact = FALSE` you can use pattern to grep objects.
 
-The cheatsheet only show some most used arguments, please check their help function to read more details.
+The cheat sheet only show some most used arguments, please check their help function to read more details.
 
 ```{r, eval = FALSE}
 a <- Auth()
@@ -113,16 +113,16 @@ So you can do a cascading like this, it reads like "I want download the file sam
 a$project("API")$file("sample1.tgz")$download("~/Desktop/")
 ```
 
-Plesase play the main function yourself, we are not covering all the function in this tutorial. Also some users may notice the object actually has lower level API binding as well for example, you can call `a$pipeline_list_project()` but those are used intenally not supposed to be used by end users. user can just call `a$prject("public")`
+Please play the main function yourself, we are not covering all the function in this tutorial. Also some users may notice the object actually has lower level API binding as well for example, you can call `a$pipeline_list_project()` but those are used internally not supposed to be used by end users. user can just call `a$prject("public")`
 
 
 # Quick start: running the FastQC pipeline
 I will go through the same tutorial again, but this time use a more simpler cascading API.
 
 ## Create an Auth object
-First thing you do is to get your authentication token following this [tutorial](https://docs.sbgenomics.com/display/sbg/Managing+Account+Settings#ManagingAccountSettings-GenerateanAuthenticationToken), then create a _Auth_ object which will be our master ojbect for reqeust and actions.
+First thing you do is to get your authentication token following this [tutorial](https://docs.sbgenomics.com/display/sbg/Managing+Account+Settings#ManagingAccountSettings-GenerateanAuthenticationToken), then create a _Auth_ object which will be our master object for request and actions.
 
-By default we are using SBG US platform API url "https://api.sbgenomics.com/1.1/", you can aslo pass another url, for example, NCI cancer cloud API url.
+By default we are using SBG US platform API URL "https://api.sbgenomics.com/1.1/", you can also pass another URL, for example, NCI cancer cloud API URL.
 
 Now let's use some fake auth token and load the library.
 
@@ -133,7 +133,7 @@ a
 ```
 
 ## Billing group
-Billing group speicfy how your computation charges, when you first registered, you should have some free credit, with billing group called something like "FreeAccount". Or maybe your company/organization purchased a license, you should have other billing group attached as well
+Billing group specify how your computation charges, when you first registered, you should have some free credit, with billing group called something like "Free Account". Or maybe your company/organization purchased a license, you should have other billing group attached as well
 
 To show how many billing group you belong too, just call _billing_ function
 ```{r}
@@ -162,7 +162,7 @@ a$project_new(name = "API", description = "API tutorial",
 ## Upload file and set metadata
 
 
-To save your typing/lines for casading style, I want to save the project I am gonna use for this tutorial to a Project object first.
+To save your typing/lines for cascading style, I want to save the project I am gonna use for this tutorial to a Project object first.
 
 ```{r}
 ## get the project we just created
@@ -214,7 +214,7 @@ p$file(basename(fl))
 ```
 
 ### Keep playing with file metadata
-Metadata is designed with fixed fields in the GUI with fixed enum types for some fields, like fiel_type, to check what's fixed, please do
+Metadata is designed with fixed fields in the GUI with fixed enum types for some fields, like file_type, to check what's fixed, please do
 
 ```{r, eval = TRUE}
 Metadata()
