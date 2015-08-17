@@ -1,7 +1,7 @@
 Package: sbgr
 Type: Package
 Title: R Client for Seven Bridges Genomics API
-Version: 0.99.2
+Version: 0.99.3
 Date: 2015-05-01
 Author: Nan Xiao <nan.xiao@sbgenomics.com>, Tengfei Yin <tengfei.yin@sbgenomics.com>
 Maintainer: Nan Xiao <nan.xiao@sbgenomics.com>
@@ -10,11 +10,15 @@ License: MIT + file LICENSE
 VignetteBuilder: knitr
 URL: https://www.sbgenomics.com
 BugReports: https://github.com/road2stat/sbgr/issues
-biocViews: DataImport, ThirdPartyClient
+biocViews: Software, DataImport, ThirdPartyClient
+Depends:
+    methods,
+    utils,
+    stats
 Imports:
     httr,
     jsonlite,
-    objectProperties
+    objectProperties,
 Suggests:
     BiocStyle,
     knitr,
