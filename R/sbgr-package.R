@@ -12,5 +12,6 @@
 #' @author Nan Xiao <\email{nan.xiao@@sbgenomics.com}>
 #'         Teng-Fei Yin <\email{tengfei.yin@@sbgenomics.com}>
 #'
-#' @import httr jsonlite
+#' @import httr jsonlite methods
+#' @importFrom stats setNames
 NULL
