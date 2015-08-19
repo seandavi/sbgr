@@ -20,15 +20,13 @@ setClassUnion("listORNULL", c("list", "NULL"))
 
 
 ##' @rdname Metadata
-##' @aliases file_type FileTypeSingleEnum qual_scale QualScaleSingleEnum seq_tech SeqTechSingleEnum paired_end PairedEndSingleEnum
-##' @export file_type FileTypeSingleEnum
-##' @export qual_scale QualScaleSingleEnum
-##' @export seq_tech SeqTechSingleEnum
-##' @export paired_end PairedEndSingleEnum
+##' @aliases file_type qual_scale seq_tech paired_end 
+##' @export file_type qual_scale seq_tech paired_end 
 file_type <- FileTypeSingleEnum <- setSingleEnum("FileType", .file_type)
 qual_scale <- QualScaleSingleEnum <- setSingleEnum("QualScale", .qual_scale)
 seq_tech <- SeqTechSingleEnum <- setSingleEnum("SeqTech", .seq_tech)
 paired_end <- PairedEndSingleEnum <- setSingleEnum("PairedEnd", .paired_end)
+
 
 ##' Metadata class
 ##'
@@ -85,13 +83,13 @@ Metadata <- setRefClass("Metadata",
                                 if(length(.l))
                                     extra <<- .l
                                 
-                                file_type <<- FileTypeSingleEnum(tolower(file_type))
-                                qual_scale <<- QualScaleSingleEnum(tolower(qual_scale))
-                                seq_tech <<- SeqTechSingleEnum(seq_tech)
+                                file_type <<- file_type(tolower(file_type))
+                                qual_scale <<- qual_scale(tolower(qual_scale))
+                                seq_tech <<- seq_tech(seq_tech)
                                 sample <<- sample
                                 library <<- library
                                 platform_unit <<- platform_unit
-                                paired_end <<- PairedEndSingleEnum(tolower(paired_end))
+                                paired_end <<- paired_end(tolower(paired_end))
                                 
                             },
                             show = function(){
@@ -1195,7 +1193,13 @@ File <- setRefClass("File", contains = "Item",
                             'see help(download.file) for more options'
                             if(is.null(url))
                                 url <<- download_url()$url
-                            if(dir.exists(destfile)){
+                            ## for compatible reason, R 3.1 doesn't have dir.exists
+                            ##
+                            .dir.exists <- function(d) {
+                                de <- file.info(d)$isdir
+                                ifelse(is.na(de), FALSE, de)
+                            }
+                            if(.dir.exists(destfile)){
                                 ## is directory
                                 if(!is.null(name))
                                     destfile <- file.path(destfile, name)
