@@ -52,6 +52,7 @@ paired_end <- PairedEndSingleEnum <- setSingleEnum("PairedEnd", .paired_end)
 ##' @rdname Metadata
 ##' @export Metadata
 ##' @exportClass Metadata
+##' @importClassesFrom objectProperties SingleEnum Enum
 ##' @importFrom objectProperties setSingleEnum
 ##' @examples
 ##' m <- Metadata()
@@ -961,7 +962,10 @@ Upload <- setRefClass("Upload", contains = "Item",
                               
                               
                               if(is.null(size)){
-                                  size <<- file.size(file)
+                                  ## file.zie is R 3.2
+                                  ## to be compatible
+                                  ## size <<- file.size(file)
+                                  size <<- file.info(file)$size
                               }else{
                                   size <<- size
                               }
