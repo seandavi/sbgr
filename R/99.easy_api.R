@@ -32,15 +32,15 @@ paired_end <- PairedEndSingleEnum <- setSingleEnum("PairedEnd", .paired_end)
 ##'
 ##' Metadata class
 ##'
-##' This funcion will help you create a Metadata object, what it does
+##' This function will help you create a Metadata object, what it does
 ##' it to accept a named list or just pass meta key-value pairs as
 ##' argument one by one. Then it first matches SBG's build-in meta field
 ##' which will be shown in the graphic interface on the platform, then
-##' save extra meta infomation in extra field, but not visible on the
+##' save extra meta information in extra field, but not visible on the
 ##' platform yet, you can view it via the API.
 ##'
 ##' There are four pre-defined fields with pre-defined levels, they are
-##' file_type, qual_scale, seq_tech, and paired_end, thos are also
+##' file_type, qual_scale, seq_tech, and paired_end, those are also
 ##' constructor names to construct a single Enum object, it's different
 ##' from characters, it has validation against levels, to check their
 ##' levels, you can simply create a empty Metadata object and access
@@ -127,7 +127,7 @@ setClassUnion("MetadataORNULL", c("Metadata", "NULL"))
 ##'
 ##' Auth token object
 ##'
-##' Every object coud be requested from this Auth object and any action
+##' Every object could be requested from this Auth object and any action
 ##' could start from this object using cascading style. Please check vignette
 ##' 'easy-api' for more information.
 ##'
@@ -170,7 +170,7 @@ setClassUnion("MetadataORNULL", c("Metadata", "NULL"))
 ##' f.file <- p$file(basename(fl))
 ##' ## get the pipeline from public repos
 ##' f.pipe <- a$pipeline(pipeline_name = "FastQC")
-##' ## copy the pipeline to your poject
+##' ## copy the pipeline to your project
 ##' p$pipeline_add(pipeline_name = f.pipe$name)
 ##' ## get the pipeline from your project not public one
 ##' f.pipe <- p$pipeline(name = "FastQC")
@@ -437,7 +437,7 @@ setClassUnion("AuthORNULL", c("Auth", "NULL"))
 ##' To describe a set of objects, Project, Task, Pipeline, File etc.
 ##'
 ##' @field response save the raw response from a request.
-##' @field auth_token propogate the auth_token from parent.
+##' @field auth_token propagate the auth_token from parent.
 Item <- setRefClass("Item", fields = list(response = "ANY",
                                           auth = "AuthORNULL")) ## to stored the called Auth parent
 
