@@ -120,6 +120,23 @@ Metadata <- setRefClass("Metadata",
 setClassUnion("MetadataORNULL", c("Metadata", "NULL"))
 
 
+normalizeMeta <- function(x){
+    ## normalize it
+    if(is.list(x)){
+        if(length(x) > 1){
+            res <- do.call(Metadata, x)
+        }else if(length(x) == 1){
+            res <- do.call(Metadata, x[[1]])
+        }else{
+            res <- Metadata()
+        }
+    }else if(is(x, "Metadata")){
+        res <- x
+    }else{
+        stop("metadata has to be a list or Metadata object")
+    }
+    res
+}
 
 
 
@@ -1509,171 +1526,4 @@ Task <- setRefClass("Task", contains = "Item",
 
 
 
-
-## MISC
-response <- function(x){
-    attr(x, "response")
-}
-
-.getFields <- function(x, values) {
-    ## from Martin's code
-    flds = names(x$getRefClass()$fields())
-    if (!missing(values))
-        flds = flds[flds %in% values]
-    result = setNames(vector("list", length(flds)), flds)
-    for (fld in flds)
-        result[[fld]] = x[[fld]]
-    result
-}
-
-stopifnot_provided <- function(..., msg = "is not provided"){
-    n <- length(ll <- list(...))
-    if(n == 0)
-        return(invisible())
-    mc <- match.call()
-    x = NULL
-    for(i in 1:n){
-        if(!(is.logical(r <- eval(ll[[i]])) && all(r))){
-            l <- mc[[i+1]][[2]]
-            x <- c(x, deparse(l[[length(l)]]))
-        }
-    }
-    if(length(x))
-        stop(paste(paste(x, collapse = ","), msg), call. = FALSE)
-}
-
-
-
-
-m.fun <- function(x, y, exact = TRUE, ignore.case = TRUE, ...){
-    if(exact){
-        pmatch(x, y, ...)
-    }else{
-        grep(x, y, ignore.case = ignore.case, ...)
-    }
-}
-
-## match by id and name
-m.match <- function(obj, id = NULL, name = NULL,
-                    .id = "id",
-                    .name = "name",
-                    exact = TRUE, ignore.case = TRUE){
-    ## if no match, return whole list
-    if(is.null(id)){
-        if(is.null(name)){
-            return(obj)
-        }else{
-            ## id is null, so use username
-            nms <- sapply(obj, function(x) x[[.name]])
-            if(ignore.case){
-                name <- tolower(name)
-                nms <- tolower(nms)
-            }
-            index <- m.fun(name, nms,
-                           exact = exact,
-                           ignore.case = ignore.case)
-        }
-    }else{
-        ## id is not NULL
-        ids <- sapply(obj, function(x) x[[.id]])
-        index <- m.fun(id, ids,
-                       exact = exact,
-                       ignore.case = ignore.case)
-
-    }
-    if(length(index) == 1 && is.na(index)){
-        message("sorry, no matching ")
-        return(NULL)
-    }else{
-        if(length(index) ==1){
-            obj[[index]]
-        }else{
-            obj[index]
-        }
-    }
-}
-
-
-.showFields <- function(x, title = NULL, values = NULL){
-    if (missing(values)){
-        flds = names(x$getRefClass()$fields())
-    }else{
-        flds = values
-    }
-
-    ## if(is.null(title))
-    ##     title <- class(x)
-    if(!is.null(title)){
-        message(title)
-    }
-
-    for (fld in flds)
-        message(fld, " : ", x[[fld]])
-
-}
-
-.showList <- function(x){
-    if(length(x)){
-        x <- x[!sapply(x, is.null)]
-        for (fld in names(x))
-            message(fld, " : ", x[[fld]])
-    }
-}
-
-
-.update_list <- function(o, n){
-    o.nm <- names(o)
-    n.nm <- names(n)
-    i.nm <- intersect(o.nm, n.nm)
-
-    if(length(i.nm)){
-        o.nm <- setdiff(o.nm, i.nm)
-        c(o[o.nm], n)
-    }else{
-        c(o, n)
-    }
-}
-
-normalizeMeta <- function(x){
-    ## normalize it
-    if(is.list(x)){
-        if(length(x) > 1){
-            res <- do.call(Metadata, x)
-        }else if(length(x) == 1){
-            res <- do.call(Metadata, x[[1]])
-        }else{
-            res <- Metadata()
-        }
-    }else if(is(x, "Metadata")){
-        res <- x
-    }else{
-        stop("metadata has to be a list or Metadata object")
-    }
-    res
-}
-
-## self testing method to run tutorial
-## Warning: this is used internally for maintainer, it will
-## 1. delete API project first and start clean
-## 2. re-build the rmarkdown easy-api docs with real auth.
-## in progress
-## .test_build <- function(token = NULL, file = "easy_api_eval.Rmd",
-##                         output_dir = "~/Downloads/"){
-##     if(is.null(token))
-##         stop("token not provided")
-
-##     fl <- system.file("extdata", file, package = "sbgr")
-##     rmarkdown::render(fl, BiocStyle::html_document(), output_dir = output_dir)
-## }
-
-## .test_examples <- function(auth = NULL, file = "test-easy-api.R",
-##                            extdata = TRUE, clean = TRUE){
-##     if(is.null(auth))
-##         stop("auth not provided")
-##     if(extdata)
-##         file <- system.file("extdata", file, package = "sbgr")
-##     a <<- auth
-##     clean <<- clean
-##     source(file)
-## }
 
