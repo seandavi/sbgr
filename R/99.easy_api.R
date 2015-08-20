@@ -285,7 +285,7 @@ Auth <- setRefClass("Auth", fields = list(auth_token = "character",
                                     x
                                 })
                             }
-                            return(res)
+                            res
                         },
                         pipeline = function(repos = c("public", "my", "project"),
                                             project_name = NULL,
@@ -333,7 +333,7 @@ Auth <- setRefClass("Auth", fields = list(auth_token = "character",
                             }
                             
                             
-                            return(res)
+                            res
                         },
                         pipeline_list_pub = function(){
                             res <- sbgr::pipeline_list_pub(auth_token,
@@ -631,7 +631,7 @@ Project <- setRefClass("Project", contains = "Item",
                                        x
                                    })
                                }
-                               return(res)
+                               res
                            },
                            pipeline_add = function(project_name_from = NULL,
                                                    pipeline_name = NULL,
@@ -679,7 +679,7 @@ Project <- setRefClass("Project", contains = "Item",
                                        x
                                    })
                                }
-                               return(res)
+                               res
                            },
                            file_delete = function(name = NULL, file_id = NULL,
                                                   exact = TRUE){
@@ -733,7 +733,7 @@ Project <- setRefClass("Project", contains = "Item",
                                        x
                                    })
                                }
-                               return(res)
+                               res
                                
                                
                            },
@@ -851,7 +851,7 @@ Pipeline <- setRefClass("Pipeline", contains = "Item",
                                 
                                 
                                 
-                                return(.self)
+                                .self
                             },
                             show = function(){
                                 .showFields(.self, "== Pipeline ==",
@@ -1257,7 +1257,7 @@ File <- setRefClass("File", contains = "Item",
                                 }
                                 
                             }
-                            return(res)
+                            res
                         },
                         show = function(){
                             .showFields(.self,
@@ -1628,9 +1628,9 @@ m.match <- function(obj, id = NULL, name = NULL,
     
     if(length(i.nm)){
         o.nm <- setdiff(o.nm, i.nm)
-        return(c(o[o.nm], n))
+        c(o[o.nm], n)
     }else{
-        return(c(o, n))
+        c(o, n)
     }
 }
 
@@ -1649,7 +1649,7 @@ normalizeMeta <- function(x){
     }else{
         stop("metadata has to be a list or Metadata object")
     }
-    return(res)
+    res
 }
 
 ## self testing method to run tutorial
