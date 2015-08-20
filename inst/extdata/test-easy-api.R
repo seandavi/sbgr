@@ -17,6 +17,7 @@ message("creating new project 'API'")
 a$project_new(name = "API", description = "API tutorial",
               billing_group_id = b[[1]]$id)
 p <- a$project("API")
+
 ## get data
 fl <- system.file("extdata", "sample1.fastq", package = "sbgr")
 ## create meta data
