@@ -33,9 +33,9 @@ library("sbgr")
 
 And you are all set. Please check out the package [page](https://www.bioconductor.org/packages/devel/bioc/html/sbgr.html) for more information, for example some tutorials
 
-
-- [Tutorial with functional API](http://www.bioconductor.org/packages/devel/bioc/vignettes/sbgr/inst/doc/sbgr.html) 
 - [Easy Cascading API for end useres](https://www.bioconductor.org/packages/devel/bioc/vignettes/sbgr/inst/doc/easy_api.html)
+- [Tutorial with functional API](http://www.bioconductor.org/packages/devel/bioc/vignettes/sbgr/inst/doc/sbgr.html) 
+
 
 
 <hr>
