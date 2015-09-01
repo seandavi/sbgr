@@ -6,11 +6,8 @@ The `sbgr` package provides an R client for accessing the [Seven Bridges Genomic
 
 ## Installation
 
-The package is currently not availble in the `release` branch, please switch to the `devel` branch to install, it's now follow the Bioconductor release schedule.
-<<<<<<< HEAD
+The package is currently not availble in the Bioconductor `release` branch yet until next Bioc release cycle, please switch to the `devel` branch by following code to install.
 
-=======
->>>>>>> c579e7e2494b576d42a0af316810f160f95c6950
 
 ```
 source("http://bioconductor.org/biocLite.R")
@@ -18,7 +15,7 @@ useDevel(devel = TRUE)
 biocLite("sbgr")
 ```
 
-Alternatively, you can install the cutting-edge development version of the package from GitHub:
+Alternatively, you can install the latest development version of the package from GitHub too:
 
 ```
 # install.packages("devtools") if devtools was not installed
@@ -26,7 +23,7 @@ library("devtools")
 install_github("road2stat/sbgr")
 ```
 
-To load the package in R, simply use
+To load the package in R, simply call
 
 ```
 library("sbgr")
@@ -34,11 +31,12 @@ library("sbgr")
 
 ## Manual and Vignettes
 
-And you are all set. Please check out the package [page](https://www.bioconductor.org/packages/devel/bioc/html/sbgr.html) for more information, for example some tutorials
-
+Please check out the package [page](https://www.bioconductor.org/packages/devel/bioc/html/sbgr.html) for more information, and two tutorials
 
 - [Easy Cascading API for end useres](https://www.bioconductor.org/packages/devel/bioc/vignettes/sbgr/inst/doc/easy_api.html)
 - [Tutorial with functional API](http://www.bioconductor.org/packages/devel/bioc/vignettes/sbgr/inst/doc/sbgr.html) 
+
+
 
 <hr>
 
