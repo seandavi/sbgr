@@ -8,7 +8,6 @@ The `sbgr` package provides an R client for accessing the [Seven Bridges Genomic
 
 The package is currently not availble in the Bioconductor `release` branch yet until next Bioc release cycle, please switch to the `devel` branch by following code to install.
 
-
 ```
 source("http://bioconductor.org/biocLite.R")
 useDevel(devel = TRUE)
