@@ -15,4 +15,3 @@ Depends: methods, utils, stats
 Imports: httr, jsonlite, objectProperties,
 Suggests: BiocStyle, knitr, rmarkdown, testthat
 NeedsCompilation: no
-
