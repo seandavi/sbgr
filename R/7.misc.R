@@ -104,7 +104,6 @@ misc_get_uploader = function (destdir = NULL) {
 #' @return list, JSON string, or a file.
 #'
 #' @export misc_make_metadata
-#'
 #' @references
 #' \url{https://developer.sbgenomics.com/platform/metadata}
 #'
@@ -175,7 +174,6 @@ misc_make_metadata = function (output = c('list', 'json', 'metafile'),
 #' see \url{https://developer.sbgenomics.com/tools/uploader/documentation}.
 #'
 #' @export misc_upload_cli
-#'
 #' @references
 #' \url{https://developer.sbgenomics.com/tools/uploader/documentation}
 #'
@@ -331,3 +329,38 @@ m.match <- function(obj, id = NULL, name = NULL,
 }
 
 
+## guess version based on URL and save it
+.ver <- function(url){
+    str_match(url, "https://.*/(.*)/$")[, 2]   
+}
+
+
+## parse an item from a v2 request object
+parseItem <- function(x){
+    obj <- x$items
+    attr(obj, "href") <- x$href
+    attr(obj, "response") <- x$response
+    obj
+}
+
+hasItems <- function(x){
+    "items" %in% names(x)
+}
+
+ptype <- function(x){
+    ifelse(grepl("\\/", x), "v2", "1.1")
+}
+
+setAuth <- function(res, auth, className = NULL){
+    stopifnot(!is.null(className))
+    if(is(res, className)){
+        res$auth <- auth
+    }else if(is.list(res) &&
+             all(sapply(res, is, className))){
+        res <- lapply(res, function(x){
+            x$auth <- auth
+            x
+        })
+    }
+    res
+}

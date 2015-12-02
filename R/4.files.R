@@ -14,7 +14,6 @@
 #' @return parsed list of the returned json
 #'
 #' @export file_list
-#'
 #' @examples
 #' token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' \donttest{req = file_list(token,
@@ -42,8 +41,6 @@ file_list = function (auth_token = NULL, project_id = NULL, ...) {
 #' @return parsed list of the returned json
 #'
 #' @export file_details
-#'
-#'
 #' @examples
 #' token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' \donttest{req = file_details(token,
@@ -76,8 +73,6 @@ file_details = function (auth_token = NULL, project_id = NULL,
 #' @return parsed list of the returned json
 #'
 #' @export file_copy
-#'
-#'
 #' @examples
 #' token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' \donttest{req = file_copy(token,
@@ -152,7 +147,6 @@ file_copy = function (auth_token = NULL, project_id = NULL,
 #' @return parsed list of the returned json
 #'
 #' @export file_meta_update
-#'
 #' @examples
 #' token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' \donttest{req = file_meta_update(token,
@@ -213,8 +207,6 @@ file_meta_update = function (auth_token = NULL,
 #' @return parsed list of the returned json
 #'
 #' @export file_delete
-#'
-#'
 #' @examples
 #' token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' \donttest{req = file_delete(token,
@@ -249,8 +241,6 @@ file_delete = function (auth_token = NULL,
 #' @return parsed list of the returned json
 #'
 #' @export file_download_url
-#'
-#'
 #' @examples
 #' token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' \donttest{req = file_download_url(token,

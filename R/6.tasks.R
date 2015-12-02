@@ -17,8 +17,6 @@
 #' @return parsed list of the returned json
 #'
 #' @export task_list
-#'
-#'
 #' @examples
 #' token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' \donttest{req = task_list(token,
@@ -62,8 +60,6 @@ task_list = function (auth_token = NULL, project_id = NULL, ...) {
 #' @return parsed list of the returned json
 #'
 #' @export task_run
-#'
-#'
 #' @examples
 #' token = '58aeb140-1970-0130-6386-001f5b34aa78'
 #' details = list(
@@ -121,8 +117,6 @@ task_run = function (auth_token = NULL,
 #' @return parsed list of the returned json
 #'
 #' @export task_details
-#'
-#'
 #' @examples
 #' token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' \donttest{req1 = task_details(token,
@@ -166,8 +160,6 @@ task_details = function (auth_token = NULL,
 #' @return parsed list of the returned json
 #'
 #' @export task_action
-#'
-#'
 #' @examples
 #' token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' \donttest{req = task_action(token,

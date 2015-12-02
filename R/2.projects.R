@@ -10,13 +10,25 @@
 #' @return parsed list of the returned json
 #'
 #' @export project_list
-#'
 #' @examples
 #' token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' \donttest{req = project_list(token)}
 project_list = function (auth_token = NULL, ...) {
+    ## args <- list(...)
 
-    req = sbgapi(auth_token = auth_token, path = 'project', method = 'GET', ...)
+    ## ## maintain two set of API versions ...
+    ## if(!is.null(args$base_url)){
+    ##     url <- args$base_url
+    ##     version <- .ver(url)
+    ## }else{
+    ##     version = "1.1"
+    ## }
+    
+    ## if(version == "v2"){
+    ##     req = sbgapi(auth_token = auth_token, path = 'projects', method = 'GET', ...)        
+    ## }else{
+        req = sbgapi(auth_token = auth_token, path = 'project', method = 'GET', ...)        
+    ## }
 
     return(status_check(req))
 
@@ -33,7 +45,6 @@ project_list = function (auth_token = NULL, ...) {
 #' @return parsed list of the returned json
 #'
 #' @export project_details
-#'
 #' @examples
 #' token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' \donttest{req = project_details(token,
@@ -62,7 +73,6 @@ project_details = function (auth_token = NULL, project_id = NULL, ...) {
 #' @return parsed list of the returned json
 #'
 #' @export project_members
-#'
 #' @examples
 #' token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' \donttest{req = project_members(token,
@@ -96,7 +106,6 @@ project_members = function (auth_token = NULL, project_id = NULL, ...) {
 #' @return parsed list of the returned json
 #'
 #' @export project_new
-#'
 #' @examples
 #' token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' \donttest{req = project_new(token, name = 'Test API project',
@@ -140,8 +149,6 @@ project_new = function (auth_token = NULL, name = NULL,
 #' @return parsed list of the returned json
 #'
 #' @export project_member_add
-#'
-#'
 #' @examples
 #' token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' \donttest{req = project_member_add(token,
@@ -188,8 +195,6 @@ project_member_add = function (auth_token = NULL, project_id = NULL,
 #' @return parsed list of the returned json
 #'
 #' @export project_member_update
-#'
-#'
 #' @examples
 #' token = '58aeb140-1970-0130-6386-001f5b34aa78'
 #' \donttest{req = project_member_update(token,
@@ -227,8 +232,6 @@ project_member_update = function (auth_token = NULL,
 #' @return parsed list of the returned json
 #'
 #' @export project_delete
-#'
-#'
 #' @examples
 #' token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' \donttest{req = project_delete(token,
@@ -257,8 +260,6 @@ project_delete = function (auth_token = NULL, project_id = NULL, ...) {
 #' @return parsed list of the returned json
 #'
 #' @export project_member_delete
-#'
-#'
 #' @examples
 #' token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' \donttest{req = project_member_delete(token,

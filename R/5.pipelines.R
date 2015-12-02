@@ -10,7 +10,6 @@
 #' @return parsed list of the returned json
 #'
 #' @export pipeline_list_pub
-#'
 #' @examples
 #' token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' \donttest{req = pipeline_list_pub(token)}
@@ -33,8 +32,6 @@ pipeline_list_pub = function (auth_token = NULL, ...) {
 #' @return parsed list of the returned json
 #'
 #' @export pipeline_list_my
-#'
-#'
 #' @examples
 #' token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' \donttest{req = pipeline_list_my(token)}
@@ -57,8 +54,6 @@ pipeline_list_my = function (auth_token = NULL, ...) {
 #' @return parsed list of the returned json
 #'
 #' @export pipeline_list_project
-#'
-#'
 #' @examples
 #' token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' \donttest{req = pipeline_list_project(token,
@@ -93,8 +88,6 @@ pipeline_list_project = function (auth_token = NULL, project_id = NULL, ...) {
 #' @return parsed list of the returned json
 #'
 #' @export pipeline_details
-#'
-#'
 #' @examples
 #' token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' \donttest{req = pipeline_details(token,
@@ -132,8 +125,6 @@ pipeline_details = function (auth_token = NULL,
 #' @return parsed list of the returned json
 #'
 #' @export pipeline_add
-#'
-#'
 #' @examples
 #' token = '58aeb140-1970-0130-6386-001f5b34aa78'
 #' \donttest{req = pipeline_add(token,
