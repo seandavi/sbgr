@@ -1,145 +1,3 @@
-setClassUnion("characterORNULL", c("character", "NULL"))
-setClassUnion("numericORNULL", c("numeric", "NULL"))
-setClassUnion("listORNULL", c("list", "NULL"))
-
-## define meta data
-.file_type <- c('text', 'binary', 'fasta', 'csfasta',
-                'fastq', 'qual', 'xsq', 'sff', 'bam',
-                'bam_index', 'illumina_export',
-                'vcf', 'sam', 'bed', 'archive',
-                'juncs', 'gtf','gff',
-                'enlis_genome', NA)
-
-.qual_scale <- c('sanger', 'illumina13',
-                 'illumina15', 'illumina18',
-                 'solexa', NA)
-
-.seq_tech <- c('454', 'Helicos', 'Illumina', 'Solid', 'IonTorrent', NA)
-.paired_end <- c(NA, "1", "2")
-
-
-
-##' @rdname Metadata
-##' @aliases file_type qual_scale seq_tech paired_end
-##' @export file_type qual_scale seq_tech paired_end
-file_type <- FileTypeSingleEnum <- setSingleEnum("FileType", .file_type)
-qual_scale <- QualScaleSingleEnum <- setSingleEnum("QualScale", .qual_scale)
-seq_tech <- SeqTechSingleEnum <- setSingleEnum("SeqTech", .seq_tech)
-paired_end <- PairedEndSingleEnum <- setSingleEnum("PairedEnd", .paired_end)
-
-
-##' Metadata class
-##'
-##' Metadata class
-##'
-##' This function will help you create a Metadata object, what it does
-##' it to accept a named list or just pass meta key-value pairs as
-##' argument one by one. Then it first matches SBG's build-in meta field
-##' which will be shown in the graphic interface on the platform, then
-##' save extra meta information in extra field, but not visible on the
-##' platform yet, you can view it via the API.
-##'
-##' There are four pre-defined fields with pre-defined levels, they are
-##' file_type, qual_scale, seq_tech, and paired_end, those are also
-##' constructor names to construct a single Enum object, it's different
-##' from characters, it has validation against levels, to check their
-##' levels, you can simply create a empty Metadata object and access
-##' the field levels. Please see examples.
-##'
-##' @references \url{https://docs.sbgenomics.com/display/sbg/Metadata}
-##' @rdname Metadata
-##' @export Metadata
-##' @exportClass Metadata
-##' @importClassesFrom objectProperties SingleEnum Enum
-##' @importFrom objectProperties setSingleEnum
-##' @examples
-##' m <- Metadata()
-##' ## to check levels
-##' m$file_type
-##' levels(m$file_type)
-##' ## to replace a Enum class need to use constructor
-##' m$file_type <- file_type("text")
-Metadata <- setRefClass("Metadata",
-                        fields = list(
-                            file_type = "FileTypeSingleEnum",
-                            qual_scale = "QualScaleSingleEnum",
-                            seq_tech = "SeqTechSingleEnum",
-                            sample = "characterORNULL",
-                            library = "characterORNULL",
-                            platform_unit = "characterORNULL",
-                            paired_end = "PairedEndSingleEnum",
-                            extra = "listORNULL"
-                        ),
-                        methods = list(
-                            initialize = function(file_type = NA,
-                                                  qual_scale = NA,
-                                                  seq_tech = NA,
-                                                  sample = NULL,
-                                                  library = NULL,
-                                                  platform_unit = NULL,
-                                                  paired_end = NA, ...){
-
-                                .l <- list(...)
-                                if(length(.l))
-                                    extra <<- .l
-
-                                file_type <<- file_type(tolower(file_type))
-                                qual_scale <<- qual_scale(tolower(qual_scale))
-                                seq_tech <<- seq_tech(seq_tech)
-                                sample <<- sample
-                                library <<- library
-                                platform_unit <<- platform_unit
-                                paired_end <<- paired_end(tolower(paired_end))
-
-                            },
-                            show = function(){
-                                .showFields(.self, "-- Metadata --",
-                                            c("file_type",
-                                              "qual_scale",
-                                              "seq_tech",
-                                              "sample",
-                                              "library",
-                                              "platform_unit",
-                                              "paired_end"))
-                                .showList(extra)
-                            },
-                            asList = function(){
-                                lst <- .getFields(.self, c("file_type",
-                                                           "qual_scale",
-                                                           "seq_tech",
-                                                           "sample",
-                                                           "library",
-                                                           "platform_unit",
-                                                           "paired_end"))
-                                res <- list(c(lst, extra))
-                                names(res) <- "metadata"
-                                res
-                            }
-                        ))
-
-setClassUnion("MetadataORNULL", c("Metadata", "NULL"))
-
-
-normalizeMeta <- function(x){
-    ## normalize it
-    if(is.list(x)){
-        if(length(x) > 1){
-            res <- do.call(Metadata, x)
-        }else if(length(x) == 1){
-            res <- do.call(Metadata, x[[1]])
-        }else{
-            res <- Metadata()
-        }
-    }else if(is(x, "Metadata")){
-        res <- x
-    }else{
-        stop("metadata has to be a list or Metadata object")
-    }
-    res
-}
-
-
-
 ##' Class Auth
 ##'
 ##' Auth token object
@@ -153,13 +11,13 @@ normalizeMeta <- function(x){
 ##' it's \url{https://api.sbgenomics.com/1.1/}
 ##'
 ##' @param auth_token [character] your auth token.
-##' @param api [character %in% 'sbg-us', 'cgc'] which api you are
+##' @param platform [character %in% 'sbg-us', 'cgc'] which platform you are
 ##'  using, by default it is sbg us platform.
 ##' @param url [chracter] a URL for the API, default is \code{NULL},
 ##'  will use \code{api} parameter to switch to the right one.
 ##' @param version [character] default: 1.1 version used for api.
 ##'
-##'
+##' @importFrom stringr str_match 
 ##'
 ##' @export Auth
 ##' @exportClass Auth
@@ -221,49 +79,114 @@ normalizeMeta <- function(x){
 ##' f.task$abort()
 ##' }
 Auth <- setRefClass("Auth", fields = list(auth_token = "character",
-                                          url = "character"),
+                                url = "character",
+                                version = "character"),
                     methods = list(
                         initialize = function(
                             auth_token = NULL,
-                            api = c("sbg-us", "cgc"),
+                            platform = c("sbg-us", "cgc"),
                             url = NULL,
-                            version = "1.1"){
+                            version = c("1.1", "v2"), ...){
 
-                            api <- match.arg(api)
-
+                            platform <- match.arg(platform)
+                            .v <- match.arg(version)
+                        
                             if(is.null(auth_token)){
                                 stop("missing token")
                             }
+                            
                             auth_token <<- auth_token
 
                             stopifnot(is.null(url) | is.character(url))
 
                             if(is.null(url)){
-                                url <<- switch(api,
+                                url <<- switch(platform,
                                                'sbg-us' =
-                                                   paste0('https://api.sbgenomics.com/', version, '/'),
+                                                   paste0('https://api.sbgenomics.com/', .v, '/'),
                                                'cgc' =
-                                                   paste0('https://cgc-api.sbgenomics.com/', version, '/')
-                                )
+                                                   paste0('https://cgc-api.sbgenomics.com/', "v2", '/')
+                                               )
+                                ## if(platform %in% c("cgc")){
+                                ##     ## V2 only platform?
+                                ##     version <<- "v2"
+                                ## }else{
+                                ##     version <<- .v
+                                ## }                                
                             }else{
                                 url <<- url
+                                ## platform 
                             }
+                            version <<- .ver(url)
 
                         },
-                        project_list = function(){
-                            res <- sbgr::project_list(auth_token,
-                                                      base_url = url)
-                            .asProjectList(res[[1]])
+                        project_owner = function(owner = NULL, ...){
+                            'List the projects owned by and accessible to a particular user.
+                             Each project\'s ID and URL will be returned.'
+                            
+                            if(is.null(owner)){
+                                stop("owner must be provided. For example, Nate. ")
+                            }
+                            v2Check(version)
+                            req <- sbgapi(auth_token = auth_token,
+                                          base_url = url, 
+                                          path = paste0('projects/', owner),
+                                          method = 'GET', ...)
+                            res <- status_check(req)
+                            if(hasItems(res)){
+                                rp <- parseItem(res)
+                                obj <- .asProjectList(rp)
+                            }else{
+                                message("not found")
+                                obj <- res
+                            }
+                             obj <- setAuth(obj, .self, "Project")
+                            
+                        }, 
+                        project_list = function(...){
+                            if(version == "1.1"){
+                                res <- sbgr::project_list(auth_token,
+                                                          base_url = url, ...)
+                                obj <- .asProjectList(res[[1]])
+                            }
+                            if(version == "v2"){
+                                req <- sbgapi(auth_token = auth_token,
+                                              base_url = url, 
+                                              path = 'projects', method = 'GET', ...)
+                                res <- status_check(req)
+                                obj <- .asProjectList(res$items)
+                                ## let's fill the permission for project
+                            }
+                            setAuth(obj, .self, "Project")
                         },
                         project_new = function(name = NULL,
                                                description = NULL,
-                                               billing_group_id = NULL){
-                            res <- sbgr::project_new(auth_token, name = name,
-                                                     base_url = url,
-                                                     description = description,
-                                                     billing_group_id = billing_group_id)
+                            billing_group_id = NULL, ...){
+                            
+                            'Create new projects'
 
-                            .asProject(res)
+                            if(version == "1.1"){
+                                res <- sbgr::project_new(auth_token, name = name,
+                                                         base_url = url,
+                                                         description = description,
+                                                         billing_group_id = billing_group_id)
+                            }
+                            if(version == "v2"){
+                                if (is.null(name) || is.null(description) || is.null(billing_group_id))
+                                    stop('name, description, and billing_group_id must be provided')
+
+                                body = list('name' = name,
+                                    'description' = description,
+                                    'billing_group_id' = billing_group_id)
+
+                                req = sbgapi(auth_token = auth_token,
+                                    base_url = url,
+                                    path = 'projects', body = body,
+                                    method = 'POST', ...)
+
+                                res <- status_check(req)
+                            }
+                            res <- .asProject(res)
+                            res <- setAuth(res, .self, "Project")
                         },
                         project_delete = function(id = NULL,
                                                   name = NULL){
@@ -282,27 +205,22 @@ Auth <- setRefClass("Auth", fields = list(auth_token = "character",
                                                      project_id = p$id)
                             }
                         },
+                        ## main project api function to support multiple versions                        
                         project = function(
                             name = NULL,
                             id = NULL,
                             index = NULL,
                             ignore.case = TRUE,
-                            exact = TRUE){
+                            exact = TRUE, ...){
                             'find project'
 
+                            ## if(version == "1.1"){
                             pl <- .self$project_list()
                             res <- m.match(pl, id = id, name = name, exact = exact,
                                            ignore.case = ignore.case)
-                            if(is(res, "Project")){
-                                res$auth <- .self
-                            }else if(is.list(res) &&
-                                         all(sapply(res, is, "Project"))){
-                                res <- lapply(res, function(x){
-                                    x$auth <- .self
-                                    x
-                                })
-                            }
+                            res <- setAuth(res, .self, "Project")
                             res
+                            
                         },
                         pipeline = function(repos = c("public", "my", "project"),
                                             project_name = NULL,
@@ -431,19 +349,56 @@ Auth <- setRefClass("Auth", fields = list(auth_token = "character",
 
                         },
                         billing = function(){
-                            res <- sbgr::billing(auth_token, base_url = url)
-                            res <- .asBillingList(res[[1]])
-                            lapply(res, function(x){
-                                x$auth <- .self
-                                x
-                            })
+                            if(version == "1.1"){
+                                res <- sbgr::billing(auth_token, base_url = url)
+                                res <- .asBillingList(res[[1]])
+                                lapply(res, function(x){
+                                    x$auth <- .self
+                                    x
+                                })
+                            }
+                            if(version == "v2"){
+                                ## show api
+                                sbgr::billing(auth_token, base_url = url)
+                            }
                         },
 
+                        ## v2
+                        billing_groups = function(id = NULL, breakdown = FALSE, ...){
+                            v2Check(version)
+                            res <- sbgr::billing_groups(auth_token, base_url = url,
+                                                        id = id, breakdown = breakdown, ...)
+                            ## .asBillingGroup(res)
+                            res
+                        },
+                        billing_invoices = function(id = NULL, ...){
+                            v2Check(version)
+                            sbgr::billing_invoices(auth_token ,
+                                                   base_url = url,
+                                                   id = id, ...)
+                        },
+                        api = function(){
+                            v2Check(version)
+                            req <- sbgapi(auth_token, base_url = url, path = "")
+                            status_check(req)
+                        },
                         show = function(){
                             .showFields(.self, "== Auth ==",
                                         values = c("auth_token", "url"))
+                        },
+                        ## v2 only feature
+                        rate_limit = function(...){
+                            v2Check(version)
+                            req <- sbgr::rate_limit(auth_token, base_url = url, ...)
+                            .asRate(req)
+                        },
+                        user = function(username = NULL, ...){
+                            v2Check(version)
+                            req <- sbgr::user_list(auth_token, base_url = url, username = username, ...)
+                            .asUser(req)
                         }
                     ))
+
 
 setClassUnion("AuthORNULL", c("Auth", "NULL"))
 
@@ -455,31 +410,37 @@ setClassUnion("AuthORNULL", c("Auth", "NULL"))
 ##'
 ##' @field response save the raw response from a request.
 ##' @field auth_token propagate the auth_token from parent.
+##' @field href api href
 Item <- setRefClass("Item", fields = list(response = "ANY",
-                                          auth = "AuthORNULL")) ## to stored the called Auth parent
+                                auth = "AuthORNULL",
+                                href = "characterORNULL")) ## to stored the called Auth parent
 
 
 Permission <- setRefClass("Permission", contains = "Item",
                           fields = list(
-                              write = "logical",
-                              copy_permission = "logical", #cannot use copy
-                              execute = "logical",
-                              admin = "logical"),
+                              write = "logicalORNULL",
+                              copy_permission = "logicalORNULL", #cannot use copy
+                              execute = "logicalORNULL",
+                              admin = "logicalORNULL",
+                          read = "logicalORNULL"),
                           methods = list(
-                              initialize = function(write = FALSE,
-                                                    copy_permission = FALSE,
-                                                    execute = FALSE,
-                                                    admin = FALSE, ...){
+                              initialize = function(write = NULL,
+                                  copy_permission = NULL,
+                                  execute = NULL,
+                                  admin = NULL,
+                                  read = NULL, ...){
 
                                   write <<- write
                                   copy_permission <<- copy_permission
                                   execute <<- execute
                                   admin <<- admin
+                                  read <<- read
 
                                   callSuper(...)
                               },
                               show = function(){
                                   ## message("== Permission == ")
+                                  message("read: ", read)
                                   message("write: ", write)
                                   message("copy: ", copy_permission)
                                   message("execute: ", execute)
@@ -491,12 +452,65 @@ Permission <- setRefClass("Permission", contains = "Item",
 
 Member <- setRefClass("Member", contains = "Item",
                       fields = list(
-                          id = "character",
-                          username = "character",
-                          invitation_pending = "logical",
+                          pid = "characterORNULL",
+                          id = "characterORNULL",
+                          username = "characterORNULL",
+                          invitation_pending = "logicalORNULL",
                           permissions = "Permission"
                       ),
                       methods = list(
+                          update = function(write = NULL,
+                              copy = NULL,
+                              execute = NULL,
+                              admin = NULL, read = NULL, ...){
+                              
+                              v2Check(auth$version)
+                              if(is.null(pid)){
+                                  stop("cannot find project id")
+                              }
+                              body = list('write' = write,
+                                  'copy' = copy,
+                                  'execute' = execute,
+                                  'read' = read, 
+                                  'admin' = admin)
+
+                              body <- body[!sapply(body, is.null)]
+                              
+                              if(length(body) == 0)
+                                  stop("please provide updated information")
+
+                              nms <- names(body)
+                              lst <- body
+                              names(lst)[names(lst) == "copy"] <- "copy_permission"
+                              for(nm in nms){
+                                  .self$permissions$field(nm, lst[[nm]])
+                              }
+
+
+                              req = sbgapi(auth_token = auth$auth_token,
+                                  base_url = auth$url, 
+                                  path = paste0('projects/', pid, '/members/', username, '/permissions'),
+                                  body = body, method = 'PUT', ...)
+                              
+                              res <- status_check(req)
+
+                              .asMember(res)
+                          },
+                          delete = function(...){
+                              stopifnot(!is.null(auth$version))
+                              
+                              if(auth$version == "1.1"){
+                                  stop("not supported for v1.1 yet, please use project$member_delete() instead")
+                              }
+                              
+                              if(auth$version == "v2"){
+                                  req = sbgapi(auth_token = auth$auth_token,
+                                      base_url = auth$url,
+                                      path = paste0('projects/', pid, '/members/', username),
+                                      method = 'DELETE', ...)
+                                  res <- status_check(req)
+                              }
+                          },
                           show = function(){
                               .showFields(.self, "== Member ==",
                                           values = c("id", "username",
@@ -506,51 +520,140 @@ Member <- setRefClass("Member", contains = "Item",
                       ))
 
 
+## this Project object should support both version
 Project <- setRefClass("Project", contains = "Item",
-                       fields = list(id = "character",
-                                     name = "character",
-                                     description = "character",
-                                     my_permission = "Permission"),
+                       fields = list(id = "characterORNULL",
+                           name = "characterORNULL",
+                           billing_group_id = "characterORNULL", 
+                           description = "characterORNULL",
+                           type = "characterORNULL", 
+                           my_permission = "Permission",
+                           owner = "characterORNULL",
+                           tags = "listORNULL"),
                        methods = list(
-                           initialize = function(id, name = "",
-                                                 description = "",
-                                                 my_permission = Permission(), ...){
+                           initialize = function(id = NULL, name = NULL,
+                               billing_group_id = NULL, 
+                               description = NULL,
+                               type = NULL,
+                               my_permission = Permission(),
+                               owner = NULL,
+                               tags = list(), ...){
 
-                               if(missing(id))
+                               if(is.null(id))
                                    stop("id is required")
 
                                id <<- id
                                name <<- name
                                description <<- description
                                my_permission <<- my_permission
-
+                               type <<- type
+                               owner <<- owner
+                               tags <<- tags
+                               billing_group_id <<- billing_group_id
+                               
                                callSuper(...)
                            },
-                           details = function(){
-                               res <- sbgr::project_details(auth$auth_token, id,
-                                                            base_url = auth$url)
-                               response <<- res
-                               id <<- res$id
-                               name <<- res$name
-                               description <<- resdescription
-                               my_permission <<- do.call(Permission,
-                                                         res$my_permission)
-                               .self
+                           update = function(name = NULL, description = NULL, billing_group_id = NULL, ... ){
+                               'update name/description/billing group for a project'
 
+
+                               body = list('name' = name,
+                                   'description' = description,
+                                   'billing_group_id' = billing_group_id)
+
+                               body <- body[!sapply(body, is.null)]
+                               if(length(body) == 0)
+                                   stop("please provide updated information")
+
+                               nms <- names(body)
+
+                               for(nm in nms){
+                                .self$field(nm, body[[nm]])
+                               }
+
+                               req <- sbgapi(auth_token = auth$auth_token,
+                                   base_url = auth$url, 
+                                   path = paste0('projects/', id),
+                                   body = body, method = 'POST', ...)
+
+                               res <- status_check(req)
+                               res <- .asProject(res)
+                               res$auth <- .self$auth
+                               res
                            },
-                           members = function(){
-                               res <- project_members(auth$auth_token, id)
-                               .asMemberList(res[[1]])
+                           details = function(...){
+                               'This call returns the details of a specified project.
+                                The project id is the project\'s name, with any spaces replaced by hyphens.'
+
+                               if(ptype(id) == "1.1"){
+                                   res <- sbgr::project_details(auth$auth_token, id,
+                                                                base_url = auth$url)
+                               }
+                               if(ptype(id) == "v2"){
+                                   req <- sbgapi(auth_token = auth$auth_token,
+                                                 base_url = auth$url,
+                                                 path = paste0('projects/', id), method = 'GET', ...)
+                                   res <- status_check(req)
+                               }
+                               ## update
+                               response <<- response(res)
+                               type <<- res$type
+                               name <<- res$name
+                               description <<- res$description
+                               type <<- res$type
+                               billing_group_id <<- res$billing_group_id
+                               tags <<- res$tags
+                               
+                               obj <- .asProject(res)
+                               obj$response <- response(res)
+                               .showFields(.self, "== Project ==",
+                                           c("href", "id", "name",
+                                             "description",
+                                             "type", "billing_group_id", "tags"))
+                               invisible(obj)
+                           },
+                           ## suggested member API use members
+                           members = function(username = NULL,
+                               name = username,
+                               ignore.case = TRUE,
+                               exact = TRUE, ...){
+
+                               if(is.null(id))
+                                   stop("id must be provided")
+                               ## depends on owner information to decide which version we use
+                               if(ptype(id) == "1.1"){
+                                   ## use V1.1
+                                   res <- project_members(auth$auth_token, id)
+                                   ms <- .asMemberList(res[[1]])                                   
+                               }
+                               if(ptype(id) == "v2"){
+                                   ## use v2
+                                   req = sbgapi(auth_token = auth$auth_token,
+                                       base_url = auth$url, 
+                                       path = paste0('projects/', id, '/members'),
+                                       method = 'GET', ...)
+                                   res <- status_check(req)
+                                   ms <- .asMemberList(parseItem(res), pid = id)
+                                   ms <- setAuth(ms, .self$auth, "Member")
+                               }
+                               
+                               if(is.null(name)){
+                                   return(ms)
+                               }else{
+                                   m <- m.match(ms, name = name,
+                                                .name = "username", exact = exact)
+                                   return(m)
+                               }
+
                            },
                            member = function(username = NULL,
                                              name = username,
                                              id = NULL,
                                              ignore.case = TRUE,
-                                             exact = TRUE){
+                               exact = TRUE){
+                               
+                               .Deprecated("obj$members") 
 
-                               ms <- members()
-                               m.match(ms, id = id, name = name,
-                                       .name = "username", exact = exact)
                            },
                            member_add = function(
                                username = NULL,
@@ -558,21 +661,42 @@ Project <- setRefClass("Project", contains = "Item",
                                copy = FALSE,
                                write = FALSE,
                                execute = FALSE,
-                               admin = FALSE){
+                               admin = FALSE,
+                               read = FALSE,
+                               ...){
 
-                               res <- sbgr::project_member_add(auth$auth_token,
-                                                               project_id = .self$id,
-                                                               username = name,
-                                                               copy = copy,
-                                                               write = write,
-                                                               execute = execute,
-                                                               admin = admin,
-                                                               base_url = auth$url)
+                               if(ptype(id) == "1.1"){
+                                   res <- sbgr::project_member_add(auth$auth_token,
+                                                                   project_id = .self$id,
+                                                                   username = name,
+                                                                   copy = copy,
+                                                                   write = write,
+                                                                   execute = execute,
+                                                                   admin = admin,
+                                                                   read = read, 
+                                                                   base_url = auth$url)
 
-                               .asMember(res)
+                                   .asMember(res)
+                               }
+                               if(ptype(id) == "v2"){
+                                   body <- list('username' = name,
+                                                'permissions' = list(
+                                                    'copy' = copy, 'write' = write,
+                                                    'read' = read,
+                                                    'execute' = execute, 'admin' = admin))
+
+                                   req = sbgapi(auth_token = auth$auth_token,
+                                       base_url = auth$url,
+                                       path = paste0('projects/', id, '/members'),
+                                       body = body, method = 'POST', ...)
+                                   
+                                   res <- status_check(req)
+                                   .asMember(res)
+                               }
 
                            },
                            member_update = function(
+                               ## onvly v1
                                username = NULL,
                                name = username,
                                user_id = NULL,
@@ -760,70 +884,158 @@ Project <- setRefClass("Project", contains = "Item",
 
                                task$run()
                            },
+                           delete = function(...){
+                               if(ptype(id) == "1.1"){
+                                   res <- sbgr::project_delete(auth$auth_token,
+                                                        project_id = id,
+                                                        base_url = auth$url, ...)
+                               }
+                               if(ptype(id) == "v2"){
+                                   req = sbgapi(auth_token = auth$auth_token,
+                                       base_url = auth$url, 
+                                       path = paste0('projects/', id), method = 'DELETE', ...)
 
-                           delete = function(){
-
-                               sbgr::project_delete(auth$auth_token,
-                                                    project_id = id,
-                                                    base_url = auth$url)
+                                   res <- status_check(req)
+                               }
+                               res
                            },
                            show = function(){
-                               ## callSuper()
                                .showFields(.self, "== Project ==",
-                                           c("id", "name",
-                                             "description"))
-                               .self$my_permission$show()
-
+                                           c("id", "name", "description"))
                            }
                        ))
 
 
 .asProject <- function(x){
-    Project(id = x$id,
-            name = x$name,
-            description = x$description,
-            my_permission = do.call(Permission, x$my_permission),
-            response = response(x))
-
-
+    if(is.null(x$my_permission)){
+        Project(id = x$id,
+                href = x$href,
+                name = x$name,
+                type = x$type,
+                owner = x$owner,
+                tags = x$tags,
+                description = x$description, ## v1 only entry
+                billing_group_id = x$billing_group_id, 
+                response = response(x))
+        
+    }else{
+        Project(id = x$id,
+                href = x$href,
+                name = x$name,
+                type = x$type,
+                owner = x$owner,
+                tags = x$tags,
+                description = x$description, ## v1 only entry
+                billing_group_id = x$billing_group_id,                 
+                my_permission = do.call(Permission, x$my_permission), ## v1 only entry
+                response = response(x))
+        
+    }
 }
 
 .asProjectList <- function(x){
-    lapply(x, .asProject)
+    lst <- lapply(x, .asProject)
+    rp <- response(x)
+    if(is.null(rp)){
+        ## if not a list entry, searcy attr
+        rp <- attr(x, "response")
+    }
+    attr(lst, "response") <- rp
+    attr(lst, "href") <- x$href
+    lst
 }
 
-.asMember <- function(x){
+.asMember <- function(x, pid = NULL){
     Member(id = x$id,
+           pid = pid, 
            username = x$username,
            invitation_pending = x$invitation_pending,
            permissions = do.call(Permission, x$permissions),
            response = response(x))
 }
 
-.asMemberList <- function(x){
-    lapply(x, .asMember)
+.asMemberList <- function(x, pid = NULL){
+    lst <- lapply(x, .asMember, pid = pid)
+    rp <- response(x)
+    if(is.null(rp)){
+        ## if not a list entry, searcy attr
+        rp <- attr(x, "response")
+    }
+    attr(lst, "response") <- rp
+    attr(lst, "href") <- x$href
+    lst    
 }
 
 
-
+## TODO: when it's get stable, define billing object
+## PrivilegesEnum <- setSingleEnum("Privileges", c(""))
 ## Billing
+## to make it simple to update, return a list, not an object, because no action defined an this object
 Billing <- setRefClass("Billing", contains = "Item",
-                       fields = c("id", "name"),
+                       fields = list(id = "characterORNULL",
+                           href = "characterORNULL",
+                           name = "characterORNULL",
+                           owner = "characterORNULL",
+                           privileges = "list",
+                           type = "characterORNULL",
+                           pending = "logicalORNULL",
+                           disabled = "logicalORNULL",
+                           active = "logicalORNULL",
+                           balance = "listORNULL"), ## 1.1
+                       
                        methods = list(
+                           
+                           initialize = function(id = NULL,
+                               href = NULL, name = NULL,
+                               owner = NULL, privileges = list(),
+                               type = NULL, pending = NULL,
+                               disabled = NULL, active = NULL, balance = list(), ...){
+
+                               id <<- id
+                               href <<- href
+                               name <<- name
+                               owner <<- owner
+                               privileges <<- privileges
+                               type <<- type
+                               disabled <<- disabled
+                               active <<- active
+                               balance <<- balance
+                               
+                               
+                           },
+                           
                            show = function(){
                                .showFields(.self, "== Billing ==",
-                                           values = c("id", "name"))
+                                           values = c("id", "href", "name",
+                                               "owner", "privileges", "type",
+                                               "disabled", "active", "balance"))
 
                            }
                        ))
 
 .asBilling <- function(x){
     Billing(id = x$id,
+            href = x$href,
             name = x$name,
+            owner = x$owner,
+            privileges = x$privileges,
+            type = x$type,
+            disabled = x$disabled,
+            active = x$active,
+            balance = x$balance,
             response = response(x))
 }
+
 .asBillingList <- function(x){
     lapply(x, .asBilling)
+}
+
+.asBillingGroup <- function(x){
+    ## x is a req
+    bg <- .asBillingList(x$items)
+    ## TODO: should make group a class?
+    attr(bg, "href") <- x$href
+    bg
 }
 
 ## Pipeline
@@ -1523,7 +1735,109 @@ Task <- setRefClass("Task", contains = "Item",
     lapply(x, .asTask)
 }
 
+isv2 <- function(version){
+    version == "v2"
+}
+
+v2Check <- function(version, msg = "This function only supported in API V2"){
+    if(version != "v2")
+        stop(msg,  call. = FALSE)
+}
+
+## Rate limit
+Rate <- setRefClass("Rate", contains = "Item",
+            fields = list(limit = "numeric",
+                remaining = "numeric",
+                reset = "numeric"),
+            methods = list(
+                show = function(){
+                    .showFields(.self, "== Rate Limit ==",
+                                values = c("limit", "remaining", "reset"))
+                }
+            ))
+
+.asRate <- function(x){
+    Rate(limit = x$rate$limit,
+         remaining = x$rate$remaining,
+         reset = x$rate$reset)
+}
+
+User <- setRefClass("User", contains = "Item",
+                    fields = c("username", "email",
+                        "first_name", "last_name", "affiliation",
+                        "phone", "address", "city",
+                        "state", "country", "zip_code",
+                        "projects", "billing_groups", "tasks"),
+                    methods = list(
+                        initialize = function(href = "", 
+                            username = "",
+                            email = "",
+                            first_name = "",
+                            last_name = "",
+                            affiliation = "",
+                            phone = "",
+                            address= "",
+                            city = "",
+                            state = "",
+                            country = "",
+                            zip_code = "",
+                            projects = "",
+                            billing_groups= "",
+                            tasks= "", ...){
+
+                            href <<- href
+                            username <<- username 
+                            email <<- email 
+                            first_name <<- first_name
+                            last_name <<- last_name
+                            affiliation <<- affiliation 
+                            phone <<- phone 
+                            address <<- address
+                            city <<- city 
+                            state <<- state 
+                            country <<- country 
+                            zip_code <<- zip_code
+                            projects <<- projects
+                            billing_groups <<- billing_groups
+                            tasks <<- tasks
+
+                        },
+                        show = function(){
+                            .showFields(.self, "== Rate Limit ==",
+                                        values = c("href",
+                                            "username",
+                                            "email",
+                                            "first_name",
+                                            "last_name",
+                                            "affiliation",
+                                            "phone",
+                                            "address",
+                                            "city",
+                                            "state",
+                                            "country",
+                                            "zip_code",
+                                            "projects",
+                                            "billing_groups",
+                                            "tasks"))
+                            
+                        }
+                    ))
 
 
-
-
+.asUser <- function(x){
+    User(href = x$href, 
+         username = x$username,
+         email = x$email,
+         first_name = x$first_name,
+         last_name = x$last_name,
+         affiliation = x$affiliation,
+         phone = x$phone,
+         address= x$addrss,
+         city = x$city,
+         state = x$state,
+         country = x$country,
+         zip_code = x$zip_code,
+         projects = x$projects,
+         billing_groups= x$billing_groups,
+         tasks= x$tasks)
+}

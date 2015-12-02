@@ -11,7 +11,6 @@
 #' @return parsed list of the returned json
 #'
 #' @export upload_info
-#'
 #' @examples
 #' token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' \donttest{req = upload_info(token,
@@ -42,8 +41,6 @@ upload_info = function (auth_token = NULL, upload_id = NULL, ...) {
 #' @return parsed list of the returned json
 #'
 #' @export upload_info_part
-#'
-#'
 #' @examples
 #' token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' \donttest{req = upload_info_part(token,
@@ -90,8 +87,6 @@ upload_info_part = function (auth_token = NULL,
 #' @return parsed list of the returned json
 #'
 #' @export upload_init
-#'
-#'
 #' @examples
 #' token = '58aeb140-1970-0130-6386-001f5b34aa78'
 #' \donttest{req = upload_init(token,
@@ -131,7 +126,6 @@ upload_init = function (auth_token = NULL, project_id = NULL,
 #' @return parsed list of the returned json
 #'
 #' @export upload_complete_part
-#'
 #' @examples
 #' token = '58aeb140-1970-0130-6386-001f5b34aa78'
 #' \donttest{req = upload_complete_part(token,
@@ -167,8 +161,6 @@ upload_complete_part = function (auth_token = NULL, upload_id = NULL,
 #' @return parsed list of the returned json
 #'
 #' @export upload_complete_all
-#'
-#'
 #' @examples
 #' token = '58aeb140-1970-0130-6386-001f5b34aa78'
 #' \donttest{req = upload_complete_all(token,
@@ -196,8 +188,6 @@ upload_complete_all = function (auth_token = NULL, upload_id = NULL, ...) {
 #' @return parsed list of the returned json
 #'
 #' @export upload_delete
-#'
-#'
 #' @examples
 #' token = '420b4672ebfc43bab48dc0d18a32fb6f'
 #' \donttest{req = upload_delete(token,
