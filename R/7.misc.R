@@ -34,19 +34,21 @@ misc_get_auth_token = function () {
 #' @param destdir The directory to extract SBG uploader to.
 #' If not present, it will be created automatically.
 #'
+#' @param method the download.file method
+#' 
 #' @export misc_get_uploader
 #' @importFrom utils untar download.file
 #' @examples
 #' dir = '~/sbg-uploader/'
 #' \donttest{misc_get_uploader(dir)}
-misc_get_uploader = function (destdir = NULL) {
+misc_get_uploader = function (destdir = NULL, method = 'auto') {
 
     if (is.null(destdir)) stop('destdir must be provided')
 
     tmpfile = tempfile()
 
     download.file(url = 'https://igor.sbgenomics.com/sbg-uploader/sbg-uploader.tgz',
-                  method = 'libcurl', destfile = tmpfile)
+                  method = method, destfile = tmpfile)
 
     untar(tarfile = tmpfile, exdir = path.expand(destdir))
 
